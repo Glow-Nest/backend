@@ -4,11 +4,7 @@
         <TargetFramework>net9.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <RootNamespace>Repositories</RootNamespace>
     </PropertyGroup>
-
-    <ItemGroup>
-      <Folder Include="Aggregates\Client\Entities\" />
-      <Folder Include="Common\" />
-    </ItemGroup>
 
 </Project>

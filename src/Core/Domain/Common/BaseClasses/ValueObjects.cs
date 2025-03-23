@@ -13,8 +13,15 @@ public abstract class ValueObject
         return GetEqualityComponents().SequenceEqual(other.GetEqualityComponents());
     }
 
+    public override int GetHashCode()
+    {
+        return GetEqualityComponents()
+            .Aggregate(1, (current, obj) =>
+                HashCode.Combine(current, obj?.GetHashCode() ?? 0));
+    }
+
     public override string ToString()
     {
-        return base.ToString();
+        return string.Join(", ", GetEqualityComponents());
     }
 }
