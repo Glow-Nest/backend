@@ -1,18 +1,28 @@
 using Domain.Aggregates.Client;
+using Domain.Aggregates.Client.Values;
 using Domain.Common.OperationResult;
 
 namespace UnitTest.Features.Helpers;
 
 public class FakeClientRepository : IClientRepository
 {
-    public Task<Result> AddAsync()
+    private List<Client>  _listOfClients = new();
+    
+    public async Task<Result> AddAsync(Client clientToAdd)
+    {
+        _listOfClients.Add(clientToAdd);
+        return await Task.FromResult(Result.Success());
+    }
+
+    public async Task<Result<Client>> GetAsync(ClientId clientId)
     {
         throw new NotImplementedException();
     }
 
-    public Task<Result<Client>> GetAsync()
+    public async Task<Result<List<Client>>> GetAllAsync()
     {
-        throw new NotImplementedException();
+        var result = await Task.FromResult(Result<List<Client>>.Success(_listOfClients));
+        return result;
     }
 
     public Task<Result> RemoveAsync()

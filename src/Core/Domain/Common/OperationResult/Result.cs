@@ -63,4 +63,13 @@ public static class ResultExtensions
 
         return Result<T>.Fail(result.Errors);
     }
+    
+    public static Result ToNonGeneric<T>(this Result<T> result)
+    {
+        if (result.IsSuccess)
+            return Result.Success();
+
+        return Result.Fail(result.Errors);
+    }
 }
+

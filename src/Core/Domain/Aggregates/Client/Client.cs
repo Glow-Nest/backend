@@ -7,17 +7,19 @@ namespace Domain.Aggregates.Client;
 
 public class Client: AggregateRoot<ClientId>
 {
-    internal FullName fullName;
-    internal Email email;
-    internal Password password;
-    internal PhoneNumber phoneNumber;
+    internal FullName FullName {get; private set;}
+    internal Email Email { get; private set;}
+    internal Password Password { get; private set;}
+    internal PhoneNumber PhoneNumber { get; private set;}
     
-    protected Client(ClientId clientId,FullName fullName, Email email, Password password, PhoneNumber phoneNumber)
+    public string EmailAddress => Email.Value;
+    
+    protected Client(ClientId clientId, FullName fullName, Email email, Password password, PhoneNumber phoneNumber)
     {
-        this.fullName = fullName;
-        this.email = email;
-        this.password = password;
-        this.phoneNumber = phoneNumber;
+        FullName = fullName;
+        Email = email;
+        Password = password;
+        PhoneNumber = phoneNumber;
     }
 
     public static async Task<Result<Client>> Create(FullName fullName, Email email, Password password, PhoneNumber phoneNumber, IEmailUniqueChecker emailUniqueChecker)

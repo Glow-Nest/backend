@@ -11,7 +11,7 @@ public class ClientBuilder
     private string _firstName = "Valid";
     private string _lastName = "User";
     private string _password = "Password@123";
-    private string _phoneNumber = "+459100000";
+    private string _phoneNumber = "91000000";
     
     private static IClientRepository _clientRepository = new FakeClientRepository();
     private IEmailUniqueChecker _emailUniqueChecker = new FakeEmailUniqueChecker(_clientRepository);

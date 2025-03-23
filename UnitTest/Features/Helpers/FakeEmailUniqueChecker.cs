@@ -11,8 +11,12 @@ public class FakeEmailUniqueChecker : IEmailUniqueChecker
     {
         _clientRepository = clientRepository;
     }
-    public Task<bool> IsEmailUniqueAsync(string email)
+    public async Task<bool> IsEmailUniqueAsync(string email)
     {
-        throw new NotImplementedException();
+        var allClients = _clientRepository.GetAllAsync().Result.Data;
+        
+        allClients = allClients.Where(c => c.EmailAddress == email).ToList();
+
+        return !allClients.Any();
     }
 }
