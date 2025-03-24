@@ -7,6 +7,7 @@ namespace Domain.Aggregates.Client;
 
 public class Client: AggregateRoot<ClientId>
 {
+    internal ClientId ClientId { get; private set; }
     internal FullName FullName {get; private set;}
     internal Email Email { get; private set;}
     internal Password Password { get; private set;}
@@ -16,6 +17,7 @@ public class Client: AggregateRoot<ClientId>
     
     protected Client(ClientId clientId, FullName fullName, Email email, Password password, PhoneNumber phoneNumber)
     {
+        ClientId = clientId;
         FullName = fullName;
         Email = email;
         Password = password;
