@@ -1,9 +1,7 @@
-using Domain.Aggregates.Client;
-using Domain.Aggregates.Client.Contracts;
 using Domain.Aggregates.Client.Values;
 using Domain.Common.OperationResult;
 
-namespace Application.CommandsDispatching.Commands.Client;
+namespace Application.AppEntry.Commands.Client;
 
 public class CreateClientCommand(FullName fullName, Email email, Password password, PhoneNumber phoneNumber)
 {

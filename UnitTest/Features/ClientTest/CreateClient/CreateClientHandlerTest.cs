@@ -1,4 +1,4 @@
-using Application.CommandsDispatching.Commands.Client;
+using Application.AppEntry.Commands.Client;
 using Application.Handlers.ClientHandlers;
 using UnitTest.Features.Helpers;
 

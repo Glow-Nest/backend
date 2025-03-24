@@ -1,5 +1,5 @@
-using Application.CommandsDispatching;
-using Application.CommandsDispatching.Commands.Client;
+using Application.AppEntry;
+using Application.AppEntry.Commands.Client;
 using Domain.Aggregates.Client;
 using Domain.Aggregates.Client.Contracts;
 using Domain.Common;
@@ -7,7 +7,7 @@ using Domain.Common.OperationResult;
 
 namespace Application.Handlers.ClientHandlers;
 
-public class CreateClientHandler : ICommandHandler<CreateClientCommand>
+internal class CreateClientHandler : ICommandHandler<CreateClientCommand>
 {
     private readonly IEmailUniqueChecker _emailUniqueChecker;
     private readonly IClientRepository _clientRepository;

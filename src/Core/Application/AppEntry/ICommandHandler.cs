@@ -1,6 +1,6 @@
 using Domain.Common.OperationResult;
 
-namespace Application.CommandsDispatching;
+namespace Application.AppEntry;
 
 public interface ICommandHandler<T>
 {

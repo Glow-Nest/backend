@@ -1,4 +1,4 @@
-using Application.CommandsDispatching.Commands.Client;
+using Application.AppEntry.Commands.Client;
 using Domain.Aggregates.Client;
 
 namespace UnitTest.Features.ClientTest.CreateClient;
