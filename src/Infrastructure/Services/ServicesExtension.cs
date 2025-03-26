@@ -9,5 +9,6 @@ public static class ServicesExtension
     public static void RegisterContracts(this IServiceCollection serviceCollection)
     {
         serviceCollection.AddSingleton<IEmailUniqueChecker, EmailUniqueChecker>();
+        serviceCollection.AddSingleton<IDateTimeProvider, DateTimeProvider>();
     }
 }

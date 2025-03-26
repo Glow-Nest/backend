@@ -19,6 +19,17 @@ public class FakeClientRepository : IClientRepository
         throw new NotImplementedException();
     }
 
+    public async Task<Result<Client>> GetAsync(Email email)
+    {
+        var client = _listOfClients.FirstOrDefault(c => c.EmailValue.Equals(email));
+        if (client == null)
+        {
+            return await Task.FromResult(Result<Client>.Fail(ClientErrorMessage.ClientNotFound()));
+        }
+
+        return await Task.FromResult(Result<Client>.Success(client));
+    }
+
     public async Task<Result<List<Client>>> GetAllAsync()
     {
         var result = await Task.FromResult(Result<List<Client>>.Success(_listOfClients));

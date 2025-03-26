@@ -7,7 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Aggregates\Client\Entities\" />
+        <InternalsVisibleTo Include="UnitTest" />
     </ItemGroup>
 
 </Project>

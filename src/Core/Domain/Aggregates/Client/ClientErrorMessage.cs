@@ -4,6 +4,8 @@ namespace Domain.Aggregates.Client;
 
 public class ClientErrorMessage
 {
+    public static Error ClientNotFound() => new("Client.NotFound", "Client not found.");
+    
     // Email
     public static Error InvalidEmailFormat() => new("Email.Invalid", "Email must be in the format: name@example.com");
     public static Error EmailAlreadyExists() => new("Email.AlreadyExists", "Email already exists.");
@@ -23,4 +25,13 @@ public class ClientErrorMessage
     // PhoneNumber
     public static Error PhoneNumberCannotBeEmpty() => new("Phone.Empty", "Phone number cannot be empty.");
     public static Error PhoneNumberMustBeEightDigitsOnly() => new("Phone.Invalid", "Phone number must be exactly 8 digits, with no spaces or symbols.");
+    
+    // OtpSession
+    public static Error InvalidOtp() => new("Otp.Invalid", "Invalid OTP code.");
+    public static Error OtpExpired() => new("Otp.Expired", "OTP code has expired.");
+    public static Error ActiveOtpAlreadyExists() => new("Otp.Active", "Active OTP code already exists.");
+    public static Error NoActiveOtp() => new("Otp.NoActive", "No active OTP code found.");
+    public static Error OtpPurposeMismatch() => new("Otp.Purpose", "OTP code purpose does not match.");
+    public static Error OtpEmailMismatch() => new("Otp.Email", "OTP code email does not match.");
+    
 }
