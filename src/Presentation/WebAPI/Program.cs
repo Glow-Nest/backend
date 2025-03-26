@@ -18,7 +18,6 @@ builder.Services.RegisterContracts();
 builder.Services.RegisterRepositories();
 builder.Services.RegisterUnitOfWork();
 
-
 var app = builder.Build();
 
 app.MapControllers();
@@ -31,5 +30,11 @@ if (app.Environment.IsDevelopment())
     
     app.MapScalarApiReference();
 }
+
+app.UseCors(x => x
+    .AllowAnyMethod()
+    .AllowAnyHeader()
+    .SetIsOriginAllowed(origin => true) // allow any origin
+    .AllowCredentials());
 
 app.Run();

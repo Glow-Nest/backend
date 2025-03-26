@@ -9,11 +9,11 @@ public static class ApplicationExtensions
 {
     public static void RegisterHandlers(this IServiceCollection serviceCollection)
     {
-        serviceCollection.AddScoped<ICommandHandler<CreateClientCommand>, CreateClientHandler>();
+        serviceCollection.AddSingleton<ICommandHandler<CreateClientCommand>, CreateClientHandler>();
     }
 
     public static void RegisterDispatcher(this IServiceCollection serviceCollection)
     {
-        serviceCollection.AddScoped<ICommandDispatcher, CommandDispatcher>();
+        serviceCollection.AddSingleton<ICommandDispatcher, CommandDispatcher>();
     }
 }

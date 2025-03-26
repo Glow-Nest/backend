@@ -6,13 +6,15 @@ namespace Services.Contracts.Client;
 public class EmailUniqueChecker(IClientRepository clientRepository) : IEmailUniqueChecker
 {
     private readonly IClientRepository _clientRepository = clientRepository;
-    
+
     public async Task<bool> IsEmailUniqueAsync(string email)
     {
-        var allClientsResult = await _clientRepository.GetAllAsync();
+        var allClients = _clientRepository.GetAllAsync().Result.Data;
         
-        var exists = allClientsResult.Data.Any(c => c.EmailAddress.Equals(email, StringComparison.OrdinalIgnoreCase));       
-        
-        return !exists;
+        Console.WriteLine("All Clients: " + allClients.Count);
+
+        allClients = allClients.Where(c => c.EmailAddress == email).ToList();
+
+        return !allClients.Any();
     }
 }

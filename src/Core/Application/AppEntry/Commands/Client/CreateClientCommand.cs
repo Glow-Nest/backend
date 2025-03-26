@@ -12,6 +12,8 @@ public class CreateClientCommand(FullName fullName, Email email, Password passwo
 
     public static  Result<CreateClientCommand> Create(string firstNameStr, string lastNameStr, string emailStr, string passwordStr, string phoneNumberStr)
     {
+        var listOfErrors = new List<Error>(); 
+         
         var fullNameResult = FullName.Create(firstNameStr, lastNameStr);
         var emailResult = Email.Create(emailStr);
         var passwordResult = Password.Create(passwordStr);
@@ -19,22 +21,27 @@ public class CreateClientCommand(FullName fullName, Email email, Password passwo
         
         if (!fullNameResult.IsSuccess)
         {
-            return Result<CreateClientCommand>.Fail(fullNameResult.Errors);
+             listOfErrors.AddRange(fullNameResult.Errors);
         }
         
         if (!emailResult.IsSuccess)
         {
-            return Result<CreateClientCommand>.Fail(emailResult.Errors);
+             listOfErrors.AddRange(emailResult.Errors);
         }
         
         if (!passwordResult.IsSuccess)
         {
-            return Result<CreateClientCommand>.Fail(passwordResult.Errors);
+             listOfErrors.AddRange(passwordResult.Errors);
         }
         
         if (!phoneNumberResult.IsSuccess)
         {
-            return Result<CreateClientCommand>.Fail(phoneNumberResult.Errors);
+             listOfErrors.AddRange(phoneNumberResult.Errors);
+        }
+
+        if (listOfErrors.Any())
+        {
+             return Result<CreateClientCommand>.Fail(listOfErrors);
         }
         
         var command = new CreateClientCommand(fullNameResult.Data, emailResult.Data, passwordResult.Data, phoneNumberResult.Data);

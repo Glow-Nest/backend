@@ -8,6 +8,6 @@ public static class ServicesExtension
 {
     public static void RegisterContracts(this IServiceCollection serviceCollection)
     {
-        serviceCollection.AddScoped<IEmailUniqueChecker, EmailUniqueChecker>();
+        serviceCollection.AddSingleton<IEmailUniqueChecker, EmailUniqueChecker>();
     }
 }

@@ -5,12 +5,12 @@ namespace Domain.Aggregates.Client;
 public class ClientErrorMessage
 {
     // Email
-    public static Error InvalidEmailFormat() => new("Email.Invalid", "Invalid email format.");
+    public static Error InvalidEmailFormat() => new("Email.Invalid", "Email must be in the format: name@example.com");
     public static Error EmailAlreadyExists() => new("Email.AlreadyExists", "Email already exists.");
     
     // FullName
-    public static Error InvalidFirstName() => new("FirstName.Length", "Invalid first name. Must be 2-25 letters with no symbols or spaces.");
-    public static Error InvalidLastName() => new("LastName.Length", "Invalid last name. Must be 2-25 letters with no symbols or spaces.");
+    public static Error InvalidFirstName() => new("FirstName.Length", "Must be 2-25 letters with no symbols or spaces.");
+    public static Error InvalidLastName() => new("LastName.Length", "Must be 2-25 letters with no symbols or spaces.");
     
     // Password
     public static Error PasswordCannotBeEmpty() => new("Password.Empty", "Password cannot be empty.");

@@ -15,15 +15,23 @@ public class FullName : ValueObject
     }
     
     public static Result<FullName> Create(string firstName, string lastName)
-    {   
+    {
+        var errors = new List<Error>();
+
         if (string.IsNullOrWhiteSpace(firstName) || firstName.Length < 2 || firstName.Length > 25 || !firstName.All(char.IsLetter))
         {
-            return Result<FullName>.Fail(ClientErrorMessage.InvalidFirstName());
+            errors.Add(ClientErrorMessage.InvalidFirstName());
         }
         if (string.IsNullOrWhiteSpace(lastName) || lastName.Length < 2 || lastName.Length > 25 || !lastName.All(char.IsLetter))
         {
-            return Result<FullName>.Fail(ClientErrorMessage.InvalidLastName());
+            errors.Add(ClientErrorMessage.InvalidLastName());
         }
+        
+        if (errors.Any())
+        {
+            return Result<FullName>.Fail(errors);
+        }
+        
         return Result<FullName>.Success(new FullName(firstName, lastName));
     }
 
