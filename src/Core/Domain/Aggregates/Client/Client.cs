@@ -9,7 +9,7 @@ namespace Domain.Aggregates.Client;
 public class Client : AggregateRoot<ClientId>
 {
     internal ClientId ClientId { get; private set; }
-    internal FullName FullName { get; private set; }
+    public FullName FullName { get; private set; }
     internal Email Email { get; private set; }
     internal Password Password { get; private set; }
     internal PhoneNumber PhoneNumber { get; private set; }

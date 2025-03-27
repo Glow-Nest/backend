@@ -7,7 +7,7 @@ namespace Domain.Aggregates.Client.Entities;
 public class OtpSession
 {
     internal Email Email { get; }
-    internal OtpCode OtpCode { get; }
+    public OtpCode OtpCode { get; private set; }
     internal DateTime CreatedAt { get; }
     internal Purpose Purpose { get; }
     internal bool IsUsed { get; private set; }
@@ -28,14 +28,14 @@ public class OtpSession
         var otpSession = new OtpSession(email, otpCode, createdAt, purpose);
         return Result<OtpSession>.Success(otpSession);
     }
-    
+
     public Result VerifyOtp(OtpCode otp, Email email, IDateTimeProvider dateTimeProvider)
     {
         if (otp.Value != OtpCode.Value)
         {
             return Result.Fail(ClientErrorMessage.InvalidOtp());
         }
-        
+
         if (!email.Value.Equals(Email.Value))
         {
             return Result.Fail(ClientErrorMessage.OtpEmailMismatch());
@@ -45,16 +45,16 @@ public class OtpSession
         {
             return Result.Fail(ClientErrorMessage.OtpAlreadyUsed());
         }
-        
+
         if (dateTimeProvider.GetNow() > CreatedAt.AddMinutes(2))
         {
             return Result.Fail(ClientErrorMessage.OtpExpired());
         }
-        
+
 
         return Result.Success();
     }
-    
+
     public override string ToString()
     {
         return $"[OtpSession] Code: {OtpCode.Value}, Email: {Email.Value}, Purpose: {Purpose}, CreatedAt: {CreatedAt}";
