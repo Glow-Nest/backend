@@ -10,6 +10,7 @@ public class OtpSession
     internal OtpCode OtpCode { get; }
     internal DateTime CreatedAt { get; }
     internal Purpose Purpose { get; }
+    internal bool IsUsed { get; private set; }
 
     protected OtpSession(Email email, OtpCode otpCode, DateTime createdAt, Purpose purpose)
     {
@@ -30,17 +31,22 @@ public class OtpSession
     
     public Result VerifyOtp(OtpCode otp, Email email, IDateTimeProvider dateTimeProvider)
     {
-        if (!Equals(OtpCode, otp))
+        if (otp.Value != OtpCode.Value)
         {
             return Result.Fail(ClientErrorMessage.InvalidOtp());
         }
         
-        if (!Equals(Email, email))
+        if (!email.Value.Equals(Email.Value))
         {
             return Result.Fail(ClientErrorMessage.OtpEmailMismatch());
         }
+
+        if (IsUsed)
+        {
+            return Result.Fail(ClientErrorMessage.OtpAlreadyUsed());
+        }
         
-        if (dateTimeProvider.GetNow() > CreatedAt.AddMinutes(10))
+        if (dateTimeProvider.GetNow() > CreatedAt.AddMinutes(2))
         {
             return Result.Fail(ClientErrorMessage.OtpExpired());
         }

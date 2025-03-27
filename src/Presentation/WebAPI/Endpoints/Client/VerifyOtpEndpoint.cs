@@ -12,6 +12,8 @@ public class VerifyOtpEndpoint : CommandEndpoint.WithRequest<VerifyOtpRequest>.W
     [HttpPost("clients/otp/verify")]
     public override async Task<ActionResult> HandleAsync(VerifyOtpRequest request, ICommandDispatcher commandDispatcher)
     {
+        Console.WriteLine("Request received");
+        
         var commandResult = VerifyOtpCommand.Create(request.Email, request.OtpCode);
         if (!commandResult.IsSuccess)
         {

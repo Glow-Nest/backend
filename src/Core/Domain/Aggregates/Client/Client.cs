@@ -46,9 +46,14 @@ public class Client : AggregateRoot<ClientId>
 
     public Result<OtpSession> CreateOtp(Purpose purpose, IDateTimeProvider dateTimeProvider)
     {
-        if (OtpSession is not null && dateTimeProvider.GetNow() > OtpSession.CreatedAt.AddMinutes(10))
+        if (OtpSession is not null && dateTimeProvider.GetNow() > OtpSession.CreatedAt.AddMinutes(2))
         {
             return Result<OtpSession>.Fail(ClientErrorMessage.ActiveOtpAlreadyExists());
+        }
+        
+        if (IsVerified)
+        {
+            return Result<OtpSession>.Fail(ClientErrorMessage.ClientAlreadyVerified());
         }
 
         var otpSessionResult = OtpSession.Create(Email, purpose, dateTimeProvider);
@@ -67,6 +72,11 @@ public class Client : AggregateRoot<ClientId>
         if (OtpSession is null)
         {
             return Result.Fail(ClientErrorMessage.NoActiveOtp());
+        }
+
+        if (IsVerified)
+        {
+            return Result.Fail(ClientErrorMessage.ClientAlreadyVerified());
         }
 
         var verifyResult = OtpSession.VerifyOtp(otp, Email, dateTimeProvider);

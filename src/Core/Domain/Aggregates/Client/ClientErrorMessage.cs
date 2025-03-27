@@ -28,10 +28,12 @@ public class ClientErrorMessage
     
     // OtpSession
     public static Error InvalidOtp() => new("Otp.Invalid", "Invalid OTP code.");
-    public static Error OtpExpired() => new("Otp.Expired", "OTP code has expired.");
+    public static Error OtpExpired() => new("Otp.Expired", "OTP code has expired. Request new one. ");
     public static Error ActiveOtpAlreadyExists() => new("Otp.Active", "Active OTP code already exists.");
     public static Error NoActiveOtp() => new("Otp.NoActive", "No active OTP code found.");
     public static Error OtpPurposeMismatch() => new("Otp.Purpose", "OTP code purpose does not match.");
     public static Error OtpEmailMismatch() => new("Otp.Email", "OTP code email does not match.");
+    public static Error OtpAlreadyUsed() => new("Otp.Used", "OTP code has already been used.");
+    public static Error ClientAlreadyVerified() => new("Client.Verified", "Client is already verified.");
     
 }
