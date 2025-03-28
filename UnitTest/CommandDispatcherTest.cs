@@ -1,11 +1,11 @@
 using Application.AppEntry;
 using Application.AppEntry.Commands.Client;
-using Application.Handlers.ClientHandlers;
 using Domain.Aggregates.Client;
 using Domain.Aggregates.Client.Contracts;
 using Domain.Common;
+using Domain.Common.OperationResult;
 using Microsoft.Extensions.DependencyInjection;
-using UnitTest.Features.Helpers;
+using Moq;
 
 namespace UnitTest;
 
@@ -23,11 +23,18 @@ public class CommandDispatcherTest
         
         var command = CreateClientCommand.Create(firstNameStr, lastNameStr, emailStr, passwordStr, phoneNumberStr).Data;
         
+        var mockHandler = new Mock<ICommandHandler<CreateClientCommand>>();
+        mockHandler.Setup(h => h.HandleAsync(It.IsAny<CreateClientCommand>())).ReturnsAsync(Result.Success());
+        
+        var mockEmailChecker = new Mock<IEmailUniqueChecker>();
+        var mockClientRepository = new Mock<IClientRepository>();
+        var mockUnitOfWork = new Mock<IUnitOfWork>();
+        
         var serviceProvider = new ServiceCollection()
-            .AddTransient<ICommandHandler<CreateClientCommand>, CreateClientHandler>()
-            .AddSingleton<IEmailUniqueChecker, FakeEmailUniqueChecker>()
-            .AddSingleton<IClientRepository, FakeClientRepository>()
-            .AddSingleton<IUnitOfWork, FakeUnitOfWork>()
+            .AddSingleton(_ => mockHandler.Object)
+            .AddSingleton(_ => mockEmailChecker.Object)
+            .AddSingleton(_ => mockClientRepository.Object)
+            .AddSingleton(_ => mockUnitOfWork.Object)
             .BuildServiceProvider();
         
         var dispatcher = new CommandDispatcher(serviceProvider);
@@ -37,5 +44,6 @@ public class CommandDispatcherTest
         
         // Assert
         Assert.True(result.IsSuccess);
+        mockHandler.Verify(h => h.HandleAsync(It.IsAny<CreateClientCommand>()), Times.Once);
     }
 }
