@@ -53,5 +53,4 @@ jobs:
           gcloud run deploy beauty-salon-backend \
             --image gcr.io/beauty-salon-455021/beauty-salon-backend \
             --platform managed \
-            --region europe-north2 \
-            --allow-unauthenticated
+            --region europe-north2
