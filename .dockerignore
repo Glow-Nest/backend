@@ -1,0 +1,30 @@
+﻿# Ignore the .git directory
+.git
+
+bin/
+obj/
+
+# Ignore user-specific files (IDE/editor-specific)
+.vscode/
+.idea/
+
+# Ignore logs
+*.log
+
+# Ignore configuration files that are not needed
+appsettings.Development.json
+appsettings.Local.json
+
+# Ignore local environment files
+.env
+
+# Ignore Visual Studio temporary files
+.vs/
+
+# Ignore NuGet packages cache
+.nuget/
+
+# Ignore test output folders
+test_output/
+LICENSE
+README.md
