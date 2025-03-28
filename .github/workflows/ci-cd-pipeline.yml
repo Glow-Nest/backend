@@ -3,12 +3,11 @@
 on:
   push:
     branches:
-      - '**'  # Run for any branch push
+      - main 
+      - '**'
   pull_request:
     branches:
       - '**'  # Run tests for pull requests to any branch
-  pull_request_target:
-    types: [closed]
 
 jobs:
   test:
@@ -31,7 +30,7 @@ jobs:
 
   deploy:
     needs: test  # Ensure the deployed job runs only after the test job has passed
-    if: github.event_name == 'pull_request_target' && github.event.pull_request.merged == true && github.base_ref == 'main'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && success()
     runs-on: ubuntu-latest
 
     steps:
