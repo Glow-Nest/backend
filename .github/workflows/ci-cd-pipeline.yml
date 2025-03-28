@@ -1,0 +1,57 @@
+﻿name: CI/CD Pipeline for Google Cloud Run
+
+on:
+  push:
+    branches:
+      - '**'  # Run for any branch push
+  pull_request:
+    branches:
+      - '**'  # Run tests for pull requests to any branch
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '9.0'  
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Run Tests
+        run: dotnet test  # Run your tests 
+
+  deploy:
+    needs: test  # Ensure the deployed job runs only after the test job has passed
+    if: github.event_name == 'push' && success()  # Only deploy on push events if tests are successful
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Authenticate with Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.BEAUTY_SALON }}
+
+      - name: Set up Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Build and Push Docker image
+        run: |
+          gcloud builds submit --tag gcr.io/beauty-salon-455021/beauty-salon-backend
+
+      - name: Deploy to Cloud Run
+        run: |
+          gcloud run deploy beauty-salon-backend \
+            --image gcr.io/beauty-salon-455021/beauty-salon-backend \
+            --platform managed \
+            --region europe-north2 \
+            --allow-unauthenticated
