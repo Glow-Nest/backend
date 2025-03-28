@@ -1,6 +1,7 @@
 using Application.Interfaces;
 using Domain.Aggregates.Client.Contracts;
 using Domain.Aggregates.Client.Values;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Services.Contracts.Client;
@@ -18,8 +19,6 @@ public static class ServicesExtension
 
     public static void RegisterServices(this IServiceCollection serviceCollection)
     {
-        serviceCollection.AddSingleton<EmailSettings>(sp => sp.GetRequiredService<IOptions<EmailSettings>>().Value);
-        
         serviceCollection.AddSingleton<IEmailSender, EmailSender>();
     }
 }

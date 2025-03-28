@@ -1,8 +1,7 @@
-using System.Windows.Input;
 using Domain.Common.OperationResult;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Application.AppEntry;
+namespace Application.AppEntry.Dispatchers;
 
 internal class CommandDispatcher(IServiceProvider serviceProvider) : ICommandDispatcher
 {

@@ -2,6 +2,7 @@ using Domain.Aggregates.Client;
 using Domain.Aggregates.Client.Contracts;
 using Domain.Aggregates.Client.Entities;
 using Domain.Aggregates.Client.Values;
+using Domain.Common;
 using Moq;
 using UnitTest.Features.Helpers.Builders;
 
@@ -10,6 +11,7 @@ namespace UnitTest.Features.ClientTest.CreateClient.VerifyOtp;
 public class VerifyOtpAggregateTest
 {
     private readonly Mock<IDateTimeProvider> _mockDateTimeProvider = new();
+    private readonly Mock<IUnitOfWork> _mockUnitOfWork = new();
 
     [Fact]
     public void VerifyOtp_ShouldReturnSuccess_WhenOtpIsCorrectAndNotExpired()
@@ -19,7 +21,7 @@ public class VerifyOtpAggregateTest
         _mockDateTimeProvider.Setup(d => d.GetNow()).Returns(now.AddMinutes(5));
 
         var client = ClientBuilder.CreateValid().BuildAsync().Result.Data;
-        var otpSession = client.CreateOtp(Purpose.Registration, _mockDateTimeProvider.Object).Data;
+        var otpSession = client.CreateOtp(Purpose.Registration, _mockDateTimeProvider.Object, _mockUnitOfWork.Object).Data;
 
         // Act
         var result = client.VerifyOtp(otpSession.OtpCode, _mockDateTimeProvider.Object);
@@ -39,6 +41,8 @@ public class VerifyOtpAggregateTest
         var client = ClientBuilder.CreateValid().BuildAsync().Result.Data;
 
         var newOtpCode = OtpCode.New().Data;
+        
+        var otpSession = client.CreateOtp(Purpose.Registration, _mockDateTimeProvider.Object, _mockUnitOfWork.Object).Data;
 
         // Act
         var result = client.VerifyOtp(newOtpCode, _mockDateTimeProvider.Object);
@@ -56,7 +60,7 @@ public class VerifyOtpAggregateTest
         _mockDateTimeProvider.Setup(d => d.GetNow()).Returns(now);
 
         var client = ClientBuilder.CreateValid().BuildAsync().Result.Data;
-        var otpSession = client.CreateOtp(Purpose.Registration, _mockDateTimeProvider.Object).Data;
+        var otpSession = client.CreateOtp(Purpose.Registration, _mockDateTimeProvider.Object, _mockUnitOfWork.Object).Data;
 
         _mockDateTimeProvider.Setup(d => d.GetNow()).Returns(now.AddMinutes(11));
 
