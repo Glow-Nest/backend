@@ -45,7 +45,7 @@ public class VerifyOtpAggregateTest
 
         // Assert
         Assert.False(result.IsSuccess);
-        Assert.Contains(ClientErrorMessage.InvalidOtp(), result.Errors);
+        Assert.Contains(ClientErrorMessage.NoActiveOtp(), result.Errors);
     }
 
     [Fact]
