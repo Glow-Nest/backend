@@ -1,7 +1,6 @@
 ﻿# Ignore the .git directory
 .git
 
-# Ignore build and temporary files
 bin/
 obj/
 
