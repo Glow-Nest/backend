@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main 
+      - '**'
   pull_request:
     branches:
       - '**'  # Run tests for pull requests to any branch
