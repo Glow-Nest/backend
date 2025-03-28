@@ -22,10 +22,10 @@ public class Result<T>
 
     public static Result<T> Success(T data) => new(data);
 
-    public static Result<T> Failure(List<Error> errors) => new(errors);
+    public static Result<T> Fail(List<Error> errors) => new(errors);
 
-    public static Result<T> Failure(string errorId, string message) =>
-        new([new Error(errorId, message)]);
+    public static Result<T> Fail(Error error) =>
+        new([error]);
 }
 
 public class Result
@@ -33,7 +33,9 @@ public class Result
     public bool IsSuccess => Errors.Count == 0;
     public List<Error> Errors { get; } = new();
 
-    private Result() { }
+    private Result()
+    {
+    }
 
     private Result(List<Error> errors)
     {
@@ -45,8 +47,29 @@ public class Result
 
     public static Result Success() => new();
 
-    public static Result Failure(List<Error> errors) => new(errors);
+    public static Result Fail(List<Error> errors) => new(errors);
 
-    public static Result Failure(string errorId, string message) =>
-        new([new Error(errorId, message)]);
+    public static Result Fail(Error error) =>
+        new([error]);
+    
 }
+
+public static class ResultExtensions
+{
+    public static Result<T> ToGeneric<T>(this Result result)
+    {
+        if (result.IsSuccess)
+            throw new InvalidOperationException("Cannot convert a successful Result to Result<T>.");
+
+        return Result<T>.Fail(result.Errors);
+    }
+    
+    public static Result ToNonGeneric<T>(this Result<T> result)
+    {
+        if (result.IsSuccess)
+            return Result.Success();
+
+        return Result.Fail(result.Errors);
+    }
+}
+
