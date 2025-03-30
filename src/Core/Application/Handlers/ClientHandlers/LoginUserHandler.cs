@@ -56,7 +56,7 @@ public class LoginUserHandler : ICommandHandler<LoginUserCommand, LoginResponse>
         }
 
         // Generate JWT token with appropriate claims
-        var token = _tokenService.GenerateTokenAsync(client.EmailAddress);
+        var token = _tokenService.GenerateTokenAsync(client.EmailAddress,"Client");
 
         var response = new LoginResponse(token.Result.Data.Token, token.Result.Data.Role,client.EmailAddress);
         
@@ -82,7 +82,7 @@ public class LoginUserHandler : ICommandHandler<LoginUserCommand, LoginResponse>
         }
 
         // Generate JWT token with appropriate claims
-        var token = _tokenService.GenerateTokenAsync(salonOwner.EmailAddress);
+        var token = _tokenService.GenerateTokenAsync(salonOwner.EmailAddress,"SalonOwner");
 
         var response = new LoginResponse(token.Result.Data.Token, token.Result.Data.Role, salonOwner.EmailAddress);
         

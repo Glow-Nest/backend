@@ -18,7 +18,7 @@ public class TokenService:ITokenService
         _configuration = configuration;
     }
 
-    public Task<Result<TokenInfo>> GenerateTokenAsync(string email)
+    public Task<Result<TokenInfo>> GenerateTokenAsync(string email,string role)
     {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_configuration.GetSection("JwtSetting:SecretKey").Key);
@@ -26,7 +26,7 @@ public class TokenService:ITokenService
             var claims = new List<Claim>
             {
                 new(ClaimTypes.Email, email),
-                new(ClaimTypes.Role, "Client") 
+                new(ClaimTypes.Role, role) 
             };
 
             var tokenDescriptor = new SecurityTokenDescriptor
@@ -41,7 +41,7 @@ public class TokenService:ITokenService
             var token = tokenHandler.CreateToken(tokenDescriptor);
             var tokenString = tokenHandler.WriteToken(token);
             
-            var tokenInfoResult = TokenInfo.Create(tokenString, "Client", tokenDescriptor.Expires.Value);
+            var tokenInfoResult = TokenInfo.Create(tokenString, role, tokenDescriptor.Expires.Value);
             
             return Task.FromResult(tokenInfoResult);
         }
