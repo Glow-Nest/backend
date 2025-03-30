@@ -1,3 +1,4 @@
+using Domain.Aggregates;
 using Domain.Aggregates.Client;
 using Domain.Common;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,6 +11,7 @@ public static class RepositoryExtensions
     public static void RegisterRepositories(this IServiceCollection serviceCollection)
     {
         serviceCollection.AddSingleton<IClientRepository, ClientRepository>();
+        serviceCollection.AddSingleton<ISalonOwnerRepository, SalonOwnerRepository>();
     }
 
     public static void RegisterUnitOfWork(this IServiceCollection serviceCollection)

@@ -1,5 +1,9 @@
+using System.Text;
 using Application.Extensions;
+using Application.Login.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using Repositories;
 using Scalar.AspNetCore;
 using Services;
@@ -22,8 +26,18 @@ builder.Services.RegisterContracts();
 builder.Services.RegisterServices();
 builder.Services.RegisterRepositories();
 builder.Services.RegisterUnitOfWork();
+builder.Services.AddSingleton<ITokenService, TokenService>();
 
-
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(builder.Configuration["JwtSetting:SecretKey"]!)),
+            ValidateIssuerSigningKey = true
+        };
+    });
 var app = builder.Build();
 
 app.MapControllers();

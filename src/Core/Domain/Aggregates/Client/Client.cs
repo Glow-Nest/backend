@@ -18,6 +18,7 @@ public class Client : AggregateRoot<ClientId>
 
     public string EmailAddress => Email.Value;
     public Email EmailValue => Email;
+    public Password PasswordValue => Password;
 
     protected Client(ClientId clientId, FullName fullName, Email email, Password password, PhoneNumber phoneNumber)
     {

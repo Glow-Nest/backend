@@ -11,4 +11,10 @@ internal class CommandDispatcher(IServiceProvider serviceProvider) : ICommandDis
         var handler = serviceProvider.GetRequiredService<ICommandHandler<TCommand>>();
         return handler.HandleAsync(command);
     }
+
+    public Task<Result<TResult>> DispatchAsync<TCommand, TResult>(TCommand command)
+    {
+        var handler = serviceProvider.GetRequiredService<ICommandHandler<TCommand, TResult>>();
+        return handler.HandleAsyncWithResult(command);
+    }
 }

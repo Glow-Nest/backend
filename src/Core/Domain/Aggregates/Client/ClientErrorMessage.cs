@@ -35,5 +35,12 @@ public class ClientErrorMessage
     public static Error OtpEmailMismatch() => new("Otp.Email", "OTP code email does not match.");
     public static Error OtpAlreadyUsed() => new("Otp.Used", "OTP code has already been used.");
     public static Error ClientAlreadyVerified() => new("Client.Verified", "Client is already verified.");
-    
+
+    // Token
+    public static Error TokenIsEmpty() => new("Token.Empty", "Token cannot be empty.");
+    public static Error ExpiredDateIsInFuture() => new("Token.Future", "Expiration date cannot be in the future.");
+    public static Error RoleIsEmpty() => new("Token.Role", "Role cannot be empty.");
+    public static Error InvalidCredentials() => new("Credentials.Invalid", "Invalid credentials.");
+
+    public static Error PasswordNotVerified() => new("Passwords.NotVerified", "Password not verified.");
 }
