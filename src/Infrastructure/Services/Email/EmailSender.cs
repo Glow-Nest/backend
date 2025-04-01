@@ -4,7 +4,7 @@ using Domain.Aggregates.Client;
 using Domain.Common.OperationResult;
 using MailKit.Net.Smtp;
 using MailKit.Security;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using MimeKit;
 using Services.Utilities;
 
@@ -12,19 +12,11 @@ namespace Services.Email;
 
 public class EmailSender : IEmailSender
 {
-    private readonly string smtpServer;
-    private readonly int smtpPort;
-    private readonly string fromEmail;
-    private readonly string fromName;
-    private readonly string appPassword;
+    private readonly EmailSettings _settings;
 
-    public EmailSender(IConfiguration config)
+    public EmailSender(IOptions<EmailSettings> options)
     {
-        smtpServer = config["Smtp:Server"]!;
-        smtpPort = int.Parse(config["Smtp:Port"]!);
-        fromEmail = config["Smtp:FromEmail"]!;
-        fromName = config["Smtp:FromName"]!;
-        appPassword = config["Smtp:AppPassword"]!;
+        _settings = options.Value;
     }
 
     public async Task<Result> SendEmailAsync(Client to, EmailPurpose purpose, string subject, string body)
@@ -32,7 +24,7 @@ public class EmailSender : IEmailSender
         try
         {
             var message = new MimeMessage();
-            message.From.Add(new MailboxAddress(fromName, fromEmail));
+            message.From.Add(new MailboxAddress(_settings.FromName, _settings.FromEmail));
             message.To.Add(new MailboxAddress(to.FullName.ToString(), to.EmailAddress));
             message.Subject = subject;
 
@@ -44,8 +36,8 @@ public class EmailSender : IEmailSender
             };
 
             using var client = new SmtpClient();
-            await client.ConnectAsync(smtpServer, smtpPort, SecureSocketOptions.StartTls);
-            await client.AuthenticateAsync(fromEmail, appPassword);
+            await client.ConnectAsync(_settings.SmtpServer, _settings.SmtpPort, SecureSocketOptions.StartTls);
+            await client.AuthenticateAsync(_settings.FromEmail, _settings.AppPassword);
             await client.SendAsync(message);
             await client.DisconnectAsync(true);
 

@@ -49,7 +49,7 @@ public class VerifyOtpHandlerTest
 
         _dateTimeProviderMock.Setup(d => d.GetNow()).Returns(DateTime.UtcNow);
         
-        var otp = clientResult.Data.CreateOtp(Purpose.Registration, _dateTimeProviderMock.Object).Data;
+        var otp = clientResult.Data.CreateOtp(Purpose.Registration, _dateTimeProviderMock.Object, _unitOfWork).Data;
 
         var handler = new VerifyOtpHandler(_repository, _dateTimeProviderMock.Object, _unitOfWork);
         var command = VerifyOtpCommand.Create(clientResult.Data.Email.Value,otp.OtpCode.Value).Data ;

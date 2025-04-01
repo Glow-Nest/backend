@@ -30,7 +30,11 @@ internal class CreateClientHandler : ICommandHandler<CreateClientCommand>
         }
 
         var clientAddResult = await _clientRepository.AddAsync(result.Data);
-        await _unitOfWork.SaveChangesAsync();
+        
+        if (!clientAddResult.IsSuccess)
+        {
+            return clientAddResult;
+        }
 
         return Result.Success();
     }
