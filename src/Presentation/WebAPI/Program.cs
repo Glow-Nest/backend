@@ -4,6 +4,7 @@ using Application.Login.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Npgsql;
 using Repositories;
 using Scalar.AspNetCore;
 using Services;
@@ -38,6 +39,17 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateIssuerSigningKey = true
         };
     });
+
+// Configure Cloud SQL connection (PostgreSQL)
+var cloudSqlConnectionString = builder.Configuration.GetConnectionString("CloudSqlConnection");
+
+builder.Services.AddSingleton<NpgsqlConnection>(_ =>
+{
+    var connection = new NpgsqlConnection(cloudSqlConnectionString);
+    connection.Open();
+    return connection;
+});
+
 var app = builder.Build();
 
 app.MapControllers();
