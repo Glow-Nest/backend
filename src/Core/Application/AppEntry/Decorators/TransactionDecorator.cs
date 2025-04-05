@@ -22,7 +22,7 @@ public class TransactionDecorator : ICommandDispatcher
         
         if (dispatchResult.IsSuccess && !_changesSaved)
         {
-            Console.WriteLine("TransactionDecorator: Dispatching command was successful. " + command.GetType().Name);
+            Console.WriteLine("TransactionDecorator: Dispatching command was successful. " + command!.GetType().Name);
             await _unitOfWork.SaveChangesAsync();
             _changesSaved = true;
         }

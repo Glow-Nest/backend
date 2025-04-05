@@ -17,6 +17,6 @@ public class FakeEmailUniqueChecker : IEmailUniqueChecker
         
         allClients = allClients.Where(c => c.EmailAddress == email).ToList();
 
-        return !allClients.Any();
+        return await Task.FromResult(!allClients.Any());
     }
 }

@@ -15,6 +15,6 @@ public class EmailUniqueChecker(IClientRepository clientRepository) : IEmailUniq
 
         allClients = allClients.Where(c => c.EmailAddress == email).ToList();
 
-        return !allClients.Any();
+        return await Task.FromResult(!allClients.Any());
     }
 }

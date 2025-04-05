@@ -2,9 +2,9 @@ namespace Services.Email;
 
 public class EmailSettings
 {
-    public string SmtpServer { get; set; }
+    public required string SmtpServer { get; set; }
     public int SmtpPort { get; set; }
-    public string FromEmail { get; set; }
-    public string FromName { get; set; }
-    public string AppPassword { get; set; }
+    public required string FromEmail { get; set; }
+    public required string FromName { get; set; }
+    public required string AppPassword { get; set; }
 }

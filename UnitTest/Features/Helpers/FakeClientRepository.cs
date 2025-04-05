@@ -14,7 +14,7 @@ public class FakeClientRepository : IClientRepository
         return await Task.FromResult(Result.Success());
     }
 
-    public async Task<Result<Client>> GetAsync(ClientId clientId)
+    public Task<Result<Client>> GetAsync(ClientId clientId)
     {
         throw new NotImplementedException();
     }

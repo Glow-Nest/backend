@@ -11,6 +11,6 @@ public class FakeEmailSender : IEmailSender
     public async Task<Result> SendEmailAsync(Client email, EmailPurpose purpose, string subject, string message)
     {
         // Simulate sending an email
-        return Result.Success();
+        return await Task.FromResult(Result.Success());
     }
 }
