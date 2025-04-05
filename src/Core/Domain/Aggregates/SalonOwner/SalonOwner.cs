@@ -5,7 +5,7 @@ using Domain.Common.OperationResult;
 
 namespace Domain.Aggregates;
 
-public class SalonOwner : AggregateRoot<SalonOwnerId>
+public class SalonOwner : AggregateRoot
 {
     internal SalonOwnerId SalonOwnerId { get; private set; }
     internal Email Email { get; private set; }

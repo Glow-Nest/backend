@@ -1,5 +1,6 @@
 using Application.AppEntry;
 using Application.AppEntry.Commands.Client;
+using Application.AppEntry.Dispatchers;
 using Domain.Aggregates.Client;
 using Domain.Aggregates.Client.Contracts;
 using Domain.Common;

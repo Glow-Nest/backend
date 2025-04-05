@@ -35,26 +35,13 @@ internal class CreateOtpHandler : ICommandHandler<CreateOtpCommand>
         }
 
         var client = clientResult.Data;
-        var result = client.CreateOtp(command.Purpose, _dateTimeProvider);
+        var result = client.CreateOtp(command.Purpose, _dateTimeProvider, _unitOfWork);
 
         if (!result.IsSuccess)
         {
             return result.ToNonGeneric();
         }
 
-        var otpCode = result.Data;
-        
-        // TODO: send otp to client email
-        var sendEmailResult = await _emailSender.SendEmailAsync(clientResult.Data, EmailPurpose.OtpCode, "OTP Code", otpCode.OtpCode.ToString());
-
-        if (!sendEmailResult.IsSuccess)
-        {
-            return sendEmailResult;
-        }
-        
-        Console.WriteLine(otpCode);
-
-        await _unitOfWork.SaveChangesAsync();
         return Result.Success();
     }
 }
