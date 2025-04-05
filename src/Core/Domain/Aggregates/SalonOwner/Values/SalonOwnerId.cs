@@ -4,7 +4,7 @@ namespace Domain.Aggregates.Values;
 
 public class SalonOwnerId : ValueObject
 {
-    internal Guid Value { get; }
+    public Guid Value { get; private set; }
     
     protected SalonOwnerId(Guid value)
     {
@@ -12,6 +12,8 @@ public class SalonOwnerId : ValueObject
     }
     
     public static SalonOwnerId Create() => new(Guid.NewGuid());
+
+    public static SalonOwnerId FromGuid(Guid id) => new SalonOwnerId(id);
     protected override IEnumerable<object> GetEqualityComponents()
     {
         yield return Value;

@@ -7,13 +7,18 @@ namespace Domain.Aggregates;
 
 public class SalonOwner : AggregateRoot
 {
-    internal SalonOwnerId SalonOwnerId { get; private set; }
+    public SalonOwnerId SalonOwnerId { get; private set; }
     internal Email Email { get; private set; }
     internal Password Password { get; private set; }
     
     public string EmailAddress => Email.Value;
     public Email EmailValue => Email;
     public Password PasswordValue => Password;
+
+    public SalonOwner() // For EF
+    {
+    }
+
     private SalonOwner(SalonOwnerId salonOwnerId, Email email, Password password)
     {
         SalonOwnerId = salonOwnerId;

@@ -8,6 +8,10 @@ public class Password : ValueObject
 {
     internal string Value { get; }
 
+    public Password() // for efc
+    {
+    }
+
     protected Password(string passwordStr)
     {
         Value = passwordStr;

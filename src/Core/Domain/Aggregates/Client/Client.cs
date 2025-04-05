@@ -10,7 +10,7 @@ namespace Domain.Aggregates.Client;
 
 public class Client : AggregateRoot
 {
-    internal ClientId ClientId { get; private set; }
+    public ClientId ClientId { get; private set; }
     public FullName FullName { get; private set; }
     internal Email Email { get; private set; }
     internal Password Password { get; private set; }
@@ -20,8 +20,11 @@ public class Client : AggregateRoot
 
     public string EmailAddress => Email.Value;
     public Email EmailValue => Email;
-    public ClientId Id => ClientId;
     public Password PasswordValue => Password;
+
+    public Client() // for EF Core
+    {
+    }
 
     protected Client(ClientId clientId, FullName fullName, Email email, Password password, PhoneNumber phoneNumber)
     {

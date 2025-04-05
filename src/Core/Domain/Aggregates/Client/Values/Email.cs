@@ -6,7 +6,7 @@ namespace Domain.Aggregates.Client.Values;
 
 public class Email : ValueObject
 {
-    internal string Value { get; }
+    public string Value { get; private set; }
 
     protected Email(string value)
     {

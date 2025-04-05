@@ -19,7 +19,7 @@ public class ClientRepository : IClientRepository
 
     public async Task<Result<Client>> GetAsync(ClientId clientId)
     {
-        var client = _listOfClients.FirstOrDefault(c => c.Id.Equals(clientId));
+        var client = _listOfClients.FirstOrDefault(c => c.ClientId.Equals(clientId));
 
         if (client == null)
         {

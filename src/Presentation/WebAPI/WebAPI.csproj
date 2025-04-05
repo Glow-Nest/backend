@@ -15,6 +15,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\..\EfcDmPersistence\EfcDmPersistence.csproj" />
       <ProjectReference Include="..\..\Core\Application\Application.csproj" />
       <ProjectReference Include="..\..\Infrastructure\DomainModelPersistence\DomainModelPersistence.csproj" />
       <ProjectReference Include="..\..\Infrastructure\Services\Services.csproj" />

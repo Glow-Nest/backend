@@ -1,7 +1,9 @@
 using System.Text;
 using Application.Extensions;
 using Application.Login.Authentication;
+using EfcDmPersistence;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Npgsql;
@@ -49,6 +51,9 @@ builder.Services.AddSingleton<NpgsqlConnection>(_ =>
     connection.Open();
     return connection;
 });
+
+builder.Services.AddDbContext<DomainModelContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();
 
