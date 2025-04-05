@@ -1,9 +1,9 @@
 ﻿using Domain.Aggregates.Client.Values;
-using Domain.Aggregates.Values;
+using Domain.Aggregates.SalonOwner.Values;
 using Domain.Common.BaseClasses;
 using Domain.Common.OperationResult;
 
-namespace Domain.Aggregates;
+namespace Domain.Aggregates.SalonOwner;
 
 public class SalonOwner : AggregateRoot
 {

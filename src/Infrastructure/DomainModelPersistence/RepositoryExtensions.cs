@@ -1,10 +1,11 @@
-using Domain.Aggregates;
 using Domain.Aggregates.Client;
+using Domain.Aggregates.SalonOwner;
 using Domain.Common;
+using DomainModelPersistence.ClientPersistence;
+using DomainModelPersistence.SalonOwnerPersistence;
 using Microsoft.Extensions.DependencyInjection;
-using Repositories.Repositories;
 
-namespace Repositories;
+namespace DomainModelPersistence;
 
 public static class RepositoryExtensions
 {

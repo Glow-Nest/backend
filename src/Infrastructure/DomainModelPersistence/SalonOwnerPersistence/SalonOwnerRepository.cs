@@ -1,8 +1,8 @@
-﻿using Domain.Aggregates;
-using Domain.Aggregates.Client.Values;
+﻿using Domain.Aggregates.Client.Values;
+using Domain.Aggregates.SalonOwner;
 using Domain.Common.OperationResult;
 
-namespace Repositories.Repositories;
+namespace DomainModelPersistence.SalonOwnerPersistence;
 
 public class SalonOwnerRepository: ISalonOwnerRepository
 {

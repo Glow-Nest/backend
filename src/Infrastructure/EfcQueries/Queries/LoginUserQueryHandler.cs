@@ -1,4 +1,4 @@
-﻿namespace EfcQueries;
+﻿namespace EfcQueries.Queries;
 
 public class LoginUserQueryHandler
 {

@@ -1,6 +1,6 @@
 ﻿using Domain.Common.BaseClasses;
 
-namespace Domain.Aggregates.Values;
+namespace Domain.Aggregates.SalonOwner.Values;
 
 public class SalonOwnerId : ValueObject
 {

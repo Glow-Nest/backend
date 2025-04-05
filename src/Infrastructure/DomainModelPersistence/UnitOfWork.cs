@@ -2,7 +2,7 @@ using Domain.Common;
 using Domain.Common.BaseClasses;
 using Domain.Common.OperationResult;
 
-namespace Repositories;
+namespace DomainModelPersistence;
 
 public class UnitOfWork : IUnitOfWork
 {
@@ -24,7 +24,7 @@ public class UnitOfWork : IUnitOfWork
         if (!_aggregates.Contains(aggregate))
             _aggregates.Add(aggregate);
 
-        return Result.Success();
+        return await Task.FromResult(Result.Success());
     }
 
     public async Task<List<IDomainEvent>> GetDomainEvents()
@@ -39,6 +39,6 @@ public class UnitOfWork : IUnitOfWork
         foreach (var aggregate in _aggregates)
             aggregate.ClearDomainEvents();
 
-        return Result.Success();
+        return await Task.FromResult(Result.Success());
     }
 }

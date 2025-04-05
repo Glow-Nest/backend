@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore.Design;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
 
-namespace EfcDmPersistence;
+namespace DomainModelPersistence.EfcConfigs;
 
 public class DesignTimeContextFactory : IDesignTimeDbContextFactory<DomainModelContext>
 {

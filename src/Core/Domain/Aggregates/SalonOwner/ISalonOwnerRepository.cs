@@ -1,7 +1,7 @@
 ﻿using Domain.Aggregates.Client.Values;
 using Domain.Common.OperationResult;
 
-namespace Domain.Aggregates;
+namespace Domain.Aggregates.SalonOwner;
 
 public interface ISalonOwnerRepository
 {

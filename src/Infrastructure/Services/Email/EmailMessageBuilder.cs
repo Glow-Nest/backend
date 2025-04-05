@@ -1,4 +1,4 @@
-namespace Services.Utilities;
+namespace Services.Email;
 
 public static class EmailMessageBuilder
 {

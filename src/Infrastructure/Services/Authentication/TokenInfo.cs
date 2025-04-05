@@ -1,7 +1,8 @@
-﻿using Domain.Common.BaseClasses;
+﻿using Domain.Aggregates.Client;
+using Domain.Common.BaseClasses;
 using Domain.Common.OperationResult;
 
-namespace Domain.Aggregates.Client.Values;
+namespace Services.Authentication;
 
 public class TokenInfo:ValueObject
 {

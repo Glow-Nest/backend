@@ -1,13 +1,11 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Domain.Aggregates.Client;
-using Domain.Aggregates.Client.Values;
 using Domain.Common.OperationResult;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Application.Login.Authentication;
+namespace Services.Authentication;
 
 public class TokenService:ITokenService
 {

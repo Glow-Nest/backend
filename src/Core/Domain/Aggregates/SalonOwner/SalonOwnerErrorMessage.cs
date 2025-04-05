@@ -1,6 +1,6 @@
 ﻿using Domain.Common.OperationResult;
 
-namespace Domain.Aggregates;
+namespace Domain.Aggregates.SalonOwner;
 
 public class SalonOwnerErrorMessage
 {

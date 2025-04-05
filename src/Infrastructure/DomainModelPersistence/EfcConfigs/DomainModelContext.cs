@@ -1,12 +1,11 @@
-﻿using Domain.Aggregates;
-using Domain.Aggregates.Client;
+﻿using Domain.Aggregates.Client;
 using Domain.Aggregates.Client.Values;
-using Domain.Aggregates.Values;
+using Domain.Aggregates.SalonOwner;
+using Domain.Aggregates.SalonOwner.Values;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace EfcDmPersistence;
+namespace DomainModelPersistence.EfcConfigs;
 
 public class DomainModelContext(DbContextOptions options) : DbContext(options)
 {

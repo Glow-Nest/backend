@@ -1,6 +1,6 @@
-﻿using backend.Core.QueryContracts.Contract;
+using QueryContracts.Contracts;
 
-namespace backend.Core.QueryContracts.QueryDispatching;
+namespace QueryContracts.QueryDispatching;
 
 public interface IQueryDispatcher
 {

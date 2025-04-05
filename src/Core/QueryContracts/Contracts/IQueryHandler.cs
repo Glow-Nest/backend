@@ -1,4 +1,4 @@
-﻿namespace backend.Core.QueryContracts.Contract;
+namespace QueryContracts.Contracts;
 
 public interface IQueryHandler<in TQuery,TAnswer> where TQuery : IQuery<TAnswer>
 {

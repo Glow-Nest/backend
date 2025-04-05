@@ -1,8 +1,6 @@
-﻿using Domain.Aggregates.Client;
-using Domain.Aggregates.Client.Values;
-using Domain.Common.OperationResult;
+﻿using Domain.Common.OperationResult;
 
-namespace Application.Login.Authentication;
+namespace Services.Authentication;
 
 public interface ITokenService
 {

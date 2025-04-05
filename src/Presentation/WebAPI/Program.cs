@@ -1,16 +1,16 @@
 using System.Text;
 using Application.Extensions;
-using Application.Login.Authentication;
-using EfcDmPersistence;
+using DomainModelPersistence;
+using DomainModelPersistence.EfcConfigs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Npgsql;
-using Repositories;
 using Scalar.AspNetCore;
 using Services;
-using Services.Utilities;
+using Services.Authentication;
+using Services.Email;
 
 var builder = WebApplication.CreateBuilder(args);
 
