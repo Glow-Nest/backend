@@ -49,7 +49,12 @@ public class LoginUserQueryHandler : IQueryHandler<LoginUserQuery, LoginUserResp
                 var client = await _context.Set<Client>()
                     .Where(c => c.Email.Value == query.Email) 
                     .FirstOrDefaultAsync();
-            
+
+                if (client!.IsVerified==false)
+                {
+                    return Result<LoginUserResponse>.Fail(ClientErrorMessage.ClientNotVerified()).Data;
+                }
+                
                 if (client == null || !client.Password.Verify(query.Password))
                 {
                     return Result<LoginUserResponse>.Fail(ClientErrorMessage.InvalidCredentials()).Data;

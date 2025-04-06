@@ -1,39 +1,31 @@
-﻿using Domain.Aggregates.Client.Values;
+﻿using Domain.Aggregates.Client;
+using Domain.Aggregates.Client.Values;
 using Domain.Aggregates.SalonOwner;
+using Domain.Aggregates.SalonOwner.Values;
+using Domain.Common;
 using Domain.Common.OperationResult;
+using DomainModelPersistence.Common;
+using DomainModelPersistence.EfcConfigs;
+using Microsoft.EntityFrameworkCore;
 
 namespace DomainModelPersistence.SalonOwnerPersistence;
 
-public class SalonOwnerRepository: ISalonOwnerRepository
+public class SalonOwnerRepository : RepositoryBase<SalonOwner, SalonOwnerId>, ISalonOwnerRepository
 {
-    private readonly List<SalonOwner> _listOfSalonOwners = new();
-    
-    //This is just for test purpose
-    private readonly string _salonOwnerEmail = "salonowner@gmail.com";
-    
-    public async Task<Result> AddAsync(SalonOwner salonOwner)
-    {
-        if (salonOwner.EmailValue.Equals(Email.Create(_salonOwnerEmail).Data))
-        {
-            _listOfSalonOwners.Add(salonOwner);
-            return await Task.FromResult(Result.Success());
-        }
-        return await Task.FromResult(Result.Fail(SalonOwnerErrorMessage.SalonOwnerNotFound()));
-    }
+    private readonly DomainModelContext _context;
 
+    public SalonOwnerRepository(DomainModelContext context) : base(context)
+    {
+        _context = context;
+    }
+    
     public async Task<Result<SalonOwner>> GetAsync(Email email)
     {
-        // Check if the email matches the hardcoded salon owner email
-        if (email.Equals(Email.Create(_salonOwnerEmail).Data))
-        {
-            var salonOwner = _listOfSalonOwners.FirstOrDefault(c => c.EmailValue.Equals(email));
-            if (salonOwner == null)
-            {
-                return await Task.FromResult(Result<SalonOwner>.Fail(SalonOwnerErrorMessage.SalonOwnerNotFound()));
-            }
-            return await Task.FromResult(Result<SalonOwner>.Success(salonOwner));
-        }
+        var salonOwner = await _context.Set<SalonOwner>()
+            .FirstOrDefaultAsync(c => c.EmailValue.Equals(email));
 
-        return await Task.FromResult(Result<SalonOwner>.Fail(SalonOwnerErrorMessage.SalonOwnerNotFound()));
+        return salonOwner is null
+            ? Result<SalonOwner>.Fail(SalonOwnerErrorMessage.SalonOwnerNotFound())
+            : Result<SalonOwner>.Success(salonOwner);
     }
 }

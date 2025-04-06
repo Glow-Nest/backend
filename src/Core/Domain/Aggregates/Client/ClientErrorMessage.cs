@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices.JavaScript;
 using Domain.Common.OperationResult;
 
 namespace Domain.Aggregates.Client;
@@ -34,6 +35,7 @@ public class ClientErrorMessage
     public static Error OtpPurposeMismatch() => new("Otp.Purpose", "OTP code purpose does not match.");
     public static Error OtpEmailMismatch() => new("Otp.Email", "OTP code email does not match.");
     public static Error OtpAlreadyUsed() => new("Otp.Used", "OTP code has already been used.");
+    public static Error ClientNotVerified() => new("Client.NotVerified", "Client is not verified.");
     public static Error ClientAlreadyVerified() => new("Client.Verified", "Client is already verified.");
 
     // Token

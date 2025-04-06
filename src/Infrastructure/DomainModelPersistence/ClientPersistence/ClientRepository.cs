@@ -8,11 +8,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DomainModelPersistence.ClientPersistence;
 
-public class ClientRepository : RepositoryEfcBase<Client, ClientId>, IClientRepository
+public class ClientRepository : RepositoryBase<Client, ClientId>, IClientRepository
 {
     private readonly DomainModelContext _context;
 
-    public ClientRepository(DomainModelContext context, IUnitOfWork unitOfWork) : base(context, unitOfWork)
+    public ClientRepository(DomainModelContext context) : base(context)
     {
         _context = context;
     }

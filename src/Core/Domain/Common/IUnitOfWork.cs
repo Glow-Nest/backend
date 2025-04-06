@@ -9,5 +9,4 @@ public interface IUnitOfWork
     Task<List<IDomainEvent>> GetDomainEvents();
     
     Task<Result> ClearDomainEvents();
-    Task<Result> Track(AggregateRoot aggregate);
 }

@@ -35,7 +35,7 @@ internal class CreateOtpHandler : ICommandHandler<CreateOtpCommand>
         }
 
         var client = clientResult.Data;
-        var result = client.CreateOtp(command.Purpose, _dateTimeProvider, _unitOfWork);
+        var result = client.CreateOtp(command.Purpose, _dateTimeProvider);
 
         if (!result.IsSuccess)
         {

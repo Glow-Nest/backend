@@ -1,4 +1,5 @@
 ﻿using Domain.Aggregates.Client;
+using Domain.Aggregates.Client.Entities;
 using Domain.Aggregates.Client.Values;
 using Domain.Aggregates.SalonOwner;
 using Domain.Aggregates.SalonOwner.Values;
@@ -54,6 +55,45 @@ public class DomainModelContext(DbContextOptions options) : DbContext(options)
         });
         
         entityBuilder.Property(schedule => schedule.IsVerified).IsRequired();
+        
+        entityBuilder.OwnsOne(client => client.OtpSession, otpSession =>
+        {
+            // Email property mapping
+            otpSession.Property(p => p.Email)
+                .IsRequired()
+                .HasConversion(
+                    eId => eId.Value,
+                    dbValue => Email.Create(dbValue).Data
+                );
+
+            // Set OtpSession properties
+            otpSession.Property(session => session.OtpCode)
+                .HasColumnName("OtpCode")
+                .IsRequired()
+                .HasConversion(
+                    otpCode => otpCode.Value,
+                    dbValue => OtpCode.Create(dbValue).Data
+                );
+
+            otpSession.Property(session => session.CreatedAt)
+                .HasColumnName("CreatedAt")
+                .IsRequired();
+
+            otpSession.Property(session => session.Purpose)
+                .HasColumnName("Purpose")
+                .IsRequired()
+                .HasConversion(
+                    purpose => (int)purpose,
+                    purpose => (Purpose)purpose
+                );
+
+            otpSession.Property(session => session.IsUsed)
+                .HasColumnName("IsUsed")
+                .IsRequired();
+    
+            otpSession.ToTable("OtpSessions");
+            otpSession.HasKey("ClientId", "Email"); // composite key
+        });
     }
     
     private static void ConfigureSalonOwner(EntityTypeBuilder<SalonOwner> entityBuilder)

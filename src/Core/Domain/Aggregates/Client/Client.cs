@@ -52,7 +52,7 @@ public class Client : AggregateRoot
     }
 
     // TODO: remove unit of work. EFC add vayepaxi tracked aggregate dbContext bata lina milxa but list ma garda manually add garnu parxa track garna
-    public Result<OtpSession> CreateOtp(Purpose purpose, IDateTimeProvider dateTimeProvider, IUnitOfWork unitOfWork)
+    public Result<OtpSession> CreateOtp(Purpose purpose, IDateTimeProvider dateTimeProvider)
     {
         if (OtpSession is not null && dateTimeProvider.GetNow() > OtpSession.CreatedAt.AddMinutes(2))
         {
@@ -74,7 +74,6 @@ public class Client : AggregateRoot
         OtpSession = otpSessionResult.Data;
         
         AddDomainEvent(new OtpCreatedDomainEvent(OtpSession.OtpCode, this));
-        unitOfWork.Track(this);
         
         return Result<OtpSession>.Success(otpSessionResult.Data);
     }
