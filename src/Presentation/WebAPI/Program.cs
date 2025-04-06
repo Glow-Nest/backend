@@ -2,11 +2,14 @@ using System.Text;
 using Application.Extensions;
 using DomainModelPersistence;
 using DomainModelPersistence.EfcConfigs;
+using EfcQueries.Queries;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Npgsql;
+using QueryContracts.Contracts;
+using QueryContracts.Queries;
+using QueryContracts.QueryDispatching;
 using Scalar.AspNetCore;
 using Services;
 using Services.Authentication;
@@ -24,12 +27,14 @@ builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("Smtp
 
 builder.Services.RegisterHandlers();
 builder.Services.RegisterDispatcher();
+builder.Services.AddScoped<IQueryHandler<LoginUserQuery, LoginUserResponse>, LoginUserQueryHandler>();
+builder.Services.AddScoped<IQueryDispatcher>(provider => new QueryDispatcher(provider));
 
 builder.Services.RegisterContracts();
 builder.Services.RegisterServices();
 builder.Services.RegisterRepositories();
 builder.Services.RegisterUnitOfWork();
-builder.Services.AddSingleton<ITokenService, TokenService>();
+builder.Services.AddScoped<ITokenService, TokenService>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -42,18 +47,20 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-// Configure Cloud SQL connection (PostgreSQL)
-var cloudSqlConnectionString = builder.Configuration.GetConnectionString("CloudSqlConnection");
+builder.Services.AddScoped<DomainModelContext>();
 
-builder.Services.AddSingleton<NpgsqlConnection>(_ =>
-{
-    var connection = new NpgsqlConnection(cloudSqlConnectionString);
-    connection.Open();
-    return connection;
-});
+builder.Configuration.GetConnectionString("CloudSqlConnection");
 
+
+string? connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<DomainModelContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseNpgsql(connectionString!, npgsqlOptions =>
+    {
+        npgsqlOptions.EnableRetryOnFailure(
+            maxRetryCount: 5,
+            maxRetryDelay: TimeSpan.FromSeconds(10),
+            errorCodesToAdd: null);
+    }));
 
 var app = builder.Build();
 

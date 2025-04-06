@@ -13,12 +13,12 @@ public static class ServicesExtension
 {
     public static void RegisterContracts(this IServiceCollection serviceCollection)
     {
-        serviceCollection.AddSingleton<IEmailUniqueChecker, EmailUniqueChecker>();
-        serviceCollection.AddSingleton<IDateTimeProvider, DateTimeProvider>();
+        serviceCollection.AddScoped<IEmailUniqueChecker, EmailUniqueChecker>();
+        serviceCollection.AddScoped<IDateTimeProvider, DateTimeProvider>();
     }
 
     public static void RegisterServices(this IServiceCollection serviceCollection)
     {
-        serviceCollection.AddSingleton<IEmailSender, EmailSender>();
+        serviceCollection.AddScoped<IEmailSender, EmailSender>();
     }
 }

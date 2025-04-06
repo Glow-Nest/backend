@@ -1,53 +1,35 @@
 using Domain.Aggregates.Client;
 using Domain.Aggregates.Client.Values;
+using Domain.Common;
 using Domain.Common.OperationResult;
+using DomainModelPersistence.Common;
+using DomainModelPersistence.EfcConfigs;
+using Microsoft.EntityFrameworkCore;
 
 namespace DomainModelPersistence.ClientPersistence;
 
-public class ClientRepository : IClientRepository
+public class ClientRepository : RepositoryEfcBase<Client, ClientId>, IClientRepository
 {
-    private readonly List<Client> _listOfClients = new();
+    private readonly DomainModelContext _context;
 
-    public async Task<Result> AddAsync(Client client)
+    public ClientRepository(DomainModelContext context, IUnitOfWork unitOfWork) : base(context, unitOfWork)
     {
-        _listOfClients.Add(client);
-
-        Console.WriteLine($"Client with email {client.EmailAddress} added.");
-
-        return await Task.FromResult(Result.Success());
-    }
-
-    public async Task<Result<Client>> GetAsync(ClientId clientId)
-    {
-        var client = _listOfClients.FirstOrDefault(c => c.ClientId.Equals(clientId));
-
-        if (client == null)
-        {
-            return await Task.FromResult(Result<Client>.Fail(ClientErrorMessage.ClientNotFound()));
-        }
-
-        return await Task.FromResult(Result<Client>.Success(client));
+        _context = context;
     }
 
     public async Task<Result<Client>> GetAsync(Email email)
     {
-        var client = _listOfClients.FirstOrDefault(c => c.EmailValue.Equals(email));
-        if (client == null)
-        {
-            return await Task.FromResult(Result<Client>.Fail(ClientErrorMessage.ClientNotFound()));
-        }
+        var client = await _context.Set<Client>()
+            .FirstOrDefaultAsync(c => c.EmailValue.Equals(email));
 
-        return await Task.FromResult(Result<Client>.Success(client));
+        return client is null
+            ? Result<Client>.Fail(ClientErrorMessage.ClientNotFound())
+            : Result<Client>.Success(client);
     }
 
     public async Task<Result<List<Client>>> GetAllAsync()
     {
-        return await Task.FromResult(Result<List<Client>>.Success(_listOfClients.ToList()));
-    }
-
-    public async Task<Result> RemoveAsync()
-    {
-        _listOfClients.Clear();
-        return await Task.FromResult(Result.Success());
+        var clients = await _context.Set<Client>().ToListAsync();
+        return Result<List<Client>>.Success(clients);
     }
 }

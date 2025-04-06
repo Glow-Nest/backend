@@ -14,16 +14,16 @@ public static class ApplicationExtensions
 {
     public static void RegisterHandlers(this IServiceCollection serviceCollection)
     {
-        serviceCollection.AddSingleton<ICommandHandler<CreateClientCommand>, CreateClientHandler>();
-        serviceCollection.AddSingleton<ICommandHandler<CreateOtpCommand>, CreateOtpHandler>();
-        serviceCollection.AddSingleton<ICommandHandler<VerifyOtpCommand>, VerifyOtpHandler>();
+        serviceCollection.AddScoped<ICommandHandler<CreateClientCommand>, CreateClientHandler>();
+        serviceCollection.AddScoped<ICommandHandler<CreateOtpCommand>, CreateOtpHandler>();
+        serviceCollection.AddScoped<ICommandHandler<VerifyOtpCommand>, VerifyOtpHandler>();
 
-        serviceCollection.AddSingleton<IDomainEventHandler<OtpCreatedDomainEvent>, OtpCreatedDomainEventHandler>();
+        serviceCollection.AddScoped<IDomainEventHandler<OtpCreatedDomainEvent>, OtpCreatedDomainEventHandler>();
     }
 
     public static void RegisterDispatcher(this IServiceCollection serviceCollection)
     {
-        serviceCollection.AddSingleton<ICommandDispatcher>(provider =>
+        serviceCollection.AddScoped<ICommandDispatcher>(provider =>
         {
             var dispatcher = new CommandDispatcher(provider);
             var transactionDecorator = new TransactionDecorator(dispatcher, provider.GetRequiredService<IUnitOfWork>());
@@ -32,6 +32,6 @@ public static class ApplicationExtensions
             return domainEventDecorator;
         });
 
-        serviceCollection.AddSingleton<IDomainEventDispatcher, DomainEventDispatcher>();
+        serviceCollection.AddScoped<IDomainEventDispatcher, DomainEventDispatcher>();
     }
 }

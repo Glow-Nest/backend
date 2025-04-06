@@ -11,12 +11,12 @@ public static class RepositoryExtensions
 {
     public static void RegisterRepositories(this IServiceCollection serviceCollection)
     {
-        serviceCollection.AddSingleton<IClientRepository, ClientRepository>();
-        serviceCollection.AddSingleton<ISalonOwnerRepository, SalonOwnerRepository>();
+        serviceCollection.AddScoped<IClientRepository, ClientRepository>();
+        serviceCollection.AddScoped<ISalonOwnerRepository, SalonOwnerRepository>();
     }
 
     public static void RegisterUnitOfWork(this IServiceCollection serviceCollection)
     {
-        serviceCollection.AddSingleton<IUnitOfWork, UnitOfWork>();
+        serviceCollection.AddScoped<IUnitOfWork, UnitOfWork>();
     }
 }

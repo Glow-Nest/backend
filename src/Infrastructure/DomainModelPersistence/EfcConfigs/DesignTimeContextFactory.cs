@@ -8,7 +8,7 @@ public class DesignTimeContextFactory : IDesignTimeDbContextFactory<DomainModelC
     public DomainModelContext CreateDbContext(string[] args)
     {
         var optionsBuilder = new DbContextOptionsBuilder<DomainModelContext>();
-        var connectionString = "Host=thermally-subtle-anhinga.data-1.euc1.tembo.io;Port=5432;Database=postgres;Username=postgres;Password=JQ9sV2dZLfqQCGXI; SSL Mode=disable;Timeout=30;Command Timeout=30;Connection Lifetime=500";
+        var connectionString = "Host=thermally-subtle-anhinga.data-1.euc1.tembo.io;Port=5432;Database=postgres;Username=postgres;Password=JQ9sV2dZLfqQCGXI;Ssl Mode=Require;Trust Server Certificate=true";
         optionsBuilder.UseNpgsql(connectionString);
         return new DomainModelContext(optionsBuilder.Options);
     }

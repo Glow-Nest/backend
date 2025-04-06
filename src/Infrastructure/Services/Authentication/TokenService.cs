@@ -11,6 +11,10 @@ public class TokenService:ITokenService
 {
     private readonly IConfiguration _configuration;
 
+    // Todo: Use a more robust error handling mechanism
+    private Error MissingConfiguration = new Error("MissingConfiguration", "The secret key is not configured.");
+    private Error KeyIsTooShort = new Error("KeyIsTooShort", "The secret key is too short. Must be at least 128 bits.");
+
     public TokenService(IConfiguration configuration)
     {
         _configuration = configuration;
@@ -19,7 +23,19 @@ public class TokenService:ITokenService
     public Task<Result<TokenInfo>> GenerateTokenAsync(string email,string role)
     {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_configuration.GetSection("JwtSetting:SecretKey").Key);
+            var secretKey = _configuration["JwtSetting:SecretKey"];
+            
+            if (string.IsNullOrEmpty(secretKey))
+            {
+                return Task.FromResult(Result<TokenInfo>.Fail(MissingConfiguration));
+            }
+
+            // Ensure key is at least 128 bits long (16 characters for UTF-8 encoding)
+            var key = Encoding.UTF8.GetBytes(secretKey);
+            if (key.Length < 16)
+            {
+                return Task.FromResult(Result<TokenInfo>.Fail(KeyIsTooShort));
+            }
             
             var claims = new List<Claim>
             {

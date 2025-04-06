@@ -43,4 +43,5 @@ public class ClientErrorMessage
     public static Error InvalidCredentials() => new("Credentials.Invalid", "Invalid credentials.");
 
     public static Error PasswordNotVerified() => new("Passwords.NotVerified", "Password not verified.");
+    public static Error FailedToGenerateToken() => new("Token.Failed", "Failed to generate token.");
 }

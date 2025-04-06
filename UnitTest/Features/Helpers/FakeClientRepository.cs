@@ -1,13 +1,24 @@
 using Domain.Aggregates.Client;
 using Domain.Aggregates.Client.Values;
 using Domain.Common.OperationResult;
+using Domain.Common.Repositories;
 
 namespace UnitTest.Features.Helpers;
 
 public class FakeClientRepository : IClientRepository
 {
     private List<Client>  _listOfClients = new();
-    
+
+    Task<Result> IGenericRepository<Client, ClientId>.RemoveAsync(ClientId id)
+    {
+        throw new NotImplementedException();
+    }
+
+    Task<Result> IClientRepository.RemoveAsync(ClientId clientId)
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task<Result> AddAsync(Client clientToAdd)
     {
         _listOfClients.Add(clientToAdd);

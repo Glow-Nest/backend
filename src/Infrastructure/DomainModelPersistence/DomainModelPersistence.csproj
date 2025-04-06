@@ -17,6 +17,7 @@
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.3" />
       <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
       <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions">
         <HintPath>C:\Users\pdlra\.nuget\packages\microsoft.extensions.dependencyinjection.abstractions\9.0.3\lib\net9.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
