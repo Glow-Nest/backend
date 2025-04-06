@@ -19,7 +19,6 @@ public class Client : AggregateRoot
     internal bool IsVerified { get; private set; }
 
     public string EmailAddress => Email.Value;
-    public Email EmailValue => Email;
     public Password PasswordValue => Password;
 
     public Client() // for EF Core

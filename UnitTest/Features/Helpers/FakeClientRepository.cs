@@ -32,7 +32,7 @@ public class FakeClientRepository : IClientRepository
 
     public async Task<Result<Client>> GetAsync(Email email)
     {
-        var client = _listOfClients.FirstOrDefault(c => c.EmailValue.Equals(email));
+        var client = _listOfClients.FirstOrDefault(c => c.Email.Equals(email));
         if (client == null)
         {
             return await Task.FromResult(Result<Client>.Fail(ClientErrorMessage.ClientNotFound()));

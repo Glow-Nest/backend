@@ -1,5 +1,6 @@
 using System.Text;
 using Application.Extensions;
+using Domain.Common.OperationResult;
 using DomainModelPersistence;
 using DomainModelPersistence.EfcConfigs;
 using EfcQueries.Queries;
@@ -27,7 +28,7 @@ builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("Smtp
 
 builder.Services.RegisterHandlers();
 builder.Services.RegisterDispatcher();
-builder.Services.AddScoped<IQueryHandler<LoginUserQuery, LoginUserResponse>, LoginUserQueryHandler>();
+builder.Services.AddScoped<IQueryHandler<LoginUserQuery, Result<LoginUserResponse>>, LoginUserQueryHandler>();
 builder.Services.AddScoped<IQueryDispatcher>(provider => new QueryDispatcher(provider));
 
 builder.Services.RegisterContracts();

@@ -60,6 +60,7 @@ public class DomainModelContext(DbContextOptions options) : DbContext(options)
         {
             // Email property mapping
             otpSession.Property(p => p.Email)
+                .HasColumnName("Email")
                 .IsRequired()
                 .HasConversion(
                     eId => eId.Value,
@@ -77,7 +78,11 @@ public class DomainModelContext(DbContextOptions options) : DbContext(options)
 
             otpSession.Property(session => session.CreatedAt)
                 .HasColumnName("CreatedAt")
-                .IsRequired();
+                .IsRequired()
+                .HasConversion(
+                    createdAt => createdAt.ToUniversalTime(), 
+                    dbValue => DateTimeOffset.UtcNow
+                );
 
             otpSession.Property(session => session.Purpose)
                 .HasColumnName("Purpose")

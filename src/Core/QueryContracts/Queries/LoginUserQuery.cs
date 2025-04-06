@@ -1,9 +1,10 @@
+using Domain.Common.OperationResult;
 using QueryContracts.Contracts;
 
 namespace QueryContracts.Queries;
 
 public record LoginUserResponse(string Email, string Username, string Token, string Role);
-public class LoginUserQuery: IQuery<LoginUserResponse>
+public class LoginUserQuery: IQuery<Result<LoginUserResponse>>
 {
     public string Email { get; private set; }
     public string Password { get; private set; }

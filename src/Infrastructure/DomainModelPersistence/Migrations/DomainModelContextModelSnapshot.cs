@@ -110,6 +110,48 @@ namespace DomainModelPersistence.Migrations
 
                     b.ToTable("SalonOwner");
                 });
+
+            modelBuilder.Entity("Domain.Aggregates.Client.Client", b =>
+                {
+                    b.OwnsOne("Domain.Aggregates.Client.Entities.OtpSession", "OtpSession", b1 =>
+                        {
+                            b1.Property<Guid>("ClientId")
+                                .HasColumnType("uuid");
+
+                            b1.Property<string>("Email")
+                                .HasColumnType("text")
+                                .HasColumnName("Email");
+
+                            b1.Property<DateTime>("CreatedAt")
+                                .HasColumnType("timestamp with time zone")
+                                .HasColumnName("CreatedAt");
+
+                            b1.Property<bool>("IsUsed")
+                                .HasColumnType("boolean")
+                                .HasColumnName("IsUsed");
+
+                            b1.Property<string>("OtpCode")
+                                .IsRequired()
+                                .HasColumnType("text")
+                                .HasColumnName("OtpCode");
+
+                            b1.Property<int>("Purpose")
+                                .HasColumnType("integer")
+                                .HasColumnName("Purpose");
+
+                            b1.HasKey("ClientId", "Email");
+
+                            b1.HasIndex("ClientId")
+                                .IsUnique();
+
+                            b1.ToTable("OtpSessions", (string)null);
+
+                            b1.WithOwner()
+                                .HasForeignKey("ClientId");
+                        });
+
+                    b.Navigation("OtpSession");
+                });
 #pragma warning restore 612, 618
         }
     }

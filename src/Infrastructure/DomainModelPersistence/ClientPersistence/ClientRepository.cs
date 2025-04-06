@@ -20,7 +20,7 @@ public class ClientRepository : RepositoryBase<Client, ClientId>, IClientReposit
     public async Task<Result<Client>> GetAsync(Email email)
     {
         var client = await _context.Set<Client>()
-            .FirstOrDefaultAsync(c => c.EmailValue.Equals(email));
+            .FirstOrDefaultAsync(c => c.Email.Equals(email));
 
         return client is null
             ? Result<Client>.Fail(ClientErrorMessage.ClientNotFound())

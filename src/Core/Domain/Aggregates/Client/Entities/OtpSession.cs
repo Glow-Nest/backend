@@ -8,11 +8,11 @@ public class OtpSession
 {
     internal Email Email { get; }
     public OtpCode OtpCode { get; private set; }
-    internal DateTime CreatedAt { get; }
+    internal DateTimeOffset CreatedAt { get; }
     internal Purpose Purpose { get; }
     internal bool IsUsed { get; private set; }
 
-    protected OtpSession(Email email, OtpCode otpCode, DateTime createdAt, Purpose purpose)
+    protected OtpSession(Email email, OtpCode otpCode, DateTimeOffset createdAt, Purpose purpose)
     {
         Email = email;
         OtpCode = otpCode;

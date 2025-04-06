@@ -12,7 +12,11 @@ public class LoginClientEndpoint: QueryEndpoint.WithRequest<LoginUserQuery>.With
     public override Task<ActionResult<LoginUserResponse>> HandleAsync(LoginUserQuery request, IQueryDispatcher queryDispatcher)
     {
         var query = new LoginUserQuery(request.Email, request.Password);
-        var result = queryDispatcher.DispatchAsync(query).Result;
-        return Task.FromResult<ActionResult<LoginUserResponse>>(Ok(result));
+        var dispatchResult = queryDispatcher.DispatchAsync(query).Result;
+        if (dispatchResult.IsSuccess)
+        {
+            return Task.FromResult<ActionResult<LoginUserResponse>>(Ok(dispatchResult.Data));
+        }
+        return Task.FromResult<ActionResult<LoginUserResponse>>(BadRequest(dispatchResult.Errors));
     }
 }
