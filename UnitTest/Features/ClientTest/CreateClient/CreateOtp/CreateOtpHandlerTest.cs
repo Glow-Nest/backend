@@ -33,7 +33,7 @@ public class CreateOtpHandlerTest
 
 
         var otpCommand = CreateOtpCommand.Create("validU@gmail.com", "Registration").Data;
-        var createOtpHandler = new CreateOtpHandler(repository, _mockDateTimeProvider.Object, fakeUnitOfWork, _emailSender);
+        var createOtpHandler = new CreateOtpHandler(repository, _mockDateTimeProvider.Object, _emailSender);
 
         // Act
         var result = await createOtpHandler.HandleAsync(otpCommand);
@@ -53,7 +53,7 @@ public class CreateOtpHandlerTest
         _mockDateTimeProvider.Setup(d => d.GetNow()).Returns(now.AddMinutes(5));
 
         var otpCommand = CreateOtpCommand.Create("invalidEmail@gmail.com", "Registration").Data;
-        var createOtpHandler = new CreateOtpHandler(repository, _mockDateTimeProvider.Object, fakeUnitOfWork, _emailSender);
+        var createOtpHandler = new CreateOtpHandler(repository, _mockDateTimeProvider.Object, _emailSender);
 
         // Act
         var result = await createOtpHandler.HandleAsync(otpCommand);

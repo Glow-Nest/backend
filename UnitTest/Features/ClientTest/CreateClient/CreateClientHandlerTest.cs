@@ -12,7 +12,6 @@ public class CreateClientHandlerTest
         // Arrange
         var clientRepository = new FakeClientRepository();
         var emailUniqueChecker = new FakeEmailUniqueChecker(clientRepository);
-        var unitOfWork = new FakeUnitOfWork();
 
         var firstNameStr = "Valid";
         var lastNameStr = "User";
@@ -22,7 +21,7 @@ public class CreateClientHandlerTest
 
         var command = CreateClientCommand.Create(firstNameStr, lastNameStr, emailStr, passwordStr, phoneNumberStr).Data;
 
-        var handler = new CreateClientHandler(emailUniqueChecker, clientRepository, unitOfWork);
+        var handler = new CreateClientHandler(emailUniqueChecker, clientRepository);
 
         // Act
         var result = await handler.HandleAsync(command);

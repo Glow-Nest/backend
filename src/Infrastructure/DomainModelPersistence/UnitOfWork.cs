@@ -9,8 +9,7 @@ public class UnitOfWork : IUnitOfWork
 {
     private readonly DomainModelContext _context;
     private bool _changesSaved = false;
-    private Error ErrorInSaving= new Error("Error in saving changes",
-        "An error occurred while saving changes to the database.");
+    
 
     public UnitOfWork(DomainModelContext context)
     {
@@ -30,7 +29,7 @@ public class UnitOfWork : IUnitOfWork
         }
         catch (Exception)
         {
-            return Result.Fail(ErrorInSaving);
+            return Result.Fail(GenericErrorMessage.ErrorInSaving());
         }
     }
 

@@ -29,7 +29,7 @@ public class VerifyOtpHandlerTest
     {
         // Arrange
         var command = VerifyOtpCommand.Create("test@example.com","1234").Data ;
-        var handler = new VerifyOtpHandler(_repository, _dateTimeProviderMock.Object, _unitOfWork);
+        var handler = new VerifyOtpHandler(_repository, _dateTimeProviderMock.Object);
 
         // Act
         var result = await handler.HandleAsync(command);
@@ -51,7 +51,7 @@ public class VerifyOtpHandlerTest
         
         var otp = clientResult.Data.CreateOtp(Purpose.Registration, _dateTimeProviderMock.Object).Data;
 
-        var handler = new VerifyOtpHandler(_repository, _dateTimeProviderMock.Object, _unitOfWork);
+        var handler = new VerifyOtpHandler(_repository, _dateTimeProviderMock.Object);
         var command = VerifyOtpCommand.Create(clientResult.Data.Email.Value,otp.OtpCode.Value).Data ;
 
         // Act

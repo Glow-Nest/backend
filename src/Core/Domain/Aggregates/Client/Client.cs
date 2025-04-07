@@ -16,7 +16,7 @@ public class Client : AggregateRoot
     internal Password Password { get; private set; }
     internal PhoneNumber PhoneNumber { get; private set; }
     internal OtpSession? OtpSession { get; private set; }
-    internal bool IsVerified { get; private set; }
+    internal bool IsVerified { get; set; }
 
     public string EmailAddress => Email.Value;
     public Password PasswordValue => Password;

@@ -10,10 +10,6 @@ public class SalonOwner : AggregateRoot
     public SalonOwnerId SalonOwnerId { get; private set; }
     internal Email Email { get; private set; }
     internal Password Password { get; private set; }
-    
-    public string EmailAddress => Email.Value;
-    public Email EmailValue => Email;
-    public Password PasswordValue => Password;
 
     public SalonOwner() // For EF
     {

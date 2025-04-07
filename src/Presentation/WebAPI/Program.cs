@@ -3,6 +3,7 @@ using Application.Extensions;
 using Domain.Common.OperationResult;
 using DomainModelPersistence;
 using DomainModelPersistence.EfcConfigs;
+using EfcQueries.Extension;
 using EfcQueries.Queries;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -28,14 +29,14 @@ builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("Smtp
 
 builder.Services.RegisterHandlers();
 builder.Services.RegisterDispatcher();
-builder.Services.AddScoped<IQueryHandler<LoginUserQuery, Result<LoginUserResponse>>, LoginUserQueryHandler>();
-builder.Services.AddScoped<IQueryDispatcher>(provider => new QueryDispatcher(provider));
+builder.Services.RegisterQueryHandlers();
 
 builder.Services.RegisterContracts();
 builder.Services.RegisterServices();
 builder.Services.RegisterRepositories();
 builder.Services.RegisterUnitOfWork();
-builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.RegisterToken();
+builder.Services.RegisterDatabase(builder.Configuration);
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -51,17 +52,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddScoped<DomainModelContext>();
 
 builder.Configuration.GetConnectionString("CloudSqlConnection");
-
-
-string? connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<DomainModelContext>(options =>
-    options.UseNpgsql(connectionString!, npgsqlOptions =>
-    {
-        npgsqlOptions.EnableRetryOnFailure(
-            maxRetryCount: 5,
-            maxRetryDelay: TimeSpan.FromSeconds(10),
-            errorCodesToAdd: null);
-    }));
 
 var app = builder.Build();
 

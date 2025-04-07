@@ -13,15 +13,12 @@ internal class CreateOtpHandler : ICommandHandler<CreateOtpCommand>
 {
     private readonly IClientRepository _clientRepository;
     private readonly IDateTimeProvider _dateTimeProvider;
-    private readonly IUnitOfWork _unitOfWork;
     private readonly IEmailSender _emailSender;
 
-    public CreateOtpHandler(IClientRepository clientRepository, IDateTimeProvider dateTimeProvider,
-        IUnitOfWork unitOfWork, IEmailSender emailSender)
+    public CreateOtpHandler(IClientRepository clientRepository, IDateTimeProvider dateTimeProvider, IEmailSender emailSender)
     {
         _clientRepository = clientRepository;
         _dateTimeProvider = dateTimeProvider;
-        _unitOfWork = unitOfWork;
         _emailSender = emailSender;
     }
 

@@ -11,13 +11,11 @@ public class VerifyOtpHandler : ICommandHandler<VerifyOtpCommand>
 {
     private readonly IClientRepository _clientRepository;
     private readonly IDateTimeProvider _dateTimeProvider;
-    private readonly IUnitOfWork _unitOfWork;
     
-    public VerifyOtpHandler(IClientRepository clientRepository, IDateTimeProvider dateTimeProvider, IUnitOfWork unitOfWork)
+    public VerifyOtpHandler(IClientRepository clientRepository, IDateTimeProvider dateTimeProvider)
     {
         _clientRepository = clientRepository;
         _dateTimeProvider = dateTimeProvider;
-        _unitOfWork = unitOfWork;
     }
 
     public async Task<Result> HandleAsync(VerifyOtpCommand command)

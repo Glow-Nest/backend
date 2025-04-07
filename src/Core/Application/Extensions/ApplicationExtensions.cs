@@ -7,6 +7,7 @@ using Application.Handlers.DomainEvents;
 using Domain.Aggregates.Client.DomainEvents;
 using Domain.Common;
 using Microsoft.Extensions.DependencyInjection;
+using QueryContracts.QueryDispatching;
 
 namespace Application.Extensions;
 
@@ -33,5 +34,6 @@ public static class ApplicationExtensions
         });
 
         serviceCollection.AddScoped<IDomainEventDispatcher, DomainEventDispatcher>();
+        serviceCollection.AddScoped<IQueryDispatcher, QueryDispatcher>();
     }
 }

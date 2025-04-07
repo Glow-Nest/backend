@@ -22,7 +22,7 @@ public class SalonOwnerRepository : RepositoryBase<SalonOwner, SalonOwnerId>, IS
     public async Task<Result<SalonOwner>> GetAsync(Email email)
     {
         var salonOwner = await _context.Set<SalonOwner>()
-            .FirstOrDefaultAsync(c => c.EmailValue.Equals(email));
+            .FirstOrDefaultAsync(c => c.Email.Equals(email));
 
         return salonOwner is null
             ? Result<SalonOwner>.Fail(SalonOwnerErrorMessage.SalonOwnerNotFound())

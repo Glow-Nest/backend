@@ -22,11 +22,11 @@ public class ClientErrorMessage
     public static Error PasswordMissingUppercase() => new("Password.Uppercase", "Password must contain at least one uppercase letter.");
     public static Error PasswordMissingDigit() => new("Password.Digit", "Password must contain at least one digit.");
     public static Error PasswordMissingSpecialCharacter() => new("Password.Special", "Password must contain at least one special character.");
-    
+    public static Error PasswordDoesntMatch() => new Error("Password.DoesNotMatch", "Password does not match.");
     // PhoneNumber
     public static Error PhoneNumberCannotBeEmpty() => new("Phone.Empty", "Phone number cannot be empty.");
     public static Error PhoneNumberMustBeEightDigitsOnly() => new("Phone.Invalid", "Phone number must be exactly 8 digits, with no spaces or symbols.");
-    
+    public static Error PasswordNotVerified() => new("Passwords.NotVerified", "Password not verified.");
     // OtpSession
     public static Error InvalidOtp() => new("Otp.Invalid", "Invalid OTP code.");
     public static Error OtpExpired() => new("Otp.Expired", "OTP code has expired. Request new one. ");
@@ -43,7 +43,5 @@ public class ClientErrorMessage
     public static Error ExpiredDateIsInFuture() => new("Token.Future", "Expiration date cannot be in the future.");
     public static Error RoleIsEmpty() => new("Token.Role", "Role cannot be empty.");
     public static Error InvalidCredentials() => new("Credentials.Invalid", "Invalid credentials.");
-
-    public static Error PasswordNotVerified() => new("Passwords.NotVerified", "Password not verified.");
     public static Error FailedToGenerateToken() => new("Token.Failed", "Failed to generate token.");
 }
