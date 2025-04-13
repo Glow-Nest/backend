@@ -1,20 +1,11 @@
 using System.Text;
 using Application.Extensions;
-using Domain.Common.OperationResult;
 using DomainModelPersistence;
-using DomainModelPersistence.EfcConfigs;
 using EfcQueries.Extension;
-using EfcQueries.Queries;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Npgsql;
-using QueryContracts.Contracts;
-using QueryContracts.Queries;
-using QueryContracts.QueryDispatching;
 using Scalar.AspNetCore;
 using Services;
-using Services.Authentication;
 using Services.Email;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,15 +18,12 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("Smtp"));
 
-builder.Services.RegisterHandlers();
-builder.Services.RegisterDispatcher();
+builder.Services.RegisterApplications();
+builder.Services.RegisterDmPersistence();
+
 builder.Services.RegisterQueryHandlers();
 
-builder.Services.RegisterContracts();
 builder.Services.RegisterServices();
-builder.Services.RegisterRepositories();
-builder.Services.RegisterUnitOfWork();
-builder.Services.RegisterToken();
 builder.Services.RegisterDatabase(builder.Configuration);
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -49,7 +37,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-builder.Services.AddScoped<DomainModelContext>();
 
 builder.Configuration.GetConnectionString("CloudSqlConnection");
 

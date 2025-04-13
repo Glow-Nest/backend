@@ -1,8 +1,6 @@
-﻿using Domain.Aggregates.Client;
-using Domain.Aggregates.Client.Values;
+﻿using Domain.Aggregates.Client.Values;
 using Domain.Aggregates.SalonOwner;
 using Domain.Aggregates.SalonOwner.Values;
-using Domain.Common;
 using Domain.Common.OperationResult;
 using DomainModelPersistence.Common;
 using DomainModelPersistence.EfcConfigs;

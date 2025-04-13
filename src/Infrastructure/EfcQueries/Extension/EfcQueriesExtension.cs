@@ -6,23 +6,17 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using QueryContracts.Contracts;
 using QueryContracts.Queries;
-using Services.Authentication;
 
 namespace EfcQueries.Extension;
 
-public static class ApplicationExtension
+public static class EfcQueriesExtension
 {
     public static void RegisterQueryHandlers(this IServiceCollection services)
     {
         services.AddScoped<IQueryHandler<LoginUserQuery, Result<LoginUserResponse>>, LoginUserQueryHandler>();
     }
 
-    public static void RegisterToken(this IServiceCollection serviceCollection)
-    {
-        serviceCollection.AddScoped<ITokenService, TokenService>();
-    }
-
-    public static void RegisterDatabase(this IServiceCollection serviceCollection,IConfiguration configuration)
+    public static void RegisterDatabase(this IServiceCollection serviceCollection, IConfiguration configuration)
     {
         var connectionString = configuration.GetConnectionString("DefaultConnection");
 

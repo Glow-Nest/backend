@@ -13,7 +13,13 @@ namespace Application.Extensions;
 
 public static class ApplicationExtensions
 {
-    public static void RegisterHandlers(this IServiceCollection serviceCollection)
+    public static void RegisterApplications(this IServiceCollection serviceCollection)
+    {
+        RegisterHandlers(serviceCollection);
+        RegisterDispatcher(serviceCollection);
+    }
+    
+    private static void RegisterHandlers(this IServiceCollection serviceCollection)
     {
         serviceCollection.AddScoped<ICommandHandler<CreateClientCommand>, CreateClientHandler>();
         serviceCollection.AddScoped<ICommandHandler<CreateOtpCommand>, CreateOtpHandler>();
@@ -22,7 +28,7 @@ public static class ApplicationExtensions
         serviceCollection.AddScoped<IDomainEventHandler<OtpCreatedDomainEvent>, OtpCreatedDomainEventHandler>();
     }
 
-    public static void RegisterDispatcher(this IServiceCollection serviceCollection)
+    private static void RegisterDispatcher(this IServiceCollection serviceCollection)
     {
         serviceCollection.AddScoped<ICommandDispatcher>(provider =>
         {
