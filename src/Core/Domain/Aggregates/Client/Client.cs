@@ -13,7 +13,7 @@ public class Client : AggregateRoot
     public ClientId ClientId { get; private set; }
     public FullName FullName { get; private set; }
     internal Email Email { get; private set; }
-    internal Password Password { get; private set; }
+    internal Password Password { get;}
     internal PhoneNumber PhoneNumber { get; private set; }
     internal OtpSession? OtpSession { get; private set; }
     internal bool IsVerified { get; set; }

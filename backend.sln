@@ -26,6 +26,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryContracts", "src\Core\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EfcQueries", "src\Infrastructure\EfcQueries\EfcQueries.csproj", "{4F827FB2-C775-4A40-9C53-2C97B314B865}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrationTests", "IntegrationTests\IntegrationTests.csproj", "{C7E1AA12-40E0-4FF5-82FC-5832240B2554}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +45,7 @@ Global
 		{8B959EC3-C9F0-4553-950E-EE10D7B49FAF} = {49C4FCB5-2FC8-433B-9EA3-0BD054D27671}
 		{BDEA37C2-FCAA-44AC-A6DD-F0A8AD012CD9} = {0E5B9AE0-4C70-4707-A6DB-7B126BC1928D}
 		{4F827FB2-C775-4A40-9C53-2C97B314B865} = {9E6F4F1C-AED7-4A3D-90B7-F00D92969542}
+		{C7E1AA12-40E0-4FF5-82FC-5832240B2554} = {652A31A0-FF5A-49C1-9953-F77D3D93E1F3}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{D295B449-B023-4D3D-9B3B-1A5901720991}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -77,5 +80,9 @@ Global
 		{4F827FB2-C775-4A40-9C53-2C97B314B865}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4F827FB2-C775-4A40-9C53-2C97B314B865}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4F827FB2-C775-4A40-9C53-2C97B314B865}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C7E1AA12-40E0-4FF5-82FC-5832240B2554}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7E1AA12-40E0-4FF5-82FC-5832240B2554}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C7E1AA12-40E0-4FF5-82FC-5832240B2554}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C7E1AA12-40E0-4FF5-82FC-5832240B2554}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

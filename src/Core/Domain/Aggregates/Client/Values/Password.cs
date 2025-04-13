@@ -62,7 +62,6 @@ public class Password : ValueObject
 
     public bool Verify(string passwordToCheck)
     {
-        // Compare the input password with the stored hash
         return BCrypt.Net.BCrypt.Verify(passwordToCheck, Value);
     }
     

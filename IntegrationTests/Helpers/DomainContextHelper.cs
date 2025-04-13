@@ -2,17 +2,41 @@
 using Domain.Aggregates.Client.Values;
 using Domain.Aggregates.SalonOwner;
 using Domain.Aggregates.SalonOwner.Values;
+using DomainModelPersistence.EfcConfigs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace DomainModelPersistence.EfcConfigs;
+namespace IntegrationTests.Helpers;
 
-public class DomainModelContext(DbContextOptions options) : DbContext(options)
+public class DomainContextHelper : DomainModelContext
 {
+    public DomainContextHelper(DbContextOptions<DomainModelContext> options) 
+        : base(options)
+    {
+    }
+    
+    public static DomainContextHelper SetupContext()
+    {
+        DbContextOptionsBuilder<DomainModelContext> optionsBuilder = new();
+        string testDbName = "Test" + Guid.NewGuid() +".db";
+        optionsBuilder.UseSqlite(@"Data Source = " + testDbName);
+        DomainContextHelper context = new(optionsBuilder.Options);
+        
+        context.Database.EnsureDeleted();
+        context.Database.EnsureCreated();
+        return context;
+    }
+    
+    public static async Task SaveAndClearAsync<T>(T entity, DomainContextHelper context) 
+        where T : class
+    {
+        await context.Set<T>().AddAsync(entity);
+        await context.SaveChangesAsync();
+        context.ChangeTracker.Clear();
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(DomainModelContext).Assembly);
         ConfigureClient(modelBuilder.Entity<Client>());
         ConfigureSalonOwner(modelBuilder.Entity<SalonOwner>());
     }
@@ -26,7 +50,7 @@ public class DomainModelContext(DbContextOptions options) : DbContext(options)
             .HasConversion(
                 mId => mId.Value,
                 dbvalue => ClientId.FromGuid(dbvalue));
-        
+
         entityBuilder.ComplexProperty<FullName>(p => p.FullName, propBuilder =>
         {
             propBuilder.Property(valueObject => valueObject.FirstName)
@@ -34,30 +58,29 @@ public class DomainModelContext(DbContextOptions options) : DbContext(options)
             propBuilder.Property(valueObject => valueObject.LastName)
                 .HasColumnName("LastName");
         });
-        
+
         entityBuilder.ComplexProperty<PhoneNumber>(p => p.PhoneNumber, propBuilder =>
         {
             propBuilder.Property(valueObject => valueObject.Value)
                 .HasColumnName("PhoneNumber");
         });
-        
+
         entityBuilder.ComplexProperty<Email>(p => p.Email, propBuilder =>
         {
             propBuilder.Property(valueObject => valueObject.Value)
                 .HasColumnName("Email");
         });
-        
+
         entityBuilder.ComplexProperty<Password>(p => p.Password, propBuilder =>
         {
             propBuilder.Property(valueObject => valueObject.Value)
                 .HasColumnName("Password");
         });
-        
+
         entityBuilder.Property(schedule => schedule.IsVerified).IsRequired();
-        
+
         entityBuilder.OwnsOne(client => client.OtpSession, otpSession =>
         {
-            // Email property mapping
             otpSession.Property(p => p.Email)
                 .HasColumnName("Email")
                 .IsRequired()
@@ -66,7 +89,6 @@ public class DomainModelContext(DbContextOptions options) : DbContext(options)
                     dbValue => Email.Create(dbValue).Data
                 );
 
-            // Set OtpSession properties
             otpSession.Property(session => session.OtpCode)
                 .HasColumnName("OtpCode")
                 .IsRequired()
@@ -79,8 +101,8 @@ public class DomainModelContext(DbContextOptions options) : DbContext(options)
                 .HasColumnName("CreatedAt")
                 .IsRequired()
                 .HasConversion(
-                    createdAt => createdAt.ToUniversalTime(), 
-                    dbValue => DateTimeOffset.UtcNow
+                    createdAt => createdAt.ToUniversalTime(),
+                    dbValue => DateTimeOffset.UtcNow // Might need adjustment if preserving exact values is important
                 );
 
             otpSession.Property(session => session.Purpose)
@@ -94,33 +116,31 @@ public class DomainModelContext(DbContextOptions options) : DbContext(options)
             otpSession.Property(session => session.IsUsed)
                 .HasColumnName("IsUsed")
                 .IsRequired();
-    
+
             otpSession.ToTable("OtpSessions");
-            otpSession.HasKey("ClientId", "Email"); // composite key
+            otpSession.HasKey("ClientId", "Email");
         });
     }
-    
+
     private static void ConfigureSalonOwner(EntityTypeBuilder<SalonOwner> entityBuilder)
     {
         entityBuilder.HasKey(salonOwner => salonOwner.SalonOwnerId);
-        
+
         entityBuilder.Property(m => m.SalonOwnerId)
             .IsRequired()
             .HasConversion(
                 mId => mId.Value,
                 dbvalue => SalonOwnerId.FromGuid(dbvalue));
 
-        entityBuilder.ComplexProperty<Email>(p => p.Email,
-            builder =>
-            {
-                builder.Property(value => value.Value).HasColumnName("Email");
-            });
-        
+        entityBuilder.ComplexProperty<Email>(p => p.Email, builder =>
+        {
+            builder.Property(value => value.Value).HasColumnName("Email");
+        });
+
         entityBuilder.ComplexProperty<Password>(p => p.Password, propBuilder =>
         {
             propBuilder.Property(valueObject => valueObject.Value)
                 .HasColumnName("Password");
         });
     }
-        
 }

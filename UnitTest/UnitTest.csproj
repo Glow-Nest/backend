@@ -10,6 +10,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.3" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.3" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.0"/>
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.3" />
@@ -29,6 +30,7 @@
       <ProjectReference Include="..\src\Core\Application\Application.csproj" />
       <ProjectReference Include="..\src\Core\Domain\Domain.csproj" />
       <ProjectReference Include="..\src\Infrastructure\DomainModelPersistence\DomainModelPersistence.csproj" />
+      <ProjectReference Include="..\src\Infrastructure\EfcQueries\EfcQueries.csproj" />
       <ProjectReference Include="..\src\Infrastructure\Services\Services.csproj" />
     </ItemGroup>
 
