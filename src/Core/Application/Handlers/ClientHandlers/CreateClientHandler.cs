@@ -11,13 +11,11 @@ internal class CreateClientHandler : ICommandHandler<CreateClientCommand>
 {
     private readonly IEmailUniqueChecker _emailUniqueChecker;
     private readonly IClientRepository _clientRepository;
-    private readonly IUnitOfWork _unitOfWork;
 
-    public CreateClientHandler(IEmailUniqueChecker emailUniqueChecker, IClientRepository clientRepository, IUnitOfWork unitOfWork)
+    public CreateClientHandler(IEmailUniqueChecker emailUniqueChecker, IClientRepository clientRepository)
     {
         _emailUniqueChecker = emailUniqueChecker;
         _clientRepository = clientRepository;
-        _unitOfWork = unitOfWork;
     }
 
     public async Task<Result> HandleAsync(CreateClientCommand command)

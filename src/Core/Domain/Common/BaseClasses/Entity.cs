@@ -18,6 +18,16 @@ public class Entity
         return Id == other.Id;
     }
 
+    protected bool Equals(Entity other)
+    {
+        return Id.Equals(other.Id);
+    }
+
+    public override int GetHashCode()
+    {
+        return Id.GetHashCode();
+    }
+
     public override string ToString()
     {
         return base.ToString();

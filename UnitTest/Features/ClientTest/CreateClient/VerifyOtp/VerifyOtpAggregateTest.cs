@@ -21,7 +21,7 @@ public class VerifyOtpAggregateTest
         _mockDateTimeProvider.Setup(d => d.GetNow()).Returns(now.AddMinutes(5));
 
         var client = ClientBuilder.CreateValid().BuildAsync().Result.Data;
-        var otpSession = client.CreateOtp(Purpose.Registration, _mockDateTimeProvider.Object, _mockUnitOfWork.Object).Data;
+        var otpSession = client.CreateOtp(Purpose.Registration, _mockDateTimeProvider.Object).Data;
 
         // Act
         var result = client.VerifyOtp(otpSession.OtpCode, _mockDateTimeProvider.Object);
@@ -42,14 +42,14 @@ public class VerifyOtpAggregateTest
 
         var newOtpCode = OtpCode.New().Data;
         
-        var otpSession = client.CreateOtp(Purpose.Registration, _mockDateTimeProvider.Object, _mockUnitOfWork.Object).Data;
+        var otpSession = client.CreateOtp(Purpose.Registration, _mockDateTimeProvider.Object).Data;
 
         // Act
         var result = client.VerifyOtp(newOtpCode, _mockDateTimeProvider.Object);
 
         // Assert
         Assert.False(result.IsSuccess);
-        Assert.Contains(ClientErrorMessage.NoActiveOtp(), result.Errors);
+        Assert.Contains(ClientErrorMessage.InvalidOtp(), result.Errors);
     }
 
     [Fact]
@@ -60,7 +60,7 @@ public class VerifyOtpAggregateTest
         _mockDateTimeProvider.Setup(d => d.GetNow()).Returns(now);
 
         var client = ClientBuilder.CreateValid().BuildAsync().Result.Data;
-        var otpSession = client.CreateOtp(Purpose.Registration, _mockDateTimeProvider.Object, _mockUnitOfWork.Object).Data;
+        var otpSession = client.CreateOtp(Purpose.Registration, _mockDateTimeProvider.Object).Data;
 
         _mockDateTimeProvider.Setup(d => d.GetNow()).Returns(now.AddMinutes(11));
 

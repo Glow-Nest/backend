@@ -7,23 +7,30 @@ using Application.Handlers.DomainEvents;
 using Domain.Aggregates.Client.DomainEvents;
 using Domain.Common;
 using Microsoft.Extensions.DependencyInjection;
+using QueryContracts.QueryDispatching;
 
 namespace Application.Extensions;
 
 public static class ApplicationExtensions
 {
-    public static void RegisterHandlers(this IServiceCollection serviceCollection)
+    public static void RegisterApplications(this IServiceCollection serviceCollection)
     {
-        serviceCollection.AddSingleton<ICommandHandler<CreateClientCommand>, CreateClientHandler>();
-        serviceCollection.AddSingleton<ICommandHandler<CreateOtpCommand>, CreateOtpHandler>();
-        serviceCollection.AddSingleton<ICommandHandler<VerifyOtpCommand>, VerifyOtpHandler>();
+        RegisterHandlers(serviceCollection);
+        RegisterDispatcher(serviceCollection);
+    }
+    
+    private static void RegisterHandlers(this IServiceCollection serviceCollection)
+    {
+        serviceCollection.AddScoped<ICommandHandler<CreateClientCommand>, CreateClientHandler>();
+        serviceCollection.AddScoped<ICommandHandler<CreateOtpCommand>, CreateOtpHandler>();
+        serviceCollection.AddScoped<ICommandHandler<VerifyOtpCommand>, VerifyOtpHandler>();
 
-        serviceCollection.AddSingleton<IDomainEventHandler<OtpCreatedDomainEvent>, OtpCreatedDomainEventHandler>();
+        serviceCollection.AddScoped<IDomainEventHandler<OtpCreatedDomainEvent>, OtpCreatedDomainEventHandler>();
     }
 
-    public static void RegisterDispatcher(this IServiceCollection serviceCollection)
+    private static void RegisterDispatcher(this IServiceCollection serviceCollection)
     {
-        serviceCollection.AddSingleton<ICommandDispatcher>(provider =>
+        serviceCollection.AddScoped<ICommandDispatcher>(provider =>
         {
             var dispatcher = new CommandDispatcher(provider);
             var transactionDecorator = new TransactionDecorator(dispatcher, provider.GetRequiredService<IUnitOfWork>());
@@ -32,6 +39,7 @@ public static class ApplicationExtensions
             return domainEventDecorator;
         });
 
-        serviceCollection.AddSingleton<IDomainEventDispatcher, DomainEventDispatcher>();
+        serviceCollection.AddScoped<IDomainEventDispatcher, DomainEventDispatcher>();
+        serviceCollection.AddScoped<IQueryDispatcher, QueryDispatcher>();
     }
 }

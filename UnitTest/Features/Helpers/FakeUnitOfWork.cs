@@ -16,16 +16,16 @@ public class FakeUnitOfWork : IUnitOfWork
 
     public async Task<List<IDomainEvent>> GetDomainEvents()
     {
-        return new List<IDomainEvent>();
+        return await Task.FromResult<List<IDomainEvent>>(new List<IDomainEvent>());
     }
 
     public async Task<Result> ClearDomainEvents()
     {
-        return Result.Success();
+        return await Task.FromResult(Result.Success());
     }
 
     public async Task<Result> Track(AggregateRoot aggregate)
     {
-        return Result.Success();
+        return await Task.FromResult(Result.Success());
     }
 }

@@ -10,17 +10,20 @@ namespace Domain.Aggregates.Client;
 
 public class Client : AggregateRoot
 {
-    internal ClientId ClientId { get; private set; }
+    public ClientId ClientId { get; private set; }
     public FullName FullName { get; private set; }
     internal Email Email { get; private set; }
-    internal Password Password { get; private set; }
+    internal Password Password { get;}
     internal PhoneNumber PhoneNumber { get; private set; }
     internal OtpSession? OtpSession { get; private set; }
-    internal bool IsVerified { get; private set; }
+    internal bool IsVerified { get; set; }
 
     public string EmailAddress => Email.Value;
-    public Email EmailValue => Email;
-    public ClientId Id => ClientId;
+    public Password PasswordValue => Password;
+
+    public Client() // for EF Core
+    {
+    }
 
     protected Client(ClientId clientId, FullName fullName, Email email, Password password, PhoneNumber phoneNumber)
     {
@@ -48,7 +51,7 @@ public class Client : AggregateRoot
     }
 
     // TODO: remove unit of work. EFC add vayepaxi tracked aggregate dbContext bata lina milxa but list ma garda manually add garnu parxa track garna
-    public Result<OtpSession> CreateOtp(Purpose purpose, IDateTimeProvider dateTimeProvider, IUnitOfWork unitOfWork)
+    public Result<OtpSession> CreateOtp(Purpose purpose, IDateTimeProvider dateTimeProvider)
     {
         if (OtpSession is not null && dateTimeProvider.GetNow() > OtpSession.CreatedAt.AddMinutes(2))
         {
@@ -70,7 +73,6 @@ public class Client : AggregateRoot
         OtpSession = otpSessionResult.Data;
         
         AddDomainEvent(new OtpCreatedDomainEvent(OtpSession.OtpCode, this));
-        unitOfWork.Track(this);
         
         return Result<OtpSession>.Success(otpSessionResult.Data);
     }

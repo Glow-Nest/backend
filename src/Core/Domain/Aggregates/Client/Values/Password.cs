@@ -8,6 +8,10 @@ public class Password : ValueObject
 {
     internal string Value { get; }
 
+    public Password() // for efc
+    {
+    }
+
     protected Password(string passwordStr)
     {
         Value = passwordStr;
@@ -22,7 +26,8 @@ public class Password : ValueObject
             return result.ToGeneric<Password>() ;
         }
 
-        var password = new Password(passwordStr);
+        var hashedPassword = BCrypt.Net.BCrypt.HashPassword(passwordStr);
+        var password = new Password(hashedPassword);
 
         return Result<Password>.Success(password);
     }
@@ -55,6 +60,11 @@ public class Password : ValueObject
         return errors.Count > 0 ? Result.Fail(errors) : Result.Success();
     }
 
+    public bool Verify(string passwordToCheck)
+    {
+        return BCrypt.Net.BCrypt.Verify(passwordToCheck, Value);
+    }
+    
     protected override IEnumerable<object> GetEqualityComponents()
     {
         yield return Value;

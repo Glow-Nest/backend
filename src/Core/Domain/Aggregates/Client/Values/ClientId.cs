@@ -4,7 +4,7 @@ namespace Domain.Aggregates.Client.Values;
 
 public class ClientId : ValueObject
 {
-    internal Guid Value { get; private set; }
+    public Guid Value { get; private set; }
 
     protected ClientId(Guid value)
     {
@@ -12,6 +12,8 @@ public class ClientId : ValueObject
     }
 
     public static ClientId Create() => new(Guid.NewGuid());
+
+    public static ClientId FromGuid(Guid guidId) => new ClientId(guidId);
 
     protected override IEnumerable<object> GetEqualityComponents()
     {

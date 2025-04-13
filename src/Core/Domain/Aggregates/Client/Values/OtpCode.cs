@@ -6,7 +6,7 @@ namespace Domain.Aggregates.Client.Values;
 
 public class OtpCode : ValueObject
 {
-    internal string Value { get; }
+    public string Value { get; private set; }
     
     protected OtpCode(string value)
     {

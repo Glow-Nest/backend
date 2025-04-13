@@ -1,44 +1,52 @@
 using Domain.Common;
 using Domain.Common.BaseClasses;
 using Domain.Common.OperationResult;
+using DomainModelPersistence.EfcConfigs;
 
-namespace Repositories;
+namespace DomainModelPersistence;
 
 public class UnitOfWork : IUnitOfWork
 {
-    private readonly List<AggregateRoot> _aggregates = new();
+    private readonly DomainModelContext _context;
     private bool _changesSaved = false;
 
+    public UnitOfWork(DomainModelContext context)
+    {
+        _context = context;
+    }
+    
     public async Task<Result> SaveChangesAsync()
     {
         if (_changesSaved)
             return Result.Success();
 
-        Console.WriteLine("Unit of work saved changes.");
-        _changesSaved = true;
-        return await Task.FromResult(Result.Success());
-    }
-
-    public async Task<Result> Track(AggregateRoot aggregate)
-    {
-        if (!_aggregates.Contains(aggregate))
-            _aggregates.Add(aggregate);
-
-        return Result.Success();
+        try
+        {
+            await _context.SaveChangesAsync();
+            _changesSaved = true;
+            return Result.Success();
+        }
+        catch (Exception)
+        {
+            return Result.Fail(GenericErrorMessage.ErrorInSaving());
+        }
     }
 
     public async Task<List<IDomainEvent>> GetDomainEvents()
     {
-        return await Task.FromResult(_aggregates
-            .SelectMany(a => a.DomainEvents)
+        return await Task.FromResult(_context.ChangeTracker
+            .Entries<AggregateRoot>()
+            .SelectMany(entry => entry.Entity.DomainEvents)
             .ToList());
     }
 
     public async Task<Result> ClearDomainEvents()
     {
-        foreach (var aggregate in _aggregates)
-            aggregate.ClearDomainEvents();
+        foreach (var entry in _context.ChangeTracker.Entries<AggregateRoot>())
+        {
+            entry.Entity.ClearDomainEvents();
+        }
 
-        return Result.Success();
+        return await Task.FromResult(Result.Success());
     }
 }

@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices.JavaScript;
 using Domain.Common.OperationResult;
 
 namespace Domain.Aggregates.Client;
@@ -21,11 +22,11 @@ public class ClientErrorMessage
     public static Error PasswordMissingUppercase() => new("Password.Uppercase", "Password must contain at least one uppercase letter.");
     public static Error PasswordMissingDigit() => new("Password.Digit", "Password must contain at least one digit.");
     public static Error PasswordMissingSpecialCharacter() => new("Password.Special", "Password must contain at least one special character.");
-    
+    public static Error PasswordDoesntMatch() => new Error("Password.DoesNotMatch", "Password does not match.");
     // PhoneNumber
     public static Error PhoneNumberCannotBeEmpty() => new("Phone.Empty", "Phone number cannot be empty.");
     public static Error PhoneNumberMustBeEightDigitsOnly() => new("Phone.Invalid", "Phone number must be exactly 8 digits, with no spaces or symbols.");
-    
+    public static Error PasswordNotVerified() => new("Passwords.NotVerified", "Password not verified.");
     // OtpSession
     public static Error InvalidOtp() => new("Otp.Invalid", "Invalid OTP code.");
     public static Error OtpExpired() => new("Otp.Expired", "OTP code has expired. Request new one. ");
@@ -34,6 +35,13 @@ public class ClientErrorMessage
     public static Error OtpPurposeMismatch() => new("Otp.Purpose", "OTP code purpose does not match.");
     public static Error OtpEmailMismatch() => new("Otp.Email", "OTP code email does not match.");
     public static Error OtpAlreadyUsed() => new("Otp.Used", "OTP code has already been used.");
+    public static Error ClientNotVerified() => new("Client.NotVerified", "Client is not verified.");
     public static Error ClientAlreadyVerified() => new("Client.Verified", "Client is already verified.");
-    
+
+    // Token
+    public static Error TokenIsEmpty() => new("Token.Empty", "Token cannot be empty.");
+    public static Error ExpiredDateIsInFuture() => new("Token.Future", "Expiration date cannot be in the future.");
+    public static Error RoleIsEmpty() => new("Token.Role", "Role cannot be empty.");
+    public static Error InvalidCredentials() => new("Credentials.Invalid", "Invalid credentials.");
+    public static Error FailedToGenerateToken() => new("Token.Failed", "Failed to generate token.");
 }

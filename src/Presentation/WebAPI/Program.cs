@@ -1,9 +1,12 @@
+using System.Text;
 using Application.Extensions;
-using Microsoft.Extensions.Options;
-using Repositories;
+using DomainModelPersistence;
+using EfcQueries.Extension;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
 using Services;
-using Services.Utilities;
+using Services.Email;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,14 +18,27 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("Smtp"));
 
-builder.Services.RegisterHandlers();
-builder.Services.RegisterDispatcher();
+builder.Services.RegisterApplications();
+builder.Services.RegisterDmPersistence();
 
-builder.Services.RegisterContracts();
+builder.Services.RegisterQueryHandlers();
+
 builder.Services.RegisterServices();
-builder.Services.RegisterRepositories();
-builder.Services.RegisterUnitOfWork();
+builder.Services.RegisterDatabase(builder.Configuration);
 
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(builder.Configuration["JwtSetting:SecretKey"]!)),
+            ValidateIssuerSigningKey = true
+        };
+    });
+
+
+builder.Configuration.GetConnectionString("CloudSqlConnection");
 
 var app = builder.Build();
 
