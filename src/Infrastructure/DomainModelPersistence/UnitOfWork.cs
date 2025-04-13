@@ -9,7 +9,6 @@ public class UnitOfWork : IUnitOfWork
 {
     private readonly DomainModelContext _context;
     private bool _changesSaved = false;
-    
 
     public UnitOfWork(DomainModelContext context)
     {
@@ -31,16 +30,6 @@ public class UnitOfWork : IUnitOfWork
         {
             return Result.Fail(GenericErrorMessage.ErrorInSaving());
         }
-    }
-
-    public async Task<Result> Track(AggregateRoot aggregate)
-    {
-        if (_context.ChangeTracker.Entries().All(entry => entry.Entity != aggregate))
-        {
-            _context.Add(aggregate); 
-        }
-
-        return await Task.FromResult(Result.Success());
     }
 
     public async Task<List<IDomainEvent>> GetDomainEvents()
