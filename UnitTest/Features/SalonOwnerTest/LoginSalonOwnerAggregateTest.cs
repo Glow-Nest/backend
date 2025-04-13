@@ -52,7 +52,7 @@ public class LoginSalonOwnerAggregateTest
     public async Task ShouldSucceed_WhenGeneratingToken()
     {
         // Arrange
-        var email = Email.Create("validClient@example.com").Data;
+        var email = Email.Create("validSalon@example.com").Data;
         var password = Password.Create("Password123!").Data;
 
         var salonOwnerRepository = new FakeSalonOwnerRepository();
@@ -100,7 +100,7 @@ public class LoginSalonOwnerAggregateTest
     public async Task ShouldFail_WhenPasswordIsIncorrect()
     {
         // Arrange
-        var email = Email.Create("validClient@example.com").Data;
+        var email = Email.Create("validSalon@example.com").Data;
         var correctPassword = Password.Create("Password123!").Data;
         var wrongPassword = "WrongPass456!";
 
@@ -117,10 +117,10 @@ public class LoginSalonOwnerAggregateTest
     }
 
     [Fact]
-    public async Task ShouldHashPassword_WhenClientIsCreated()
+    public async Task ShouldHashPassword_WhenSalonIsCreated()
     {
         // Arrange
-        var email = Email.Create("validClient@example.com").Data;
+        var email = Email.Create("validSalon@example.com").Data;
         var plainPassword = "Password123!";
         var password = Password.Create(plainPassword).Data;
 
