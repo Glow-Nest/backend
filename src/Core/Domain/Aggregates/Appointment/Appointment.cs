@@ -27,6 +27,9 @@ public class Appointment : AggregateRoot
     internal DateOnly AppointmentDate { get; }
     internal List<ServiceId> Services { get; }
     internal ClientId BookedByClient { get; }
+    
+    // navigation for EF Core
+    internal List<AppointmentService> AppointmentServices { get; private set; } = new();
 
     public Appointment() // for EFC
     {

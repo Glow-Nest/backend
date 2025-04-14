@@ -8,6 +8,7 @@ using Microsoft.Extensions.Options;
 using Services.Authentication;
 using Services.Contracts.Appointment;
 using Services.Contracts.Client;
+using Services.Contracts.Common;
 using Services.Email;
 
 namespace Services;
