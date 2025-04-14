@@ -7,9 +7,8 @@ using Domain.Aggregates.Client.Values;
 using Domain.Aggregates.Service;
 using Domain.Aggregates.Service.Values;
 using Moq;
-using UnitTest.Features.Helpers.Builders;
 
-namespace UnitTest.Features.AppointmentTest;
+namespace UnitTest.Features.AppointmentTest.CreateAppointment;
 
 public class CreateAppointmentAggregateTest
 {
@@ -23,7 +22,7 @@ public class CreateAppointmentAggregateTest
         _serviceCheckerMock.Setup(s => s.DoesServiceExistsAsync(It.IsAny<ServiceId>())).ReturnsAsync(true);
         _clientCheckerMock.Setup(c => c.DoesClientExistsAsync(It.IsAny<ClientId>())).ReturnsAsync(true);
         _dateTimeProviderMock.Setup(d => d.GetNow()).Returns(DateTime.Now);
-        _blockedTimeCheckerMock.Setup(b => b.IsBlockedTimeAsync(It.IsAny<DateOnly>(), It.IsAny<TimeOnly>(), It.IsAny<TimeOnly>())).ReturnsAsync(true);
+        _blockedTimeCheckerMock.Setup(b => b.IsBlockedTimeAsync(It.IsAny<DateOnly>(), It.IsAny<TimeOnly>(), It.IsAny<TimeOnly>())).ReturnsAsync(false);
     }
     private CreateAppointmentDto CreateValidAppointmentDto()
     {
@@ -88,7 +87,7 @@ public class CreateAppointmentAggregateTest
         // Arrange
         var appointmentDto = CreateValidAppointmentDto();
         SetupMocksForValidScenario();
-        _dateTimeProviderMock.Setup(d => d.GetNow()).Returns(DateTime.Now.AddDays(1));
+        _dateTimeProviderMock.Setup(d => d.GetNow()).Returns(DateTime.Now.AddDays(2));
         
         // Act
         var result = await Appointment.Create(appointmentDto, _serviceCheckerMock.Object, _clientCheckerMock.Object, _dateTimeProviderMock.Object, _blockedTimeCheckerMock.Object);
@@ -120,7 +119,7 @@ public class CreateAppointmentAggregateTest
         // Arrange
         var appointmentDto = CreateValidAppointmentDto();
         SetupMocksForValidScenario();
-        _blockedTimeCheckerMock.Setup(b => b.IsBlockedTimeAsync(It.IsAny<DateOnly>(), It.IsAny<TimeOnly>(), It.IsAny<TimeOnly>())).ReturnsAsync(false);
+        _blockedTimeCheckerMock.Setup(b => b.IsBlockedTimeAsync(It.IsAny<DateOnly>(), It.IsAny<TimeOnly>(), It.IsAny<TimeOnly>())).ReturnsAsync(true);
 
         // Act
         var result = await Appointment.Create(appointmentDto, _serviceCheckerMock.Object, _clientCheckerMock.Object, _dateTimeProviderMock.Object, _blockedTimeCheckerMock.Object);
