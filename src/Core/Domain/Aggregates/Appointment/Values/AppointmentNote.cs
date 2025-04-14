@@ -1,0 +1,25 @@
+using Domain.Common.BaseClasses;
+using Domain.Common.OperationResult;
+
+namespace Domain.Aggregates.Appointment.Values;
+
+public class AppointmentNote : ValueObject
+{
+    public string Value { get; private set; }
+
+    protected AppointmentNote(string value)
+    {
+        Value = value;
+    }
+
+    public static Result<AppointmentNote> Create(string appointmentNote)
+    {
+        var note = new AppointmentNote(appointmentNote);
+        return Result<AppointmentNote>.Success(note);
+    }
+    
+    protected override IEnumerable<object> GetEqualityComponents()
+    {
+        yield return Value;
+    }
+}
