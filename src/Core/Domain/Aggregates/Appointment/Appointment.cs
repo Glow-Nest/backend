@@ -98,7 +98,7 @@ public class Appointment : AggregateRoot
         }
 
         var isBlockedTime = await blockedTimeChecker.IsBlockedTimeAsync(appointmentDto.BookingDate, appointmentDto.TimeSlot.Start, appointmentDto.TimeSlot.End);
-        if (!isBlockedTime)
+        if (isBlockedTime)
         {
             return Result.Fail(AppointmentErrorMessage.BlockedTimeSelected());
         }

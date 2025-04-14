@@ -13,7 +13,7 @@ public class ServiceId : ValueObject
 
     public static ServiceId Create() => new(Guid.NewGuid());
 
-    public static ServiceId FromGuid(Guid guidId) => new ServiceId(guidId);
+    public static ServiceId FromGuid(Guid guidId) => new(guidId);
 
     protected override IEnumerable<object> GetEqualityComponents()
     {

@@ -14,6 +14,11 @@ public class AppointmentNote : ValueObject
 
     public static Result<AppointmentNote> Create(string appointmentNote)
     {
+        if (string.IsNullOrWhiteSpace(appointmentNote))
+        {
+            return Result<AppointmentNote>.Fail(AppointmentErrorMessage.EmptyAppointmentNote());
+        }
+        
         var note = new AppointmentNote(appointmentNote);
         return Result<AppointmentNote>.Success(note);
     }

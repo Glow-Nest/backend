@@ -1,10 +1,12 @@
 using Application.Interfaces;
+using Domain.Aggregates.Appointment.Contracts;
 using Domain.Aggregates.Client.Contracts;
 using Domain.Aggregates.Client.Values;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Services.Authentication;
+using Services.Contracts.Appointment;
 using Services.Contracts.Client;
 using Services.Email;
 
@@ -22,6 +24,9 @@ public static class ServicesExtension
     {
         serviceCollection.AddScoped<IEmailUniqueChecker, EmailUniqueChecker>();
         serviceCollection.AddScoped<IDateTimeProvider, DateTimeProvider>();
+        serviceCollection.AddScoped<IClientChecker, ClientChecker>();
+        serviceCollection.AddScoped<IServiceChecker, ServiceChecker>();
+        serviceCollection.AddScoped<IBlockedTimeChecker, BlockedTimeChecker>();
     }
 
     private static void RegisterApplicationServices(this IServiceCollection serviceCollection)
