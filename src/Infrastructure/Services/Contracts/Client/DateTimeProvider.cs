@@ -6,6 +6,6 @@ public class DateTimeProvider : IDateTimeProvider
 {
     public DateTime GetNow()
     {
-        return DateTime.Now;
+        return DateTime.UtcNow;
     }
 }

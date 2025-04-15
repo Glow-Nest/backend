@@ -10,7 +10,7 @@ public class OtpSession
     public OtpCode OtpCode { get; private set; }
     internal DateTimeOffset CreatedAt { get; }
     internal Purpose Purpose { get; }
-    internal bool IsUsed { get; private set; }
+    internal bool IsUsed { get; set; }
 
     protected OtpSession(Email email, OtpCode otpCode, DateTimeOffset createdAt, Purpose purpose)
     {

@@ -24,6 +24,8 @@ public static class ApplicationExtensions
         serviceCollection.AddScoped<ICommandHandler<CreateClientCommand>, CreateClientHandler>();
         serviceCollection.AddScoped<ICommandHandler<CreateOtpCommand>, CreateOtpHandler>();
         serviceCollection.AddScoped<ICommandHandler<VerifyOtpCommand>, VerifyOtpHandler>();
+        serviceCollection.AddScoped<ICommandHandler<ResetPasswordCommand>, ResetPasswordHandler>();
+        serviceCollection.AddScoped<ICommandHandler<InitiateResetPasswordCommand>, InitiateResetPasswordHandler>();
 
         serviceCollection.AddScoped<IDomainEventHandler<OtpCreatedDomainEvent>, OtpCreatedDomainEventHandler>();
     }
