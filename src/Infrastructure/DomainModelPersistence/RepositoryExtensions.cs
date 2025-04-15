@@ -1,6 +1,8 @@
+using Domain.Aggregates.Appointment;
 using Domain.Aggregates.Client;
 using Domain.Aggregates.SalonOwner;
 using Domain.Common;
+using DomainModelPersistence.AppointmentPersistence;
 using DomainModelPersistence.ClientPersistence;
 using DomainModelPersistence.EfcConfigs;
 using DomainModelPersistence.SalonOwnerPersistence;
@@ -22,6 +24,7 @@ public static class RepositoryExtensions
 
         serviceCollection.AddScoped<IClientRepository, ClientRepository>();
         serviceCollection.AddScoped<ISalonOwnerRepository, SalonOwnerRepository>();
+        serviceCollection.AddScoped<IAppointmentRepository, AppointmentRepository>();
     }
     
     private static void RegisterUnitOfWork(this IServiceCollection serviceCollection)

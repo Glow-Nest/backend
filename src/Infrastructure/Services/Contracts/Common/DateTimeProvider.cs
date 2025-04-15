@@ -1,6 +1,6 @@
 using Domain.Aggregates.Client.Contracts;
 
-namespace Services.Contracts.Client;
+namespace Services.Contracts.Common;
 
 public class DateTimeProvider : IDateTimeProvider
 {

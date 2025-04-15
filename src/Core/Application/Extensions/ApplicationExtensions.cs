@@ -1,7 +1,9 @@
 using Application.AppEntry;
+using Application.AppEntry.Commands.Appointment;
 using Application.AppEntry.Commands.Client;
 using Application.AppEntry.Decorators;
 using Application.AppEntry.Dispatchers;
+using Application.Handlers.AppointmentHandlers;
 using Application.Handlers.ClientHandlers;
 using Application.Handlers.DomainEvents;
 using Domain.Aggregates.Client.DomainEvents;
@@ -24,6 +26,7 @@ public static class ApplicationExtensions
         serviceCollection.AddScoped<ICommandHandler<CreateClientCommand>, CreateClientHandler>();
         serviceCollection.AddScoped<ICommandHandler<CreateOtpCommand>, CreateOtpHandler>();
         serviceCollection.AddScoped<ICommandHandler<VerifyOtpCommand>, VerifyOtpHandler>();
+        serviceCollection.AddScoped<ICommandHandler<CreateAppointmentCommand>, CreateAppointmentHandler>();
 
         serviceCollection.AddScoped<IDomainEventHandler<OtpCreatedDomainEvent>, OtpCreatedDomainEventHandler>();
     }
