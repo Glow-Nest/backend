@@ -4,6 +4,7 @@ using Domain.Aggregates.Client.Entities;
 using Domain.Aggregates.Client.Values;
 using Domain.Common;
 using Domain.Common.BaseClasses;
+using Domain.Common.Contracts;
 using Domain.Common.OperationResult;
 
 namespace Domain.Aggregates.Client;
@@ -50,7 +51,6 @@ public class Client : AggregateRoot
         return Result<Client>.Success(client);
     }
 
-    // TODO: remove unit of work. EFC add vayepaxi tracked aggregate dbContext bata lina milxa but list ma garda manually add garnu parxa track garna
     public Result<OtpSession> CreateOtp(Purpose purpose, IDateTimeProvider dateTimeProvider)
     {
         if (OtpSession is not null && dateTimeProvider.GetNow() > OtpSession.CreatedAt.AddMinutes(2))

@@ -2,10 +2,9 @@ using Domain.Common;
 using Domain.Common.BaseClasses;
 using Domain.Common.OperationResult;
 using Domain.Common.Repositories;
-using DomainModelPersistence.EfcConfigs;
 using Microsoft.EntityFrameworkCore;
 
-namespace DomainModelPersistence.Common;
+namespace DomainModelPersistence.Repositories.Common;
 
 public class RepositoryBase<TAggr, TId>(DbContext context) : IGenericRepository<TAggr, TId> where TAggr : AggregateRoot
 {
