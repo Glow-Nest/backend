@@ -1,6 +1,6 @@
 ﻿using Application.AppEntry.Commands.Client;
 
-namespace UnitTest.Features.ClientTest.ResetPassword;
+namespace UnitTest.Features.ClientTest.PasswordTest;
 
 public class ResetPasswordCommandTest
 {
@@ -38,7 +38,7 @@ public class ResetPasswordCommandTest
     }
     
     [Fact]
-    public void houldReturnFailure_WhenEmailIsInvalid()
+    public void ShouldReturnFailure_WhenEmailIsInvalid()
     {
         // Arrange
         var email = "not-an-email";

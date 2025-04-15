@@ -1,11 +1,11 @@
 ﻿using Application.AppEntry.Commands.Client;
 
-namespace UnitTest.Features.ClientTest.ResetPassword;
+namespace UnitTest.Features.ClientTest.PasswordTest.InitiateResetPassword;
 
 public class InitiateResetPasswordCommandTest
 {
     [Fact]
-    public void Create_ShouldReturnSuccess_WhenEmailIsValid()
+    public void ShouldReturnSuccess_WhenEmailIsValid()
     {
         // Arrange
         var validEmail = "test@example.com";
@@ -19,7 +19,7 @@ public class InitiateResetPasswordCommandTest
     }
     
     [Fact]
-    public void Create_ShouldReturnFailure_WhenEmailIsInvalid()
+    public void ShouldReturnFailure_WhenEmailIsInvalid()
     {
         // Arrange
         var invalidEmail = "invalid-email";

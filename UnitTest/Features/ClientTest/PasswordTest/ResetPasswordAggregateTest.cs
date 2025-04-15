@@ -1,11 +1,10 @@
 ﻿using Domain.Aggregates.Client;
 using Domain.Aggregates.Client.Entities;
 using Domain.Aggregates.Client.Values;
-using Moq;
-using Services.Contracts.Client;
+using Services.Contracts.Common;
 using UnitTest.Features.Helpers.Builders;
 
-namespace UnitTest.Features.ClientTest.ResetPassword;
+namespace UnitTest.Features.ClientTest.PasswordTest;
 
 public class ResetPasswordAggregateTest
 {
@@ -48,7 +47,7 @@ public class ResetPasswordAggregateTest
     }
     
     [Fact]
-    public async Task ResetPassword_Fails_WhenOtpSessionHasWrongPurpose()
+    public async Task ShouldFail_ResetPassword_WhenOtpSessionHasWrongPurpose()
     {
         // Arrange
         var result = await ClientBuilder.CreateValid().BuildAsync();
@@ -69,7 +68,7 @@ public class ResetPasswordAggregateTest
     }
     
     [Fact]
-    public async Task ResetPassword_Fails_WhenOtpSessionIsNotUsed()
+    public async Task ShouldFail_ResetPassword_WhenOtpSessionIsNotUsed()
     {
         // Arrange
         var result = await ClientBuilder.CreateValid().BuildAsync();

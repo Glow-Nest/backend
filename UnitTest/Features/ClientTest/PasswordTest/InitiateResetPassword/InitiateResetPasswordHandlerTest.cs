@@ -1,13 +1,13 @@
 ﻿using Application.AppEntry.Commands.Client;
 using Application.Handlers.ClientHandlers;
 using Domain.Aggregates.Client;
-using Domain.Aggregates.Client.Contracts;
 using Domain.Aggregates.Client.Values;
+using Domain.Common.Contracts;
 using Domain.Common.OperationResult;
 using Moq;
 using UnitTest.Features.Helpers.Builders;
 
-namespace UnitTest.Features.ClientTest.ResetPassword;
+namespace UnitTest.Features.ClientTest.PasswordTest.InitiateResetPassword;
 
 public class InitiateResetPasswordHandlerTest
 {
@@ -24,7 +24,7 @@ public class InitiateResetPasswordHandlerTest
     }
     
     [Fact]
-    public async Task HandleAsync_ShouldReturnSuccess_WhenOtpIsSuccessfullyGenerated()
+    public async Task ShouldReturnSuccess_WhenOtpIsSuccessfullyGenerated()
     {
         // Arrange  
         var clientResult = await ClientBuilder.CreateValid().BuildAsync();
@@ -44,7 +44,7 @@ public class InitiateResetPasswordHandlerTest
     }
     
     [Fact]
-    public async Task HandleAsync_ShouldReturnFailure_WhenClientNotFound()
+    public async Task ShouldReturnFailure_WhenClientNotFound()
     {
         // Arrange
         var command = InitiateResetPasswordCommand.Create("nonexistent@example.com");
