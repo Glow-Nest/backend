@@ -1,4 +1,4 @@
-namespace Domain.Aggregates.Client.Contracts;
+namespace Domain.Common.Contracts;
 
 public interface IDateTimeProvider
 {

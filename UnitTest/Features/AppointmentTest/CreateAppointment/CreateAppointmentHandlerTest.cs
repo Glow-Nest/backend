@@ -6,6 +6,7 @@ using Domain.Aggregates.Appointment.Values;
 using Domain.Aggregates.Client.Contracts;
 using Domain.Aggregates.Client.Values;
 using Domain.Aggregates.Service.Values;
+using Domain.Common.Contracts;
 using Domain.Common.OperationResult;
 using Moq;
 

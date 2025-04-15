@@ -6,6 +6,7 @@ using Domain.Aggregates.Client.Values;
 using Domain.Aggregates.Service;
 using Domain.Aggregates.Service.Values;
 using Domain.Common.BaseClasses;
+using Domain.Common.Contracts;
 using Domain.Common.OperationResult;
 
 namespace Domain.Aggregates.Appointment;
@@ -25,18 +26,16 @@ public class Appointment : AggregateRoot
     internal AppointmentNote AppointmentNote { get; }
     internal TimeSlot TimeSlot { get; }
     internal DateOnly AppointmentDate { get; }
-    internal List<ServiceId> Services { get; }
+    internal List<AppointmentServiceReference> Services { get; }
     internal ClientId BookedByClient { get; }
     
-    // navigation for EF Core
-    internal List<AppointmentService> AppointmentServices { get; private set; } = new();
 
     public Appointment() // for EFC
     {
     }
 
     protected Appointment(AppointmentId appointmentId, AppointmentStatus appointmentStatus, AppointmentNote appointmentNote, 
-        TimeSlot timeSlot, DateOnly appointmentDate, List<ServiceId> services, ClientId bookedByClient)
+        TimeSlot timeSlot, DateOnly appointmentDate, List<AppointmentServiceReference> services, ClientId bookedByClient)
     {
         AppointmentId = appointmentId;
         AppointmentStatus = appointmentStatus;
@@ -65,8 +64,10 @@ public class Appointment : AggregateRoot
         var timeValidation = await ValidateAppointmentDateTime(appointmentDto, dateTimeProvider, blockedTimeChecker);
         if (!timeValidation.IsSuccess) return timeValidation.ToGeneric<Appointment>();
 
+        var serviceReferences = appointmentDto.ServiceIds.Select(id => new AppointmentServiceReference(id)).ToList();
+
         var appointment = new Appointment(appointmentId, status, appointmentDto.Note, appointmentDto.TimeSlot,
-            appointmentDto.BookingDate, appointmentDto.ServiceIds, appointmentDto.BookedByClient);
+            appointmentDto.BookingDate, serviceReferences, appointmentDto.BookedByClient);
         return Result<Appointment>.Success(appointment);
     }
 

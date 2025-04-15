@@ -2,6 +2,7 @@ using Application.Interfaces;
 using Domain.Aggregates.Appointment.Contracts;
 using Domain.Aggregates.Client.Contracts;
 using Domain.Aggregates.Client.Values;
+using Domain.Common.Contracts;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;

@@ -1,4 +1,5 @@
 using Domain.Aggregates.Client.Contracts;
+using Domain.Common.Contracts;
 
 namespace Services.Contracts.Common;
 

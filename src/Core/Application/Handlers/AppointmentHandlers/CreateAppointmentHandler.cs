@@ -3,6 +3,7 @@ using Application.AppEntry.Commands.Appointment;
 using Domain.Aggregates.Appointment;
 using Domain.Aggregates.Appointment.Contracts;
 using Domain.Aggregates.Client.Contracts;
+using Domain.Common.Contracts;
 using Domain.Common.OperationResult;
 
 namespace Application.Handlers.AppointmentHandlers;

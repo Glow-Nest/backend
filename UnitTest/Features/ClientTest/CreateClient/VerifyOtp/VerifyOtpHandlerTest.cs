@@ -4,6 +4,7 @@ using Domain.Aggregates.Client;
 using Domain.Aggregates.Client.Contracts;
 using Domain.Aggregates.Client.Values;
 using Domain.Common;
+using Domain.Common.Contracts;
 using Moq;
 using UnitTest.Features.Helpers;
 using UnitTest.Features.Helpers.Builders;

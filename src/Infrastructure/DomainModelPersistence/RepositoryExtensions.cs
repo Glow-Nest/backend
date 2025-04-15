@@ -2,9 +2,9 @@ using Domain.Aggregates.Appointment;
 using Domain.Aggregates.Client;
 using Domain.Aggregates.SalonOwner;
 using Domain.Common;
-using DomainModelPersistence.AppointmentPersistence;
 using DomainModelPersistence.ClientPersistence;
 using DomainModelPersistence.EfcConfigs;
+using DomainModelPersistence.Repositories;
 using DomainModelPersistence.SalonOwnerPersistence;
 using Microsoft.Extensions.DependencyInjection;
 
