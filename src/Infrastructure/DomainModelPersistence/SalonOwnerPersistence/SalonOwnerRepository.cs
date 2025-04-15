@@ -2,8 +2,8 @@
 using Domain.Aggregates.SalonOwner;
 using Domain.Aggregates.SalonOwner.Values;
 using Domain.Common.OperationResult;
-using DomainModelPersistence.Common;
 using DomainModelPersistence.EfcConfigs;
+using DomainModelPersistence.Repositories.Common;
 using Microsoft.EntityFrameworkCore;
 
 namespace DomainModelPersistence.SalonOwnerPersistence;

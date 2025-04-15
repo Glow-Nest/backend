@@ -45,13 +45,5 @@ public class AppointmentConfiguration : IEntityTypeConfiguration<Appointment>
                 dbValue => DateOnly.Parse(dbValue));
 
         entityBuilder.HasOne<Client>().WithMany().HasForeignKey(appointment => appointment.BookedByClient);
-        entityBuilder
-            .HasMany<AppointmentService>()
-            .WithOne()
-            .HasForeignKey(x => x.AppointmentId)
-            .OnDelete(DeleteBehavior.Cascade);;
-        
-        entityBuilder
-            .Ignore(a => a.Services);
     }
 }

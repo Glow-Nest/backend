@@ -6,6 +6,7 @@ using Domain.Aggregates.Client.Contracts;
 using Domain.Aggregates.Client.Values;
 using Domain.Aggregates.Service;
 using Domain.Aggregates.Service.Values;
+using Domain.Common.Contracts;
 using Moq;
 
 namespace UnitTest.Features.AppointmentTest.CreateAppointment;

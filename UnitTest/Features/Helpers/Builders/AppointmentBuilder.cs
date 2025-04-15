@@ -4,6 +4,7 @@ using Domain.Aggregates.Appointment.Values;
 using Domain.Aggregates.Client.Contracts;
 using Domain.Aggregates.Client.Values;
 using Domain.Aggregates.Service.Values;
+using Domain.Common.Contracts;
 using Domain.Common.OperationResult;
 using Moq;
 
@@ -27,6 +28,9 @@ public class AppointmentBuilder
 
     public async Task<Result<Appointment>> BuildAsync()
     {
+        _dateTimeProviderMock.Setup(x => x.GetNow())
+            .Returns(DateTime.Now.AddDays(-1));
+        
         var serviceIds = new List<ServiceId>();
 
         var appointmentNoteResult = AppointmentNote.Create(_appointmentNote);
