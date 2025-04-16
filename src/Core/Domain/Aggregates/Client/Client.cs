@@ -14,7 +14,7 @@ public class Client : AggregateRoot
     public ClientId ClientId { get; private set; }
     public FullName FullName { get; private set; }
     internal Email Email { get; private set; }
-    internal Password Password { get;}
+    internal Password Password { get; private set; }
     internal PhoneNumber PhoneNumber { get; private set; }
     internal OtpSession? OtpSession { get; private set; }
     internal bool IsVerified { get; set; }
@@ -58,7 +58,7 @@ public class Client : AggregateRoot
             return Result<OtpSession>.Fail(ClientErrorMessage.ActiveOtpAlreadyExists());
         }
         
-        if (IsVerified)
+        if (IsVerified && purpose == Purpose.Registration)
         {
             return Result<OtpSession>.Fail(ClientErrorMessage.ClientAlreadyVerified());
         }
@@ -84,7 +84,7 @@ public class Client : AggregateRoot
             return Result.Fail(ClientErrorMessage.NoActiveOtp());
         }
 
-        if (IsVerified)
+        if (IsVerified && OtpSession.Purpose == Purpose.Registration)
         {
             return Result.Fail(ClientErrorMessage.ClientAlreadyVerified());
         }
@@ -97,6 +97,25 @@ public class Client : AggregateRoot
         }
 
         IsVerified = true;
+        OtpSession.IsUsed = true;
+        return Result.Success();
+    }
+    
+    public Result ResetPassword(Password newPasswordStr)
+    {
+        if (OtpSession is not { Purpose: Purpose.PasswordReset })
+        {
+            return Result.Fail(ClientErrorMessage.InvalidOtpVerification());
+        }
+
+        if (!OtpSession.IsUsed)
+        {
+            return Result.Fail(ClientErrorMessage.ClientNotVerified());
+        }
+        
+        Password = newPasswordStr;
+        OtpSession = null;
+        
         return Result.Success();
     }
 }

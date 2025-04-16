@@ -44,4 +44,6 @@ public class ClientErrorMessage
     public static Error RoleIsEmpty() => new("Token.Role", "Role cannot be empty.");
     public static Error InvalidCredentials() => new("Credentials.Invalid", "Invalid credentials.");
     public static Error FailedToGenerateToken() => new("Token.Failed", "Failed to generate token.");
+    public static Error InvalidOtpVerification() => new("Otp.Verification", "Invalid OTP verification.");
+
 }
