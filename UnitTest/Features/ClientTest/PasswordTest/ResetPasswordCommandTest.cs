@@ -10,10 +10,9 @@ public class ResetPasswordCommandTest
         // Arrange
         var email = "user@example.com";
         var password = "ValidPassword123!";
-        var otp = "1234";
 
         // Act
-        var result = ResetPasswordCommand.Create(email, password, password, otp);
+        var result = ResetPasswordCommand.Create(email, password, password);
 
         // Assert
         Assert.True(result.IsSuccess);
@@ -27,10 +26,9 @@ public class ResetPasswordCommandTest
         var email = "user@example.com";
         var newPassword = "Password123!";
         var confirmPassword = "DifferentPassword!";
-        var otp = "1234";
 
         // Act
-        var result = ResetPasswordCommand.Create(email, newPassword, confirmPassword, otp);
+        var result = ResetPasswordCommand.Create(email, newPassword, confirmPassword);
 
         // Assert
         Assert.False(result.IsSuccess);
@@ -43,10 +41,9 @@ public class ResetPasswordCommandTest
         // Arrange
         var email = "not-an-email";
         var password = "ValidPassword123!";
-        var otp = "1234";
 
         // Act
-        var result = ResetPasswordCommand.Create(email, password, password, otp);
+        var result = ResetPasswordCommand.Create(email, password, password);
 
         // Assert
         Assert.False(result.IsSuccess);

@@ -9,17 +9,15 @@ public class ResetPasswordCommand
     internal Email Email { get; private set; }
     internal Password NewPassword { get; private set; }
     internal Password ConfirmPassword { get; private set; }
-    internal OtpCode OtpCode { get; private set; }
 
-    protected ResetPasswordCommand(Email email, Password newPassword, Password confirmPassword, OtpCode otpCode)
+    protected ResetPasswordCommand(Email email, Password newPassword, Password confirmPassword)
     {
         Email = email;
         NewPassword = newPassword;
         ConfirmPassword = confirmPassword;
-        OtpCode = otpCode;
     }
 
-    public static Result<ResetPasswordCommand> Create(string emailstr,string newPasswordstr, string confirmPasswordstr,string otpstr)
+    public static Result<ResetPasswordCommand> Create(string emailstr,string newPasswordstr, string confirmPasswordstr)
     {
         var listOfErrors = new List<Error>();
         var emailResult = Email.Create(emailstr);
@@ -43,18 +41,13 @@ public class ResetPasswordCommand
         {
             listOfErrors.Add(ClientErrorMessage.PasswordDoesntMatch());
         }
-        var otpResult = OtpCode.Create(otpstr);
-        if (!otpResult.IsSuccess)
-        {
-            listOfErrors.AddRange(otpResult.Errors);
-        }
-        
+
         if (listOfErrors.Any())
         {
             return Result<ResetPasswordCommand>.Fail(listOfErrors);
         }
         
-        var command = new ResetPasswordCommand(emailResult.Data,newPasswordResult.Data, confirmPasswordResult.Data, otpResult.Data);
+        var command = new ResetPasswordCommand(emailResult.Data,newPasswordResult.Data, confirmPasswordResult.Data);
         return Result<ResetPasswordCommand>.Success(command);
     }
 }

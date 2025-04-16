@@ -11,12 +11,10 @@ public class ResetPasswordHandler : ICommandHandler<ResetPasswordCommand>
 {
     
     private readonly IClientRepository _clientRepository;
-    private readonly IDateTimeProvider _dateTimeProvider;
 
-    public ResetPasswordHandler(IClientRepository clientRepository, IDateTimeProvider dateTimeProvider)
+    public ResetPasswordHandler(IClientRepository clientRepository)
     {
         _clientRepository = clientRepository;
-        _dateTimeProvider = dateTimeProvider;
     }
     
     public async Task<Result> HandleAsync(ResetPasswordCommand command)
@@ -29,12 +27,6 @@ public class ResetPasswordHandler : ICommandHandler<ResetPasswordCommand>
         }
         
         var client = clientResult.Data;
-        
-        var otpResult = client.VerifyOtp(command.OtpCode , _dateTimeProvider);
-        if (!otpResult.IsSuccess)
-        {
-            return Result.Fail(otpResult.Errors);
-        }
         
         var resetResult = client.ResetPassword(command.NewPassword);
         if (!resetResult.IsSuccess)

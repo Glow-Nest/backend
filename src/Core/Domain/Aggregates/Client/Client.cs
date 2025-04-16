@@ -100,12 +100,7 @@ public class Client : AggregateRoot
         OtpSession.IsUsed = true;
         return Result.Success();
     }
-
-    public Result<OtpSession> CreatePasswordResetOtp(IDateTimeProvider dateTimeProvider)
-    {
-        return CreateOtp(Purpose.PasswordReset, dateTimeProvider);
-    }
-
+    
     public Result ResetPassword(Password newPasswordStr)
     {
         if (OtpSession is not { Purpose: Purpose.PasswordReset })

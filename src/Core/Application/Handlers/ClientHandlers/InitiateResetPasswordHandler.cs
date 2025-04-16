@@ -2,6 +2,7 @@
 using Application.AppEntry.Commands.Client;
 using Domain.Aggregates.Client;
 using Domain.Aggregates.Client.Contracts;
+using Domain.Aggregates.Client.Values;
 using Domain.Common.Contracts;
 using Domain.Common.OperationResult;
 
@@ -29,7 +30,7 @@ public class InitiateResetPasswordHandler : ICommandHandler<InitiateResetPasswor
         }
         
         var client = clientResult.Data;
-        var result = client.CreatePasswordResetOtp(_dateTimeProvider);
+        var result = client.CreateOtp(Purpose.PasswordReset,_dateTimeProvider);
         
         if (!result.IsSuccess)
         {

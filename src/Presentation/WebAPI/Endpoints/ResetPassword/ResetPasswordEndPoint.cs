@@ -5,14 +5,14 @@ using WebAPI.Endpoints.Common;
 
 namespace WebAPI.Endpoints.Client;
 
-public record CompletePasswordResetRequest(string Email, string NewPassword, string ConfirmPassword, string OtpCode);
+public record CompletePasswordResetRequest(string Email, string NewPassword, string ConfirmPassword);
 
 public class ResetPasswordEndPoint : CommandEndpoint.WithRequest<CompletePasswordResetRequest>.WithoutResponse
 {
     [HttpPost("clients/password/reset")]
     public override async Task<ActionResult> HandleAsync(CompletePasswordResetRequest request, ICommandDispatcher commandDispatcher)
     {
-        var result = ResetPasswordCommand.Create(request.Email, request.NewPassword, request.ConfirmPassword, request.OtpCode);
+        var result = ResetPasswordCommand.Create(request.Email, request.NewPassword, request.ConfirmPassword);
 
         if (!result.IsSuccess)
         {
