@@ -3,6 +3,9 @@ using Domain.Aggregates.Appointment.Contracts;
 using Domain.Aggregates.Appointment.Values;
 using Domain.Aggregates.Client.Contracts;
 using Domain.Aggregates.Client.Values;
+using Domain.Aggregates.DailyAppointmentSchedule;
+using Domain.Aggregates.Schedule.Entities;
+using Domain.Aggregates.Schedule.Values;
 using Domain.Aggregates.Service.Values;
 using Domain.Common.Contracts;
 using Domain.Common.OperationResult;
@@ -22,7 +25,6 @@ public class AppointmentBuilder
     private Mock<IServiceChecker> _serviceCheckerMock = new();
     private Mock<IClientChecker> _clientCheckerMock = new();
     private Mock<IDateTimeProvider> _dateTimeProviderMock = new();
-    private Mock<IBlockedTimeChecker> _blockedTimeCheckerMock = new();
 
     public static AppointmentBuilder CreateValid() => new();
 
@@ -61,7 +63,7 @@ public class AppointmentBuilder
             clientId
         );
 
-        var result = await Appointment.Create(createAppointmentDto, _serviceCheckerMock.Object, _clientCheckerMock.Object, _dateTimeProviderMock.Object, _blockedTimeCheckerMock.Object);
+        var result = await Appointment.Create(createAppointmentDto, _serviceCheckerMock.Object, _clientCheckerMock.Object, _dateTimeProviderMock.Object);
         
         if (!result.IsSuccess)
         {
@@ -154,12 +156,6 @@ public class AppointmentBuilder
     public AppointmentBuilder WithDateTimeProviderMock(Mock<IDateTimeProvider> dateTimeProviderMock)
     {
         _dateTimeProviderMock = dateTimeProviderMock;
-        return this;
-    }
-    
-    public AppointmentBuilder WithBlockedTimeCheckerMock(Mock<IBlockedTimeChecker> blockedTimeCheckerMock)
-    {
-        _blockedTimeCheckerMock = blockedTimeCheckerMock;
         return this;
     }
 }

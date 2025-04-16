@@ -1,11 +1,11 @@
 using Application.AppEntry;
-using Application.AppEntry.Commands.Appointment;
 using Application.AppEntry.Commands.Client;
+using Application.AppEntry.Commands.Schedule;
 using Application.AppEntry.Decorators;
 using Application.AppEntry.Dispatchers;
-using Application.Handlers.AppointmentHandlers;
 using Application.Handlers.ClientHandlers;
 using Application.Handlers.DomainEvents;
+using Application.Handlers.ScheduleHandlers;
 using Domain.Aggregates.Client.DomainEvents;
 using Domain.Common;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,7 +20,7 @@ public static class ApplicationExtensions
         RegisterHandlers(serviceCollection);
         RegisterDispatcher(serviceCollection);
     }
-    
+
     private static void RegisterHandlers(this IServiceCollection serviceCollection)
     {
         serviceCollection.AddScoped<ICommandHandler<CreateClientCommand>, CreateClientHandler>();
@@ -39,8 +39,9 @@ public static class ApplicationExtensions
         {
             var dispatcher = new CommandDispatcher(provider);
             var transactionDecorator = new TransactionDecorator(dispatcher, provider.GetRequiredService<IUnitOfWork>());
-            var domainEventDecorator = new DomainEventDecorator(transactionDecorator, provider.GetRequiredService<IUnitOfWork>(), provider.GetRequiredService<IDomainEventDispatcher>());
-            
+            var domainEventDecorator = new DomainEventDecorator(transactionDecorator,
+                provider.GetRequiredService<IUnitOfWork>(), provider.GetRequiredService<IDomainEventDispatcher>());
+
             return domainEventDecorator;
         });
 

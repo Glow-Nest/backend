@@ -1,5 +1,5 @@
 using Application.AppEntry;
-using Application.AppEntry.Commands.Appointment;
+using Application.AppEntry.Commands.Schedule;
 using Microsoft.AspNetCore.Mvc;
 using WebAPI.Endpoints.Common;
 

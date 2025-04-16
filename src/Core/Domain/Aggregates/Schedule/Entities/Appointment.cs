@@ -1,15 +1,17 @@
+using Domain.Aggregates.Appointment;
 using Domain.Aggregates.Appointment.Contracts;
 using Domain.Aggregates.Appointment.Values;
 using Domain.Aggregates.Client;
-using Domain.Aggregates.Client.Contracts;
 using Domain.Aggregates.Client.Values;
+using Domain.Aggregates.DailyAppointmentSchedule.Values.Appointment;
+using Domain.Aggregates.Schedule.Values;
 using Domain.Aggregates.Service;
 using Domain.Aggregates.Service.Values;
 using Domain.Common.BaseClasses;
 using Domain.Common.Contracts;
 using Domain.Common.OperationResult;
 
-namespace Domain.Aggregates.Appointment;
+namespace Domain.Aggregates.Schedule.Entities;
 
 public record CreateAppointmentDto(
     AppointmentNote Note,
@@ -19,25 +21,23 @@ public record CreateAppointmentDto(
     ClientId BookedByClient
 );
 
-public class Appointment : AggregateRoot
+public class Appointment : Entity<AppointmentId>
 {
-    internal AppointmentId AppointmentId { get; }
     internal AppointmentStatus AppointmentStatus { get; }
     internal AppointmentNote AppointmentNote { get; }
     internal TimeSlot TimeSlot { get; }
     internal DateOnly AppointmentDate { get; }
     internal List<AppointmentServiceReference> Services { get; }
     internal ClientId BookedByClient { get; }
-    
 
-    public Appointment() // for EFC
+    public Appointment(AppointmentId id) : base(id)
     {
     }
 
-    protected Appointment(AppointmentId appointmentId, AppointmentStatus appointmentStatus, AppointmentNote appointmentNote, 
-        TimeSlot timeSlot, DateOnly appointmentDate, List<AppointmentServiceReference> services, ClientId bookedByClient)
+    protected Appointment(AppointmentId appointmentId, AppointmentStatus appointmentStatus,
+        AppointmentNote appointmentNote, TimeSlot timeSlot, DateOnly appointmentDate,
+        List<AppointmentServiceReference> services, ClientId bookedByClient) : base(appointmentId)
     {
-        AppointmentId = appointmentId;
         AppointmentStatus = appointmentStatus;
         AppointmentNote = appointmentNote;
         TimeSlot = timeSlot;
@@ -46,8 +46,9 @@ public class Appointment : AggregateRoot
         BookedByClient = bookedByClient;
     }
 
-    public static async Task<Result<Appointment>> Create(CreateAppointmentDto appointmentDto, IServiceChecker serviceChecker,
-        IClientChecker clientChecker, IDateTimeProvider dateTimeProvider, IBlockedTimeChecker blockedTimeChecker)
+    public static async Task<Result<Appointment>> Create(CreateAppointmentDto appointmentDto,
+        IServiceChecker serviceChecker,
+        IClientChecker clientChecker, IDateTimeProvider dateTimeProvider)
     {
         var appointmentId = AppointmentId.Create();
         var status = AppointmentStatus.CREATED;
@@ -61,7 +62,7 @@ public class Appointment : AggregateRoot
         if (!clientExists) return Result<Appointment>.Fail(ClientErrorMessage.ClientNotFound());
 
         // validate appointment date and time
-        var timeValidation = await ValidateAppointmentDateTime(appointmentDto, dateTimeProvider, blockedTimeChecker);
+        var timeValidation = ValidateAppointmentDateTime(appointmentDto, dateTimeProvider);
         if (!timeValidation.IsSuccess) return timeValidation.ToGeneric<Appointment>();
 
         var serviceReferences = appointmentDto.ServiceIds.Select(id => new AppointmentServiceReference(id)).ToList();
@@ -84,7 +85,8 @@ public class Appointment : AggregateRoot
         return Result.Success();
     }
 
-    private static async Task<Result> ValidateAppointmentDateTime(CreateAppointmentDto appointmentDto, IDateTimeProvider dateTimeProvider, IBlockedTimeChecker blockedTimeChecker)
+    private static Result ValidateAppointmentDateTime(CreateAppointmentDto appointmentDto,
+        IDateTimeProvider dateTimeProvider)
     {
         var now = dateTimeProvider.GetNow();
         var today = DateOnly.FromDateTime(now);
@@ -93,23 +95,18 @@ public class Appointment : AggregateRoot
         if (appointmentDto.BookingDate < today ||
             (appointmentDto.BookingDate == today && appointmentDto.TimeSlot.Start < currentTime))
         {
-            return Result.Fail(AppointmentErrorMessage.AppointmentDateInPast());
+            return Result.Fail(ScheduleErrorMessage.AppointmentDateInPast());
         }
 
         if (appointmentDto.BookingDate >= today.AddMonths(3))
         {
-            return Result.Fail(AppointmentErrorMessage.AppointmentDateTooFar());
+            return Result.Fail(ScheduleErrorMessage.AppointmentDateTooFar());
         }
 
-        var isBlockedTime = await blockedTimeChecker.IsBlockedTimeAsync(appointmentDto.BookingDate, appointmentDto.TimeSlot.Start, appointmentDto.TimeSlot.End);
-        if (isBlockedTime)
+        if (appointmentDto.TimeSlot.Start < TimeOnly.Parse("09:00") ||
+            appointmentDto.TimeSlot.End > TimeOnly.Parse("18:00"))
         {
-            return Result.Fail(AppointmentErrorMessage.BlockedTimeSelected());
-        }
-
-        if (appointmentDto.TimeSlot.Start < TimeOnly.Parse("09:00") || appointmentDto.TimeSlot.End > TimeOnly.Parse("18:00"))
-        {
-            return Result.Fail(AppointmentErrorMessage.OutsideBusinessHours());
+            return Result.Fail(ScheduleErrorMessage.OutsideBusinessHours());
         }
 
         return Result.Success();
