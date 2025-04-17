@@ -2,12 +2,13 @@ using Application.AppEntry;
 using Application.AppEntry.Commands.Schedule;
 using Microsoft.AspNetCore.Mvc;
 using WebAPI.Endpoints.Common;
+using WebAPI.Endpoints.Common.Command;
 
 namespace WebAPI.Endpoints.Schedule;
 
 public record AddBlockedTimeRequest(string StartTime, string EndTime, string ScheduleDate);
 
-public class AddBlockedTimeEndpoint : CommandEndpoint.WithRequest<AddBlockedTimeRequest>.WithoutResponse
+public class AddBlockedTimeEndpoint : ProtectedWithRequest<AddBlockedTimeRequest>
 {
     [HttpPost("schedule/blockTime")]
     public override async Task<ActionResult> HandleAsync(AddBlockedTimeRequest request,

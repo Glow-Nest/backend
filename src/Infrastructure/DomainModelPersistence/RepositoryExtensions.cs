@@ -7,7 +7,6 @@ using Domain.Common;
 using DomainModelPersistence.ClientPersistence;
 using DomainModelPersistence.EfcConfigs;
 using DomainModelPersistence.Repositories;
-using DomainModelPersistence.SalonOwnerPersistence;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DomainModelPersistence;

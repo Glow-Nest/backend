@@ -2,12 +2,13 @@
 using Application.AppEntry.Commands.Client;
 using Microsoft.AspNetCore.Mvc;
 using WebAPI.Endpoints.Common;
+using WebAPI.Endpoints.Common.Command;
 
-namespace WebAPI.Endpoints.Client;
+namespace WebAPI.Endpoints.ResetPassword;
 
 public record CompletePasswordResetRequest(string Email, string NewPassword, string ConfirmPassword);
 
-public class ResetPasswordEndPoint : CommandEndpoint.WithRequest<CompletePasswordResetRequest>.WithoutResponse
+public class ResetPasswordEndPoint : PublicWithRequest<CompletePasswordResetRequest>
 {
     [HttpPost("clients/password/reset")]
     public override async Task<ActionResult> HandleAsync(CompletePasswordResetRequest request, ICommandDispatcher commandDispatcher)

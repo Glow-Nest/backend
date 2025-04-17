@@ -6,7 +6,7 @@ using DomainModelPersistence.EfcConfigs;
 using DomainModelPersistence.Repositories.Common;
 using Microsoft.EntityFrameworkCore;
 
-namespace DomainModelPersistence.SalonOwnerPersistence;
+namespace DomainModelPersistence.Repositories;
 
 public class SalonOwnerRepository : RepositoryBase<SalonOwner, SalonOwnerId>, ISalonOwnerRepository
 {
