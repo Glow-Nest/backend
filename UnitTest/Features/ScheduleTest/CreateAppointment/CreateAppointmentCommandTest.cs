@@ -1,8 +1,8 @@
-using Application.AppEntry.Commands.Appointment;
-using Domain.Aggregates.Appointment;
+using Application.AppEntry.Commands.Schedule;
+using Domain.Aggregates.Schedule;
 using Domain.Common;
 
-namespace UnitTest.Features.AppointmentTest.CreateAppointment;
+namespace UnitTest.Features.ScheduleTest.CreateAppointment;
 
 public class CreateAppointmentCommandTest
 {
@@ -61,6 +61,6 @@ public class CreateAppointmentCommandTest
         
         // Assert
         Assert.False(command.IsSuccess);
-        Assert.Contains(AppointmentErrorMessage.EmptyAppointmentNote(), command.Errors);
+        Assert.Contains(ScheduleErrorMessage.EmptyAppointmentNote(), command.Errors);
     }
 }

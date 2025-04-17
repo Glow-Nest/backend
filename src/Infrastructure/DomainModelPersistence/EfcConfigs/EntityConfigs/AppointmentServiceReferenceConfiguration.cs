@@ -1,5 +1,8 @@
 using Domain.Aggregates.Appointment;
 using Domain.Aggregates.Appointment.Values;
+using Domain.Aggregates.DailyAppointmentSchedule;
+using Domain.Aggregates.DailyAppointmentSchedule.Values.Appointment;
+using Domain.Aggregates.Schedule.Entities;
 using Domain.Aggregates.Service;
 using Domain.Aggregates.Service.Values;
 using Microsoft.EntityFrameworkCore;

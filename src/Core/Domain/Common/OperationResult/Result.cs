@@ -26,6 +26,11 @@ public class Result<T>
 
     public static Result<T> Fail(Error error) =>
         new([error]);
+    
+    public bool HasError(string code)
+    {
+        return Errors.Any(e => e.ErrorId == code);
+    }
 }
 
 public class Result
@@ -52,6 +57,10 @@ public class Result
     public static Result Fail(Error error) =>
         new([error]);
     
+    public bool HasError(string code)
+    {
+        return Errors.Any(e => e.ErrorId == code);
+    }
 }
 
 public static class ResultExtensions
@@ -63,6 +72,7 @@ public static class ResultExtensions
 
         return Result<T>.Fail(result.Errors);
     }
+    
     
     public static Result ToNonGeneric<T>(this Result<T> result)
     {

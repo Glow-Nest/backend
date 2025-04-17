@@ -1,3 +1,4 @@
+using Domain.Aggregates.Schedule;
 using Domain.Common.BaseClasses;
 using Domain.Common.OperationResult;
 
@@ -16,7 +17,7 @@ public class AppointmentNote : ValueObject
     {
         if (string.IsNullOrWhiteSpace(appointmentNote))
         {
-            return Result<AppointmentNote>.Fail(AppointmentErrorMessage.EmptyAppointmentNote());
+            return Result<AppointmentNote>.Fail(ScheduleErrorMessage.EmptyAppointmentNote());
         }
         
         var note = new AppointmentNote(appointmentNote);

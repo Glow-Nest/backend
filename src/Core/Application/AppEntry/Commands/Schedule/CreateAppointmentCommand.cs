@@ -1,10 +1,11 @@
 using Domain.Aggregates.Appointment.Values;
 using Domain.Aggregates.Client.Values;
+using Domain.Aggregates.Schedule.Values;
 using Domain.Aggregates.Service.Values;
 using Domain.Common;
 using Domain.Common.OperationResult;
 
-namespace Application.AppEntry.Commands.Appointment;
+namespace Application.AppEntry.Commands.Schedule;
 
 public class CreateAppointmentCommand(AppointmentNote appointmentNote, TimeSlot timeSlot, List<ServiceId> serviceIds, ClientId bookedByClient, DateOnly appointmentDate)
 {

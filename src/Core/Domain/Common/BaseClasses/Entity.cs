@@ -1,24 +1,24 @@
 ﻿namespace Domain.Common.BaseClasses;
 
-public class Entity
+public abstract class Entity<TId>
+    where TId : notnull
 {
-    public Guid Id { get; set; }
+    public TId Id { get; protected set; }
 
-    protected Entity(Guid id)
+    protected Entity(TId id)
     {
         Id = id;
     }
 
     public override bool Equals(object? obj)
     {
-        if (obj == null || obj.GetType() != GetType())
+        if (obj is not Entity<TId> other)
             return false;
 
-        var other = (Entity)obj;
-        return Id == other.Id;
+        return Id.Equals(other.Id);
     }
 
-    protected bool Equals(Entity other)
+    protected bool Equals(Entity<TId> other)
     {
         return Id.Equals(other.Id);
     }
@@ -30,6 +30,6 @@ public class Entity
 
     public override string ToString()
     {
-        return base.ToString();
+        return $"{GetType().Name} [Id={Id}]";
     }
 }

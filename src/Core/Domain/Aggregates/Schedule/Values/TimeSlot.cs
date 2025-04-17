@@ -1,7 +1,8 @@
+using Domain.Aggregates.Appointment;
 using Domain.Common.BaseClasses;
 using Domain.Common.OperationResult;
 
-namespace Domain.Aggregates.Appointment.Values;
+namespace Domain.Aggregates.Schedule.Values;
 
 public class TimeSlot : ValueObject
 {
@@ -18,7 +19,7 @@ public class TimeSlot : ValueObject
     {
         if (end <= start)
         {
-            return Result<TimeSlot>.Fail(AppointmentErrorMessage.EndTimeStartError());
+            return Result<TimeSlot>.Fail(ScheduleErrorMessage.EndTimeStartError());
         }
 
         var timeSlot = new TimeSlot(start, end);
@@ -29,5 +30,10 @@ public class TimeSlot : ValueObject
     {
         yield return Start;
         yield return End;
+    }
+
+    public bool Overlaps(TimeSlot other)
+    {
+        return Start < other.End && End > other.Start;
     }
 }

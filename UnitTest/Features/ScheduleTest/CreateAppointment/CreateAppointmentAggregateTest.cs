@@ -2,14 +2,16 @@ using Domain.Aggregates.Appointment;
 using Domain.Aggregates.Appointment.Contracts;
 using Domain.Aggregates.Appointment.Values;
 using Domain.Aggregates.Client;
-using Domain.Aggregates.Client.Contracts;
 using Domain.Aggregates.Client.Values;
+using Domain.Aggregates.Schedule;
+using Domain.Aggregates.Schedule.Entities;
+using Domain.Aggregates.Schedule.Values;
 using Domain.Aggregates.Service;
 using Domain.Aggregates.Service.Values;
 using Domain.Common.Contracts;
 using Moq;
 
-namespace UnitTest.Features.AppointmentTest.CreateAppointment;
+namespace UnitTest.Features.ScheduleTest.CreateAppointment;
 
 public class CreateAppointmentAggregateTest
 {
@@ -42,13 +44,16 @@ public class CreateAppointmentAggregateTest
         // Arrange
         SetupMocksForValidScenario();
         var appointmentDto = CreateValidAppointmentDto();
-        
+
+        var schedule = Schedule.CreateSchedule(appointmentDto.BookingDate).Data;
+
         // Act
-        var result = await Appointment.Create(appointmentDto, _serviceCheckerMock.Object, _clientCheckerMock.Object, _dateTimeProviderMock.Object, _blockedTimeCheckerMock.Object);
+        var result = await schedule.AddAppointment(appointmentDto, _serviceCheckerMock.Object, _clientCheckerMock.Object, _dateTimeProviderMock.Object);
         
         // Assert
         Assert.True(result.IsSuccess);
         Assert.NotNull(result.Data);
+        Assert.Single(schedule.Appointments);
     }
 
     [Fact]
@@ -58,12 +63,15 @@ public class CreateAppointmentAggregateTest
         var appointmentDto = CreateValidAppointmentDto();
         _serviceCheckerMock.Setup(s => s.DoesServiceExistsAsync(It.IsAny<ServiceId>())).ReturnsAsync(false);
         
+        var schedule = Schedule.CreateSchedule(appointmentDto.BookingDate).Data;
+        
         // Act
-        var result = await Appointment.Create(appointmentDto, _serviceCheckerMock.Object, _clientCheckerMock.Object, _dateTimeProviderMock.Object, _blockedTimeCheckerMock.Object);
+        var result = await schedule.AddAppointment(appointmentDto, _serviceCheckerMock.Object, _clientCheckerMock.Object, _dateTimeProviderMock.Object);
         
         // Assert
         Assert.False(result.IsSuccess);
         Assert.Contains(ServiceErrorMessage.ServiceNotFound(), result.Errors);
+        Assert.Empty(schedule.Appointments);
     }
 
     [Fact]
@@ -73,13 +81,16 @@ public class CreateAppointmentAggregateTest
         var appointmentDto = CreateValidAppointmentDto();
         SetupMocksForValidScenario();
         _clientCheckerMock.Setup(c => c.DoesClientExistsAsync(It.IsAny<ClientId>())).ReturnsAsync(false);
+        
+        var schedule = Schedule.CreateSchedule(appointmentDto.BookingDate).Data;
 
         // Act
-        var result = await Appointment.Create(appointmentDto, _serviceCheckerMock.Object, _clientCheckerMock.Object, _dateTimeProviderMock.Object, _blockedTimeCheckerMock.Object);
+        var result = await schedule.AddAppointment(appointmentDto, _serviceCheckerMock.Object, _clientCheckerMock.Object, _dateTimeProviderMock.Object);
 
         // Assert
         Assert.False(result.IsSuccess);
         Assert.Contains(ClientErrorMessage.ClientNotFound(), result.Errors);
+        Assert.Empty(schedule.Appointments);
     }
 
     [Fact]
@@ -90,12 +101,15 @@ public class CreateAppointmentAggregateTest
         SetupMocksForValidScenario();
         _dateTimeProviderMock.Setup(d => d.GetNow()).Returns(DateTime.Now.AddDays(2));
         
+        var schedule = Schedule.CreateSchedule(appointmentDto.BookingDate).Data;
+        
         // Act
-        var result = await Appointment.Create(appointmentDto, _serviceCheckerMock.Object, _clientCheckerMock.Object, _dateTimeProviderMock.Object, _blockedTimeCheckerMock.Object);
+        var result = await schedule.AddAppointment(appointmentDto, _serviceCheckerMock.Object, _clientCheckerMock.Object, _dateTimeProviderMock.Object);
 
         // Assert
         Assert.False(result.IsSuccess);
-        Assert.Contains(AppointmentErrorMessage.AppointmentDateInPast(), result.Errors);
+        Assert.Contains(ScheduleErrorMessage.AppointmentDateInPast(), result.Errors);
+        Assert.Empty(schedule.Appointments);
     }
 
     [Fact]
@@ -106,12 +120,15 @@ public class CreateAppointmentAggregateTest
         SetupMocksForValidScenario();
         appointmentDto = appointmentDto with { BookingDate = DateOnly.FromDateTime(DateTime.Now.AddMonths(3)) };
 
+        var schedule = Schedule.CreateSchedule(appointmentDto.BookingDate).Data;
+        
         // Act
-        var result = await Appointment.Create(appointmentDto, _serviceCheckerMock.Object, _clientCheckerMock.Object, _dateTimeProviderMock.Object, _blockedTimeCheckerMock.Object);
+        var result = await schedule.AddAppointment(appointmentDto, _serviceCheckerMock.Object, _clientCheckerMock.Object, _dateTimeProviderMock.Object);
 
         // Assert
         Assert.False(result.IsSuccess);
-        Assert.Contains(AppointmentErrorMessage.AppointmentDateTooFar(), result.Errors);
+        Assert.Contains(ScheduleErrorMessage.AppointmentDateTooFar(), result.Errors);
+        Assert.Empty(schedule.Appointments);
     }
     
     [Fact]
@@ -120,14 +137,18 @@ public class CreateAppointmentAggregateTest
         // Arrange
         var appointmentDto = CreateValidAppointmentDto();
         SetupMocksForValidScenario();
-        _blockedTimeCheckerMock.Setup(b => b.IsBlockedTimeAsync(It.IsAny<DateOnly>(), It.IsAny<TimeOnly>(), It.IsAny<TimeOnly>())).ReturnsAsync(true);
+
+        var blockTimeSlot = TimeSlot.Create(appointmentDto.TimeSlot.Start, appointmentDto.TimeSlot.End).Data;
+        var schedule = Schedule.CreateSchedule(appointmentDto.BookingDate).Data;
+        await schedule.AddBlockedTimeSlot(blockTimeSlot);
 
         // Act
-        var result = await Appointment.Create(appointmentDto, _serviceCheckerMock.Object, _clientCheckerMock.Object, _dateTimeProviderMock.Object, _blockedTimeCheckerMock.Object);
+        var result = await schedule.AddAppointment(appointmentDto, _serviceCheckerMock.Object, _clientCheckerMock.Object, _dateTimeProviderMock.Object);
 
         // Assert
         Assert.False(result.IsSuccess);
-        Assert.Contains(AppointmentErrorMessage.BlockedTimeSelected(), result.Errors);
+        Assert.Contains(ScheduleErrorMessage.BlockedTimeSelected(), result.Errors);
+        Assert.Empty(schedule.Appointments);
     }
 
     [Fact]
@@ -137,12 +158,15 @@ public class CreateAppointmentAggregateTest
         var appointmentDto = CreateValidAppointmentDto();
         SetupMocksForValidScenario();
         appointmentDto = appointmentDto with { TimeSlot = TimeSlot.Create(TimeOnly.Parse("08:00"), TimeOnly.Parse("09:00")).Data };
-
+        
+        var schedule = Schedule.CreateSchedule(appointmentDto.BookingDate).Data;
+        
         // Act
-        var result = await Appointment.Create(appointmentDto, _serviceCheckerMock.Object, _clientCheckerMock.Object, _dateTimeProviderMock.Object, _blockedTimeCheckerMock.Object);
+        var result = await schedule.AddAppointment(appointmentDto, _serviceCheckerMock.Object, _clientCheckerMock.Object, _dateTimeProviderMock.Object);
 
         // Assert
         Assert.False(result.IsSuccess);
-        Assert.Contains(AppointmentErrorMessage.OutsideBusinessHours(), result.Errors);
+        Assert.Contains(ScheduleErrorMessage.OutsideBusinessHours(), result.Errors);
+        Assert.Empty(schedule.Appointments);
     }
 }

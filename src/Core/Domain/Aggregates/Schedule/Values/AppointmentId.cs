@@ -1,6 +1,6 @@
 using Domain.Common.BaseClasses;
 
-namespace Domain.Aggregates.Appointment.Values;
+namespace Domain.Aggregates.DailyAppointmentSchedule.Values.Appointment;
 
 public class AppointmentId : ValueObject
 {
