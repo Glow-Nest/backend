@@ -1,5 +1,4 @@
 using Domain.Aggregates.Appointment.Contracts;
-using Domain.Aggregates.DailyAppointmentSchedule.Values.DailySchedule;
 using Domain.Aggregates.Schedule.Entities;
 using Domain.Aggregates.Schedule.Values;
 using Domain.Common.BaseClasses;
@@ -61,8 +60,20 @@ public class Schedule : AggregateRoot
         return Result<Schedule>.Success(this);
     }
 
-    public async Task<Result<Schedule>> AddBlockedTimeSlot(TimeSlot timeSlot)
+    public async Task<Result<Schedule>> AddBlockedTime(TimeSlot timeSlot)
     {
+        // Check for existing blocked time slot conflict
+        if (BlockedTimeSlots.Any(existing => existing.Overlaps(timeSlot)))
+        {
+            return Result<Schedule>.Fail(ScheduleErrorMessage.BlockTimeSlotOverlap());
+        }
+        
+        // Check for existing appointment conflict
+        if (Appointments.Any(appointment => appointment.TimeSlot.Overlaps(timeSlot)))
+        {
+            return Result<Schedule>.Fail(ScheduleErrorMessage.BlockTimeSlotOverlapsExistingAppointment());
+        }
+        
         BlockedTimeSlots.Add(timeSlot);
         return Result<Schedule>.Success(this);
     }

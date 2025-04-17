@@ -3,22 +3,22 @@ using Application.AppEntry.Commands.Schedule;
 using Microsoft.AspNetCore.Mvc;
 using WebAPI.Endpoints.Common;
 
-namespace WebAPI.Endpoints.Appointment;
+namespace WebAPI.Endpoints.Schedule;
 
-public record CreateAppointmentRequest(string AppointmentNote, DateOnly AppointmentDate, Guid BookedByClient, List<Guid> ServiceIds, DateTime StartTime, DateTime EndTime);
+public record CreateAppointmentRequest(string AppointmentNote, string AppointmentDate, string BookedByClient, List<string> ServiceIds, string StartTime, string EndTime);
 
 public class CreateAppointmentEndpoint : CommandEndpoint.WithRequest<CreateAppointmentRequest>.WithoutResponse
 {
-    [HttpPost("appointments/create")]
+    [HttpPost("schedule/appointment/create")]
     public override async Task<ActionResult> HandleAsync(CreateAppointmentRequest request, ICommandDispatcher commandDispatcher)
     {
         var commandResult = CreateAppointmentCommand.Create(
             request.AppointmentNote,
-            request.StartTime.ToString("HH:mm"),
-            request.EndTime.ToString("HH:mm"),
-            request.AppointmentDate.ToString("yyyy-MM-dd"),
-            request.ServiceIds.Select(x => x.ToString()).ToList(),
-            request.BookedByClient.ToString()
+            request.StartTime,
+            request.EndTime,
+            request.AppointmentDate,
+            request.ServiceIds,
+            request.BookedByClient
         );
 
         if (!commandResult.IsSuccess) 

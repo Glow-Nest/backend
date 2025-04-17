@@ -3,7 +3,6 @@ using Domain.Aggregates.Appointment.Values;
 using Domain.Aggregates.Client;
 using Domain.Aggregates.DailyAppointmentSchedule;
 using Domain.Aggregates.DailyAppointmentSchedule.Values.Appointment;
-using Domain.Aggregates.DailyAppointmentSchedule.Values.DailySchedule;
 using Domain.Aggregates.Schedule;
 using Domain.Aggregates.Schedule.Entities;
 using Domain.Aggregates.Schedule.Values;
@@ -34,6 +33,7 @@ public class ScheduleConfiguration : IEntityTypeConfiguration<Schedule>
         // configure blocked time slots
         entityBuilder.OwnsMany(schedule => schedule.BlockedTimeSlots, timeSlot =>
         {
+            timeSlot.ToTable("BlockedTimeSlots");
             timeSlot.WithOwner().HasForeignKey("ScheduleId");
 
             timeSlot.Property(t => t.Start).HasColumnName("StartTime");

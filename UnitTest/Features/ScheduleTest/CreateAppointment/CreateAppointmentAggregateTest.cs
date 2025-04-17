@@ -10,6 +10,7 @@ using Domain.Aggregates.Service;
 using Domain.Aggregates.Service.Values;
 using Domain.Common.Contracts;
 using Moq;
+using UnitTest.Features.Helpers;
 
 namespace UnitTest.Features.ScheduleTest.CreateAppointment;
 
@@ -27,23 +28,13 @@ public class CreateAppointmentAggregateTest
         _dateTimeProviderMock.Setup(d => d.GetNow()).Returns(DateTime.Now);
         _blockedTimeCheckerMock.Setup(b => b.IsBlockedTimeAsync(It.IsAny<DateOnly>(), It.IsAny<TimeOnly>(), It.IsAny<TimeOnly>())).ReturnsAsync(false);
     }
-    private CreateAppointmentDto CreateValidAppointmentDto()
-    {
-        return new CreateAppointmentDto(
-            AppointmentNote.Create("Valid appointment note").Data,
-            TimeSlot.Create(TimeOnly.Parse("10:00"), TimeOnly.Parse("11:00")).Data,
-            DateOnly.FromDateTime(DateTime.Now.AddDays(1)),
-            [ServiceId.Create()],
-            ClientId.Create()
-        );
-    }
     
     [Fact]
     public async Task Create_ShouldSucceed_WhenAllValidationsPass()
     {
         // Arrange
         SetupMocksForValidScenario();
-        var appointmentDto = CreateValidAppointmentDto();
+        var appointmentDto = HelperMethods.CreateValidAppointmentDto();
 
         var schedule = Schedule.CreateSchedule(appointmentDto.BookingDate).Data;
 
@@ -60,7 +51,7 @@ public class CreateAppointmentAggregateTest
     public async Task Create_ShouldFail_WhenServiceDoesNotExist()
     {
         // Arrange
-        var appointmentDto = CreateValidAppointmentDto();
+        var appointmentDto = HelperMethods.CreateValidAppointmentDto();
         _serviceCheckerMock.Setup(s => s.DoesServiceExistsAsync(It.IsAny<ServiceId>())).ReturnsAsync(false);
         
         var schedule = Schedule.CreateSchedule(appointmentDto.BookingDate).Data;
@@ -78,7 +69,7 @@ public class CreateAppointmentAggregateTest
     public async Task Create_ShouldFail_WhenClientDoesNotExist()
     {
         // Arrange
-        var appointmentDto = CreateValidAppointmentDto();
+        var appointmentDto = HelperMethods.CreateValidAppointmentDto();
         SetupMocksForValidScenario();
         _clientCheckerMock.Setup(c => c.DoesClientExistsAsync(It.IsAny<ClientId>())).ReturnsAsync(false);
         
@@ -97,7 +88,7 @@ public class CreateAppointmentAggregateTest
     public async Task Create_ShouldFail_WhenAppointmentIsInThePast()
     {
         // Arrange
-        var appointmentDto = CreateValidAppointmentDto();
+        var appointmentDto = HelperMethods.CreateValidAppointmentDto();
         SetupMocksForValidScenario();
         _dateTimeProviderMock.Setup(d => d.GetNow()).Returns(DateTime.Now.AddDays(2));
         
@@ -116,7 +107,7 @@ public class CreateAppointmentAggregateTest
     public async Task Create_Should_Fail_WhenAppointmentDateIsTooFar()
     {
         // Arrange
-        var appointmentDto = CreateValidAppointmentDto();
+        var appointmentDto = HelperMethods.CreateValidAppointmentDto();
         SetupMocksForValidScenario();
         appointmentDto = appointmentDto with { BookingDate = DateOnly.FromDateTime(DateTime.Now.AddMonths(3)) };
 
@@ -135,12 +126,12 @@ public class CreateAppointmentAggregateTest
     public async Task Create_ShouldFail_WhenBlockedTimeIsSelected()
     {
         // Arrange
-        var appointmentDto = CreateValidAppointmentDto();
+        var appointmentDto = HelperMethods.CreateValidAppointmentDto();
         SetupMocksForValidScenario();
 
         var blockTimeSlot = TimeSlot.Create(appointmentDto.TimeSlot.Start, appointmentDto.TimeSlot.End).Data;
         var schedule = Schedule.CreateSchedule(appointmentDto.BookingDate).Data;
-        await schedule.AddBlockedTimeSlot(blockTimeSlot);
+        await schedule.AddBlockedTime(blockTimeSlot);
 
         // Act
         var result = await schedule.AddAppointment(appointmentDto, _serviceCheckerMock.Object, _clientCheckerMock.Object, _dateTimeProviderMock.Object);
@@ -155,7 +146,7 @@ public class CreateAppointmentAggregateTest
     public async Task Create_ShouldFail_WhenOutsideBusinessHours()
     {
         // Arrange
-        var appointmentDto = CreateValidAppointmentDto();
+        var appointmentDto = HelperMethods.CreateValidAppointmentDto();
         SetupMocksForValidScenario();
         appointmentDto = appointmentDto with { TimeSlot = TimeSlot.Create(TimeOnly.Parse("08:00"), TimeOnly.Parse("09:00")).Data };
         
