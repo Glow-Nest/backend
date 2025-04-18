@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Endpoints.Common.Query;
 
-[Authorize(Roles = "SalonOwner")]
+[Authorize(Roles = "Salon Owner")]
 [ApiController]
 [Route("api/owner")]
 public abstract class ProtectedQueryWithRequestAndResponse<TRequest, TResponse>
@@ -11,7 +11,7 @@ public abstract class ProtectedQueryWithRequestAndResponse<TRequest, TResponse>
 {
 }
 
-[Authorize(Roles = "SalonOwner")]
+[Authorize(Roles = "Salon Owner")]
 [ApiController]
 [Route("api/owner")]
 public abstract class ProtectedQueryWithRequest<TRequest>
@@ -19,7 +19,7 @@ public abstract class ProtectedQueryWithRequest<TRequest>
 {
 }
 
-[Authorize(Roles = "SalonOwner")]
+[Authorize(Roles = "Salon Owner")]
 [ApiController]
 [Route("api/owner")]
 public abstract class ProtectedQueryWithResponse<TResponse>
@@ -27,7 +27,7 @@ public abstract class ProtectedQueryWithResponse<TResponse>
 {
 }
 
-[Authorize(Roles = "SalonOwner")]
+[Authorize(Roles = "Salon Owner")]
 [ApiController]
 [Route("api/owner")]
 public abstract class ProtectedQueryEndpoint

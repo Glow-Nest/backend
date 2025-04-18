@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using System.Text;
 using Application.Extensions;
 using DomainModelPersistence;
@@ -55,7 +56,13 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         {
             IssuerSigningKey = new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes(builder.Configuration["JwtSetting:SecretKey"]!)),
-            ValidateIssuerSigningKey = true
+            ValidateIssuerSigningKey = true,
+            ValidateAudience = true,
+            ValidAudience = "GlowNestAPI",
+            ValidateIssuer = true,
+            ValidIssuer = "GlowNestServer",
+            ValidateLifetime = true,
+            RoleClaimType = ClaimTypes.Role,
         };
     });
 
