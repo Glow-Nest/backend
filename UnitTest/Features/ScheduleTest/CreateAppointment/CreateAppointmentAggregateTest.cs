@@ -128,10 +128,12 @@ public class CreateAppointmentAggregateTest
         // Arrange
         var appointmentDto = HelperMethods.CreateValidAppointmentDto();
         SetupMocksForValidScenario();
-
+        
+        _dateTimeProviderMock.Setup(d => d.GetNow()).Returns(DateTime.Now.AddDays(-1));
+        
         var blockTimeSlot = TimeSlot.Create(appointmentDto.TimeSlot.Start, appointmentDto.TimeSlot.End).Data;
         var schedule = Schedule.CreateSchedule(appointmentDto.BookingDate).Data;
-        await schedule.AddBlockedTime(blockTimeSlot);
+        await schedule.AddBlockedTime(blockTimeSlot, _dateTimeProviderMock.Object);
 
         // Act
         var result = await schedule.AddAppointment(appointmentDto, _serviceCheckerMock.Object, _clientCheckerMock.Object, _dateTimeProviderMock.Object);

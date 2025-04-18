@@ -60,8 +60,16 @@ public class Schedule : AggregateRoot
         return Result<Schedule>.Success(this);
     }
 
-    public async Task<Result<Schedule>> AddBlockedTime(TimeSlot timeSlot)
+    public async Task<Result<Schedule>> AddBlockedTime(TimeSlot timeSlot, IDateTimeProvider dateTimeProvider)
     {
+        var now = dateTimeProvider.GetNow();
+        
+        // Check if schedule date is in the past
+        if (ScheduleDate < DateOnly.FromDateTime(now))
+        {
+            return Result<Schedule>.Fail(ScheduleErrorMessage.ScheduleDateInPast());
+        }
+
         // Check for existing blocked time slot conflict
         if (BlockedTimeSlots.Any(existing => existing.Overlaps(timeSlot)))
         {

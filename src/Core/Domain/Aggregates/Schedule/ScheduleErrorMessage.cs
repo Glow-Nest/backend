@@ -6,9 +6,11 @@ public class ScheduleErrorMessage
 {
     // Schedule Error
     public static Error ScheduleNotFound(DateOnly date) => new("Schedule.NotFound", $"Schedule for date {date:yyyy-MM-dd} was not found.");
+    public static Error EndTimeStartError() => new("TimeSlot.EndTimeStart", "End time must be after start time.");
+    public static Error ScheduleDateInPast() => new("Schedule.ScheduleDateInPast", "Schedule date must be in the future.");
+
     
     // Appointment Error
-    public static Error EndTimeStartError() => new("Appointment.EndTimeStart", "End time must be after start time.");
     public static Error AppointmentNotFound() => new("Appointment.AppointmentNotFound", "Appointment not found.");
     public static Error AppointmentDateInPast() => new("Appointment.AppointmentInPast", "Appointment date must be in the future.");
     public static Error AppointmentDateTooFar() => new("Appointment.AppointmentTooFar", "Appointment date must be within 90 days.");

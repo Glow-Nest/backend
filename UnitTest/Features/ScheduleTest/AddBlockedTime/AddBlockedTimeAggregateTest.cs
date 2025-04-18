@@ -7,7 +7,7 @@ using Domain.Common.Contracts;
 using Moq;
 using UnitTest.Features.Helpers;
 
-namespace UnitTest.Features.ScheduleTest.AddBlockTimeSlot;
+namespace UnitTest.Features.ScheduleTest.AddBlockedTime;
 
 public class AddBlockedTimeAggregateTest
 {
@@ -21,23 +21,27 @@ public class AddBlockedTimeAggregateTest
         _clientCheckerMock.Setup(c => c.DoesClientExistsAsync(It.IsAny<ClientId>())).ReturnsAsync(true);
         _dateTimeProviderMock.Setup(d => d.GetNow()).Returns(DateTime.Now);
     }
-    
+
     [Fact]
     public void Add_ShouldSucceed_WhenAllValidationsPass()
     {
         // Arrange
         var scheduleDate = DateOnly.FromDateTime(DateTime.Now.AddDays(1));
         var schedule = Schedule.CreateSchedule(scheduleDate).Data;
-        var timeSlot = TimeSlot.Create(TimeOnly.FromDateTime(DateTime.Now), TimeOnly.FromDateTime(DateTime.Now.AddHours(1))).Data;
+        var timeSlot = TimeSlot
+            .Create(TimeOnly.FromDateTime(DateTime.Now), TimeOnly.FromDateTime(DateTime.Now.AddHours(1))).Data;
+
+        _dateTimeProviderMock.Setup(d => d.GetNow()).Returns(DateTime.Now.AddDays(-1));
+
 
         // Act
-        var result = schedule.AddBlockedTime(timeSlot).Result;
+        var result = schedule.AddBlockedTime(timeSlot, _dateTimeProviderMock.Object).Result;
 
         // Assert
         Assert.True(result.IsSuccess);
         Assert.Single(result.Data.BlockedTimeSlots);
     }
-    
+
     [Fact]
     public async void Add_ShouldFail_WhenTimeSlotOverlapsWithExistingBlockedTimeSlot()
     {
@@ -46,33 +50,37 @@ public class AddBlockedTimeAggregateTest
         var schedule = Schedule.CreateSchedule(scheduleDate).Data;
         var timeSlot1 = TimeSlot.Create(TimeOnly.Parse("10:00"), TimeOnly.Parse("10:30"));
         var timeSlot2 = TimeSlot.Create(TimeOnly.Parse("10:00"), TimeOnly.Parse("10:30"));
+        
+        _dateTimeProviderMock.Setup(d => d.GetNow()).Returns(DateTime.Now.AddDays(-1));
 
         // Act
-        var blockedTimeSlotResult1 = await schedule.AddBlockedTime(timeSlot1.Data);
-        var result = schedule.AddBlockedTime(timeSlot2.Data).Result;
+        var blockedTimeSlotResult1 = await schedule.AddBlockedTime(timeSlot1.Data, _dateTimeProviderMock.Object);
+        var result = schedule.AddBlockedTime(timeSlot2.Data, _dateTimeProviderMock.Object).Result;
 
         // Assert
         Assert.False(result.IsSuccess);
         Assert.Contains(ScheduleErrorMessage.BlockTimeSlotOverlap(), result.Errors);
     }
-    
+
     [Fact]
     public async void Add_ShouldFail_WhenTimeSlotOverlapsWithExistingAppointment()
     {
         // Arrange
         SetupMocksForValidScenario();
-        
+
         var scheduleDate = DateOnly.FromDateTime(DateTime.Now.AddDays(1));
         var schedule = Schedule.CreateSchedule(scheduleDate).Data;
-      
+
         var appointmentDto = HelperMethods.CreateValidAppointmentDto();
-        var appointmentResult = await schedule.AddAppointment(appointmentDto, _serviceCheckerMock.Object, _clientCheckerMock.Object, _dateTimeProviderMock.Object);
-        
+        var appointmentResult = await schedule.AddAppointment(appointmentDto, _serviceCheckerMock.Object,
+            _clientCheckerMock.Object, _dateTimeProviderMock.Object);
+
         var timeSlot = TimeSlot.Create(appointmentDto.TimeSlot.Start, appointmentDto.TimeSlot.End).Data;
-        
+        _dateTimeProviderMock.Setup(d => d.GetNow()).Returns(DateTime.Now.AddDays(-1));
+
         // Act
-        var blockedTimeSlotResult = await schedule.AddBlockedTime(timeSlot);
-        
+        var blockedTimeSlotResult = schedule.AddBlockedTime(timeSlot, _dateTimeProviderMock.Object).Result;
+
         // Assert
         Assert.False(blockedTimeSlotResult.IsSuccess);
         Assert.Contains(ScheduleErrorMessage.BlockTimeSlotOverlapsExistingAppointment(), blockedTimeSlotResult.Errors);

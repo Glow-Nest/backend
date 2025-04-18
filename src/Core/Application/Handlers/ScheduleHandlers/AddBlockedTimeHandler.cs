@@ -1,13 +1,15 @@
 using Application.AppEntry;
 using Application.AppEntry.Commands.Schedule;
 using Domain.Aggregates.Schedule;
+using Domain.Common.Contracts;
 using Domain.Common.OperationResult;
 
 namespace Application.Handlers.ScheduleHandlers;
 
-public class AddBlockedTimeHandler(IScheduleRepository scheduleRepository) : ICommandHandler<AddBlockedTimeCommand>
+public class AddBlockedTimeHandler(IScheduleRepository scheduleRepository, IDateTimeProvider dateTimeProvider) : ICommandHandler<AddBlockedTimeCommand>
 {
     private readonly IScheduleRepository _scheduleRepository = scheduleRepository;
+    private readonly IDateTimeProvider _dateTimeProvider = dateTimeProvider;
 
     public async Task<Result> HandleAsync(AddBlockedTimeCommand command)
     {
@@ -18,7 +20,7 @@ public class AddBlockedTimeHandler(IScheduleRepository scheduleRepository) : ICo
         }
         
         var schedule = scheduleResult.Data;
-        var result = await schedule.AddBlockedTime(command.timeSlot);
+        var result = await schedule.AddBlockedTime(command.timeSlot, _dateTimeProvider);
         if (!result.IsSuccess)
         {
             return Result.Fail(result.Errors);
