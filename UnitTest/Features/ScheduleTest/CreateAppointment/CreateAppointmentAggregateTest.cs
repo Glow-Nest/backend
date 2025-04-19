@@ -6,6 +6,7 @@ using Domain.Aggregates.Client.Values;
 using Domain.Aggregates.Schedule;
 using Domain.Aggregates.Schedule.Entities;
 using Domain.Aggregates.Schedule.Values;
+using Domain.Aggregates.Schedule.Values.BlockedTime;
 using Domain.Aggregates.Service;
 using Domain.Aggregates.Service.Values;
 using Domain.Common.Contracts;
@@ -132,8 +133,9 @@ public class CreateAppointmentAggregateTest
         _dateTimeProviderMock.Setup(d => d.GetNow()).Returns(DateTime.Now.AddDays(-1));
         
         var blockTimeSlot = TimeSlot.Create(appointmentDto.TimeSlot.Start, appointmentDto.TimeSlot.End).Data;
+        var blockReason = BlockReason.Create("Test reason").Data;
         var schedule = Schedule.CreateSchedule(appointmentDto.BookingDate).Data;
-        await schedule.AddBlockedTime(blockTimeSlot, _dateTimeProviderMock.Object);
+        await schedule.AddBlockedTime(blockTimeSlot, blockReason, _dateTimeProviderMock.Object);
 
         // Act
         var result = await schedule.AddAppointment(appointmentDto, _serviceCheckerMock.Object, _clientCheckerMock.Object, _dateTimeProviderMock.Object);

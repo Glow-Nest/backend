@@ -5,7 +5,7 @@ using WebAPI.Endpoints.Common.Command;
 
 namespace WebAPI.Endpoints.Schedule;
 
-public record AddBlockedTimeRequest(string StartTime, string EndTime, string ScheduleDate);
+public record AddBlockedTimeRequest(string StartTime, string EndTime, string ScheduleDate, string BlockReason);
 
 public class AddBlockedTimeEndpoint : ProtectedWithRequest<AddBlockedTimeRequest>
 {
@@ -30,7 +30,8 @@ public class AddBlockedTimeEndpoint : ProtectedWithRequest<AddBlockedTimeRequest
         var commandResult = AddBlockedTimeCommand.Create(
             request.StartTime,
             request.EndTime,
-            request.ScheduleDate
+            request.ScheduleDate,
+            request.BlockReason
         );
 
         if (!commandResult.IsSuccess)

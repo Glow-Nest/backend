@@ -2,6 +2,7 @@ using Domain.Aggregates.Appointment.Contracts;
 using Domain.Aggregates.Client.Values;
 using Domain.Aggregates.Schedule;
 using Domain.Aggregates.Schedule.Values;
+using Domain.Aggregates.Schedule.Values.BlockedTime;
 using Domain.Aggregates.Service.Values;
 using Domain.Common.Contracts;
 using Moq;
@@ -28,14 +29,14 @@ public class AddBlockedTimeAggregateTest
         // Arrange
         var scheduleDate = DateOnly.FromDateTime(DateTime.Now.AddDays(1));
         var schedule = Schedule.CreateSchedule(scheduleDate).Data;
-        var timeSlot = TimeSlot
-            .Create(TimeOnly.FromDateTime(DateTime.Now), TimeOnly.FromDateTime(DateTime.Now.AddHours(1))).Data;
+        var timeSlot = TimeSlot.Create(TimeOnly.FromDateTime(DateTime.Now), TimeOnly.FromDateTime(DateTime.Now.AddHours(1))).Data;
+        var reason = BlockReason.Create("Test reason").Data;
 
         _dateTimeProviderMock.Setup(d => d.GetNow()).Returns(DateTime.Now.AddDays(-1));
 
 
         // Act
-        var result = schedule.AddBlockedTime(timeSlot, _dateTimeProviderMock.Object).Result;
+        var result = schedule.AddBlockedTime(timeSlot, reason, _dateTimeProviderMock.Object).Result;
 
         // Assert
         Assert.True(result.IsSuccess);
@@ -50,12 +51,13 @@ public class AddBlockedTimeAggregateTest
         var schedule = Schedule.CreateSchedule(scheduleDate).Data;
         var timeSlot1 = TimeSlot.Create(TimeOnly.Parse("10:00"), TimeOnly.Parse("10:30"));
         var timeSlot2 = TimeSlot.Create(TimeOnly.Parse("10:00"), TimeOnly.Parse("10:30"));
+        var reason = BlockReason.Create("Test reason").Data;
         
         _dateTimeProviderMock.Setup(d => d.GetNow()).Returns(DateTime.Now.AddDays(-1));
 
         // Act
-        var blockedTimeSlotResult1 = await schedule.AddBlockedTime(timeSlot1.Data, _dateTimeProviderMock.Object);
-        var result = schedule.AddBlockedTime(timeSlot2.Data, _dateTimeProviderMock.Object).Result;
+        var blockedTimeSlotResult1 = await schedule.AddBlockedTime(timeSlot1.Data, reason, _dateTimeProviderMock.Object);
+        var result = schedule.AddBlockedTime(timeSlot2.Data, reason, _dateTimeProviderMock.Object).Result;
 
         // Assert
         Assert.False(result.IsSuccess);
@@ -76,10 +78,12 @@ public class AddBlockedTimeAggregateTest
             _clientCheckerMock.Object, _dateTimeProviderMock.Object);
 
         var timeSlot = TimeSlot.Create(appointmentDto.TimeSlot.Start, appointmentDto.TimeSlot.End).Data;
+        var reason = BlockReason.Create("Test reason").Data;
+
         _dateTimeProviderMock.Setup(d => d.GetNow()).Returns(DateTime.Now.AddDays(-1));
 
         // Act
-        var blockedTimeSlotResult = schedule.AddBlockedTime(timeSlot, _dateTimeProviderMock.Object).Result;
+        var blockedTimeSlotResult = schedule.AddBlockedTime(timeSlot, reason, _dateTimeProviderMock.Object).Result;
 
         // Assert
         Assert.False(blockedTimeSlotResult.IsSuccess);

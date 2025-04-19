@@ -20,6 +20,8 @@ public class ScheduleErrorMessage
     public static Error AppointmentOverlap() => new ("Appointment.Overlap", "Appointment time overlaps with another existing appointment.");
     
     // Block Time Slot Error
+    public static Error EmptyBlockReason() => new("BlockTimeSlot.EmptyBlockReason", "Blocked time slot reason cannot be empty.");
     public static Error BlockTimeSlotOverlap() => new("BlockTimeSlot.Overlap", "Blocked time slot overlaps with another existing blocked time slot.");
     public static Error BlockTimeSlotOverlapsExistingAppointment() => new("BlockTimeSlot.OverlapsExistingAppointment", "Blocked time slot overlaps with an existing appointment.");
+    public static Error BlockedTimeInPast() => new("BlockedTime.BlockedTimeInPast", "Blocked time slot cannot be in the past.");
 }

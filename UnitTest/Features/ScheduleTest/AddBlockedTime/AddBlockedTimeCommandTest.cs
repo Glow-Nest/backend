@@ -11,11 +11,12 @@ public class AddBlockedTimeCommandTest
         // Arrange
         var startTime = "10:00";
         var endTime = "11:00";
+        var reason = "Test reason";
 
         var date = DateOnly.FromDateTime(DateTime.Today).AddDays(1).ToString();
 
         // Act
-        var commandResult = AddBlockedTimeCommand.Create(startTime, endTime, date);
+        var commandResult = AddBlockedTimeCommand.Create(startTime, endTime, date, reason);
 
         // Assert
         Assert.True(commandResult.IsSuccess);
@@ -27,11 +28,12 @@ public class AddBlockedTimeCommandTest
         // Arrange
         var startTime = "invalid_time";
         var endTime = "11:00";
+        var reason = "Test reason";
         
         var date = DateOnly.FromDateTime(DateTime.Today).AddDays(1).ToString();
 
         // Act
-        var commandResult = AddBlockedTimeCommand.Create(startTime, endTime, date);
+        var commandResult = AddBlockedTimeCommand.Create(startTime, endTime, date, reason);
 
         // Assert
         Assert.False(commandResult.IsSuccess);

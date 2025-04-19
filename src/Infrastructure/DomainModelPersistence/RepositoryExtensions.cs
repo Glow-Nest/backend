@@ -1,6 +1,4 @@
-using Domain.Aggregates.Appointment;
 using Domain.Aggregates.Client;
-using Domain.Aggregates.DailyAppointmentSchedule;
 using Domain.Aggregates.SalonOwner;
 using Domain.Aggregates.Schedule;
 using Domain.Common;

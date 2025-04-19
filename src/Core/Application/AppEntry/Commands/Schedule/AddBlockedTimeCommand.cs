@@ -1,15 +1,17 @@
 using Domain.Aggregates.Schedule.Values;
+using Domain.Aggregates.Schedule.Values.BlockedTime;
 using Domain.Common;
 using Domain.Common.OperationResult;
 
 namespace Application.AppEntry.Commands.Schedule;
 
-public class AddBlockedTimeCommand(TimeSlot timeSlot, DateOnly scheduleDate)
+public class AddBlockedTimeCommand(TimeSlot timeSlot, DateOnly scheduleDate, BlockReason reason)
 {
     internal TimeSlot timeSlot = timeSlot;
     internal DateOnly scheduleDate = scheduleDate;
+    internal BlockReason reason = reason;
 
-    public static Result<AddBlockedTimeCommand> Create(string startTimeStr, string endTimeStr, string dateStr)
+    public static Result<AddBlockedTimeCommand> Create(string startTimeStr, string endTimeStr, string dateStr, string reasonStr)
     {
         var dateParse = DateOnly.TryParse(dateStr, out var date);
         if (!dateParse)
@@ -30,8 +32,14 @@ public class AddBlockedTimeCommand(TimeSlot timeSlot, DateOnly scheduleDate)
         {
             return Result<AddBlockedTimeCommand>.Fail(timeSlotResult.Errors);
         }
+        
+        var reasonResult = BlockReason.Create(reasonStr);
+        if (!reasonResult.IsSuccess)
+        {
+            return Result<AddBlockedTimeCommand>.Fail(reasonResult.Errors);
+        }
 
-        var blockedTimeCommand = new AddBlockedTimeCommand(timeSlotResult.Data, date);
+        var blockedTimeCommand = new AddBlockedTimeCommand(timeSlotResult.Data, date, reasonResult.Data);
         return Result<AddBlockedTimeCommand>.Success(blockedTimeCommand);
     }
 }

@@ -1,6 +1,7 @@
 using Domain.Aggregates.Appointment.Contracts;
 using Domain.Aggregates.Schedule.Entities;
 using Domain.Aggregates.Schedule.Values;
+using Domain.Aggregates.Schedule.Values.BlockedTime;
 using Domain.Common.BaseClasses;
 using Domain.Common.Contracts;
 using Domain.Common.OperationResult;
@@ -11,7 +12,7 @@ public class Schedule : AggregateRoot
 {
     internal ScheduleId ScheduleId { get;}
     internal List<Entities.Appointment> Appointments { get; }
-    internal List<TimeSlot> BlockedTimeSlots { get; }
+    internal List<BlockedTime> BlockedTimeSlots { get; }
     internal DateOnly ScheduleDate { get; }
 
     public Schedule()
@@ -39,7 +40,7 @@ public class Schedule : AggregateRoot
         var appointmentTimeSlot = appointmentDto.TimeSlot;
 
         // Check for blocked time slot conflict
-        if (BlockedTimeSlots.Any(blocked => appointmentTimeSlot.Overlaps(blocked)))
+        if (BlockedTimeSlots.Any(blocked => appointmentTimeSlot.Overlaps(blocked.TimeSlot)))
         {
             return Result<Schedule>.Fail(ScheduleErrorMessage.BlockedTimeSelected());
         }
@@ -60,18 +61,10 @@ public class Schedule : AggregateRoot
         return Result<Schedule>.Success(this);
     }
 
-    public async Task<Result<Schedule>> AddBlockedTime(TimeSlot timeSlot, IDateTimeProvider dateTimeProvider)
+    public async Task<Result<Schedule>> AddBlockedTime(TimeSlot timeSlot, BlockReason reason, IDateTimeProvider dateTimeProvider)
     {
-        var now = dateTimeProvider.GetNow();
-        
-        // Check if schedule date is in the past
-        if (ScheduleDate < DateOnly.FromDateTime(now))
-        {
-            return Result<Schedule>.Fail(ScheduleErrorMessage.ScheduleDateInPast());
-        }
-
         // Check for existing blocked time slot conflict
-        if (BlockedTimeSlots.Any(existing => existing.Overlaps(timeSlot)))
+        if (BlockedTimeSlots.Any(existing => existing.TimeSlot.Overlaps (timeSlot)))
         {
             return Result<Schedule>.Fail(ScheduleErrorMessage.BlockTimeSlotOverlap());
         }
@@ -81,8 +74,15 @@ public class Schedule : AggregateRoot
         {
             return Result<Schedule>.Fail(ScheduleErrorMessage.BlockTimeSlotOverlapsExistingAppointment());
         }
+
+        var blockedTimeResult = BlockedTime.Create(ScheduleDate, timeSlot, reason, dateTimeProvider);
         
-        BlockedTimeSlots.Add(timeSlot);
+        if (!blockedTimeResult.IsSuccess)
+        {
+            return Result<Schedule>.Fail(blockedTimeResult.Errors);
+        }
+
+        BlockedTimeSlots.Add(blockedTimeResult.Data);
         return Result<Schedule>.Success(this);
     }
 }

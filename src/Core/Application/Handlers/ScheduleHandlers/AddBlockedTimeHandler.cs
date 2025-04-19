@@ -20,7 +20,7 @@ public class AddBlockedTimeHandler(IScheduleRepository scheduleRepository, IDate
         }
         
         var schedule = scheduleResult.Data;
-        var result = await schedule.AddBlockedTime(command.timeSlot, _dateTimeProvider);
+        var result = await schedule.AddBlockedTime(command.timeSlot, command.reason, _dateTimeProvider);
         if (!result.IsSuccess)
         {
             return Result.Fail(result.Errors);

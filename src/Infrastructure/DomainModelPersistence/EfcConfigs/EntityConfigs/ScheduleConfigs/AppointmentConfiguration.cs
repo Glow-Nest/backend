@@ -1,12 +1,12 @@
 using Domain.Aggregates.Appointment.Values;
 using Domain.Aggregates.Client;
-using Domain.Aggregates.DailyAppointmentSchedule.Values.Appointment;
 using Domain.Aggregates.Schedule.Entities;
 using Domain.Aggregates.Schedule.Values;
+using Domain.Aggregates.Schedule.Values.Appointment;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace DomainModelPersistence.EfcConfigs.EntityConfigs;
+namespace DomainModelPersistence.EfcConfigs.EntityConfigs.ScheduleConfigs;
 
 public class AppointmentConfiguration : IEntityTypeConfiguration<Appointment>
 {
