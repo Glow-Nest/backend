@@ -11,8 +11,8 @@ namespace Domain.Aggregates.Schedule;
 public class Schedule : AggregateRoot
 {
     internal ScheduleId ScheduleId { get;}
-    internal List<Entities.Appointment> Appointments { get; }
-    internal List<BlockedTime> BlockedTimeSlots { get; }
+    internal List<Entities.Appointment> Appointments { get; } = new();
+    internal List<BlockedTime> BlockedTimeSlots { get; } = new();
     internal DateOnly ScheduleDate { get; }
 
     public Schedule()
@@ -22,8 +22,6 @@ public class Schedule : AggregateRoot
     protected Schedule(ScheduleId scheduleId, DateOnly scheduleDate)
     {
         ScheduleId = scheduleId;
-        Appointments = new ();
-        BlockedTimeSlots = new ();
         ScheduleDate = scheduleDate;
     }
 

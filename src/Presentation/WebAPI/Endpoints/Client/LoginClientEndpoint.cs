@@ -1,11 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using QueryContracts.Queries;
 using QueryContracts.QueryDispatching;
-using WebAPI.Endpoints.Common;
 using WebAPI.Endpoints.Common.Query;
 
 namespace WebAPI.Endpoints.Client;
-
 
 public class LoginClientEndpoint: PublicQueryWithRequestAndResponse<LoginUserQuery, LoginUserResponse>
 {

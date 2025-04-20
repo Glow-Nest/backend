@@ -1,6 +1,6 @@
 using Domain.Aggregates.Service.Values;
 
-namespace Domain.Aggregates.Appointment.Values;
+namespace Domain.Aggregates.Schedule.Values.Appointment;
 
 public class AppointmentServiceReference
 {

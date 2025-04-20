@@ -13,20 +13,6 @@ public class AddBlockedTimeEndpoint : ProtectedWithRequest<AddBlockedTimeRequest
     public override async Task<ActionResult> HandleAsync(AddBlockedTimeRequest request,
         ICommandDispatcher commandDispatcher)
     {
-        var errors = new List<string>();
-
-        if (string.IsNullOrWhiteSpace(request.StartTime))
-            errors.Add("StartTime must not be empty.");
-
-        if (string.IsNullOrWhiteSpace(request.EndTime))
-            errors.Add("EndTime must not be empty.");
-
-        if (string.IsNullOrWhiteSpace(request.ScheduleDate))
-            errors.Add("ScheduleDate must not be empty.");
-
-        if (errors.Any())
-            return BadRequest(errors);
-
         var commandResult = AddBlockedTimeCommand.Create(
             request.StartTime,
             request.EndTime,

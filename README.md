@@ -3,10 +3,10 @@
 ## ✅ User Login and Account Management
 
 ### Must Have
-- [ ] Clients can **create an account** using email and password.
-- [ ] Clients must **log in** before booking appointments, purchasing products, or leaving reviews.
+- [x] Clients can **create an account** using email and password.
+- [x] Clients must **log in** before booking appointments, purchasing products, or leaving reviews.
 - [ ] Salon owners can **log in** to view daily bookings.
-- [ ] Clients can **reset their password** if forgotten.
+- [x] Clients can **reset their password** if forgotten.
 
 ### Could Have
 - [ ] Clients can **update personal information**.
@@ -18,8 +18,8 @@
 ### Must Have
 - [ ] Clients can **view real-time available appointment slots**.
 - [ ] Clients can **schedule appointments online**.
-- [ ] Salon owners can **book appointments on behalf of clients**.
-- [ ] Salon owners can **block off specific times** in the schedule.
+- [x] Salon owners can **book appointments on behalf of clients**.
+- [x] Salon owners can **block off specific times** in the schedule.
 - [ ] Clients can **view upcoming and past bookings** in their account.
 - [ ] Salon owners can **view all upcoming appointments**.
 - [ ] Clients receive **email confirmation** for appointment bookings.
