@@ -12,4 +12,6 @@ public class GenericErrorMessage
     public static Error ErrorParsingTime() => new Error("Error in parsing time", "An error occurred while parsing the time.");
     public static Error ErrorParsingDate() => new Error("Error in parsing date", "An error occurred while parsing the date.");
     public static Error ErrorParsingGuid() => new Error("Error in parsing guid", "An error occurred while parsing the guid.");
+    
+    public static Error TimeMustBeOnHalfHour() => new Error("Error in parsing time", "Start and end times must be on the hour or half-hour (e.g., 10:00, 10:30).");
 }

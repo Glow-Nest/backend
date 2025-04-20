@@ -1,7 +1,7 @@
 using Domain.Aggregates.Appointment.Contracts;
-using Domain.Aggregates.DailyAppointmentSchedule.Values.DailySchedule;
 using Domain.Aggregates.Schedule.Entities;
 using Domain.Aggregates.Schedule.Values;
+using Domain.Aggregates.Schedule.Values.BlockedTime;
 using Domain.Common.BaseClasses;
 using Domain.Common.Contracts;
 using Domain.Common.OperationResult;
@@ -11,8 +11,8 @@ namespace Domain.Aggregates.Schedule;
 public class Schedule : AggregateRoot
 {
     internal ScheduleId ScheduleId { get;}
-    internal List<Entities.Appointment> Appointments { get; }
-    internal List<TimeSlot> BlockedTimeSlots { get; }
+    internal List<Entities.Appointment> Appointments { get; } = new();
+    internal List<BlockedTime> BlockedTimeSlots { get; } = new();
     internal DateOnly ScheduleDate { get; }
 
     public Schedule()
@@ -22,8 +22,6 @@ public class Schedule : AggregateRoot
     protected Schedule(ScheduleId scheduleId, DateOnly scheduleDate)
     {
         ScheduleId = scheduleId;
-        Appointments = new ();
-        BlockedTimeSlots = new ();
         ScheduleDate = scheduleDate;
     }
 
@@ -40,7 +38,7 @@ public class Schedule : AggregateRoot
         var appointmentTimeSlot = appointmentDto.TimeSlot;
 
         // Check for blocked time slot conflict
-        if (BlockedTimeSlots.Any(blocked => appointmentTimeSlot.Overlaps(blocked)))
+        if (BlockedTimeSlots.Any(blocked => appointmentTimeSlot.Overlaps(blocked.TimeSlot)))
         {
             return Result<Schedule>.Fail(ScheduleErrorMessage.BlockedTimeSelected());
         }
@@ -61,9 +59,28 @@ public class Schedule : AggregateRoot
         return Result<Schedule>.Success(this);
     }
 
-    public async Task<Result<Schedule>> AddBlockedTimeSlot(TimeSlot timeSlot)
+    public async Task<Result<Schedule>> AddBlockedTime(TimeSlot timeSlot, BlockReason reason, IDateTimeProvider dateTimeProvider)
     {
-        BlockedTimeSlots.Add(timeSlot);
+        // Check for existing blocked time slot conflict
+        if (BlockedTimeSlots.Any(existing => existing.TimeSlot.Overlaps (timeSlot)))
+        {
+            return Result<Schedule>.Fail(ScheduleErrorMessage.BlockTimeSlotOverlap());
+        }
+        
+        // Check for existing appointment conflict
+        if (Appointments.Any(appointment => appointment.TimeSlot.Overlaps(timeSlot)))
+        {
+            return Result<Schedule>.Fail(ScheduleErrorMessage.BlockTimeSlotOverlapsExistingAppointment());
+        }
+
+        var blockedTimeResult = BlockedTime.Create(ScheduleDate, timeSlot, reason, dateTimeProvider);
+        
+        if (!blockedTimeResult.IsSuccess)
+        {
+            return Result<Schedule>.Fail(blockedTimeResult.Errors);
+        }
+
+        BlockedTimeSlots.Add(blockedTimeResult.Data);
         return Result<Schedule>.Success(this);
     }
 }

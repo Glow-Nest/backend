@@ -2,12 +2,13 @@ using Application.AppEntry;
 using Application.AppEntry.Commands.Client;
 using Microsoft.AspNetCore.Mvc;
 using WebAPI.Endpoints.Common;
+using WebAPI.Endpoints.Common.Command;
 
-namespace WebAPI.Endpoints.Client;
+namespace WebAPI.Endpoints.Otp;
 
 public record CreateOtpRequest(string Email, string Purpose);
 
-public class CreateOtpEndpoint : CommandEndpoint.WithRequest<CreateOtpRequest>.WithoutResponse
+public class CreateOtpEndpoint : PublicWithRequest<CreateOtpRequest>
 {
     [HttpPost("clients/otp/create")]
     public override async Task<ActionResult> HandleAsync(CreateOtpRequest request, ICommandDispatcher commandDispatcher)

@@ -1,17 +1,10 @@
-using Domain.Aggregates.Appointment;
-using Domain.Aggregates.Appointment.Values;
-using Domain.Aggregates.Client;
-using Domain.Aggregates.DailyAppointmentSchedule;
-using Domain.Aggregates.DailyAppointmentSchedule.Values.Appointment;
-using Domain.Aggregates.DailyAppointmentSchedule.Values.DailySchedule;
 using Domain.Aggregates.Schedule;
 using Domain.Aggregates.Schedule.Entities;
 using Domain.Aggregates.Schedule.Values;
-using Domain.Aggregates.Service.Values;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace DomainModelPersistence.EfcConfigs.EntityConfigs;
+namespace DomainModelPersistence.EfcConfigs.EntityConfigs.ScheduleConfigs;
 
 public class ScheduleConfiguration : IEntityTypeConfiguration<Schedule>
 {
@@ -32,14 +25,11 @@ public class ScheduleConfiguration : IEntityTypeConfiguration<Schedule>
                 dbValue => DateOnly.Parse(dbValue));
 
         // configure blocked time slots
-        entityBuilder.OwnsMany(schedule => schedule.BlockedTimeSlots, timeSlot =>
-        {
-            timeSlot.WithOwner().HasForeignKey("ScheduleId");
-
-            timeSlot.Property(t => t.Start).HasColumnName("StartTime");
-            timeSlot.Property(t => t.End).HasColumnName("EndTime");
-        });
-
+        entityBuilder.HasMany<BlockedTime>(schedule => schedule.BlockedTimeSlots)
+            .WithOne()
+            .HasForeignKey("ScheduleId")
+            .OnDelete(DeleteBehavior.Cascade);
+        
         // configure appointments
         entityBuilder.HasMany<Appointment>(schedule => schedule.Appointments)
             .WithOne()

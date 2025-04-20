@@ -2,12 +2,13 @@
 using Application.AppEntry.Commands.Client;
 using Microsoft.AspNetCore.Mvc;
 using WebAPI.Endpoints.Common;
+using WebAPI.Endpoints.Common.Command;
 
-namespace WebAPI.Endpoints.Client;
+namespace WebAPI.Endpoints.ResetPassword;
 
 public record InitiatePasswordResetRequest(string Email);
 
-public class InitiatePasswordResetEndpoint : CommandEndpoint.WithRequest<InitiatePasswordResetRequest>.WithoutResponse
+public class InitiatePasswordResetEndpoint : PublicWithRequest<InitiatePasswordResetRequest>
 {
     [HttpPost("clients/password/reset/initiate")]
     public override async Task<ActionResult> HandleAsync(InitiatePasswordResetRequest request, ICommandDispatcher commandDispatcher)

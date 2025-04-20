@@ -2,12 +2,13 @@ using Application.AppEntry;
 using Application.AppEntry.Commands.Client;
 using Microsoft.AspNetCore.Mvc;
 using WebAPI.Endpoints.Common;
+using WebAPI.Endpoints.Common.Command;
 
-namespace WebAPI.Endpoints.Client;
+namespace WebAPI.Endpoints.Otp;
 
 public record VerifyOtpRequest(string Email, string OtpCode);
 
-public class VerifyOtpEndpoint : CommandEndpoint.WithRequest<VerifyOtpRequest>.WithoutResponse
+public class VerifyOtpEndpoint : PublicWithRequest<VerifyOtpRequest>
 {
     [HttpPost("clients/otp/verify")]
     public override async Task<ActionResult> HandleAsync(VerifyOtpRequest request, ICommandDispatcher commandDispatcher)

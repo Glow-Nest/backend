@@ -1,4 +1,5 @@
 using Domain.Aggregates.Appointment;
+using Domain.Common;
 using Domain.Common.BaseClasses;
 using Domain.Common.OperationResult;
 
@@ -17,6 +18,11 @@ public class TimeSlot : ValueObject
 
     public static Result<TimeSlot> Create(TimeOnly start, TimeOnly end)
     {
+        if (!IsValidInterval(start) || !IsValidInterval(end))
+        {
+            return Result<TimeSlot>.Fail(GenericErrorMessage.TimeMustBeOnHalfHour());
+        }
+        
         if (end <= start)
         {
             return Result<TimeSlot>.Fail(ScheduleErrorMessage.EndTimeStartError());
@@ -24,6 +30,11 @@ public class TimeSlot : ValueObject
 
         var timeSlot = new TimeSlot(start, end);
         return Result<TimeSlot>.Success(timeSlot);
+    }
+    
+    private static bool IsValidInterval(TimeOnly time)
+    {
+        return time.Minute == 0 || time.Minute == 30;
     }
 
     protected override IEnumerable<object> GetEqualityComponents()

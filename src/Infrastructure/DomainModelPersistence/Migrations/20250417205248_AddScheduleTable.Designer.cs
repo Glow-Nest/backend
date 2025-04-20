@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using DomainModelPersistence.EfcConfigs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DomainModelPersistence.Migrations
 {
     [DbContext(typeof(DomainModelContext))]
-    partial class DomainModelContextModelSnapshot : ModelSnapshot
+    [Migration("20250417205248_AddScheduleTable")]
+    partial class AddScheduleTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -176,48 +179,6 @@ namespace DomainModelPersistence.Migrations
                     b.ToTable("Appointment");
                 });
 
-            modelBuilder.Entity("Domain.Aggregates.Schedule.Entities.BlockedTime", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("ScheduleId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("ScheduledDate")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.ComplexProperty<Dictionary<string, object>>("Reason", "Domain.Aggregates.Schedule.Entities.BlockedTime.Reason#BlockReason", b1 =>
-                        {
-                            b1.IsRequired();
-
-                            b1.Property<string>("Value")
-                                .IsRequired()
-                                .HasColumnType("text")
-                                .HasColumnName("Reason");
-                        });
-
-                    b.ComplexProperty<Dictionary<string, object>>("TimeSlot", "Domain.Aggregates.Schedule.Entities.BlockedTime.TimeSlot#TimeSlot", b1 =>
-                        {
-                            b1.IsRequired();
-
-                            b1.Property<TimeOnly>("End")
-                                .HasColumnType("time without time zone")
-                                .HasColumnName("EndTime");
-
-                            b1.Property<TimeOnly>("Start")
-                                .HasColumnType("time without time zone")
-                                .HasColumnName("StartTime");
-                        });
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ScheduleId");
-
-                    b.ToTable("BlockedTime");
-                });
-
             modelBuilder.Entity("Domain.Aggregates.Schedule.Schedule", b =>
                 {
                     b.Property<Guid>("ScheduleId")
@@ -313,12 +274,36 @@ namespace DomainModelPersistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Domain.Aggregates.Schedule.Entities.BlockedTime", b =>
+            modelBuilder.Entity("Domain.Aggregates.Schedule.Schedule", b =>
                 {
-                    b.HasOne("Domain.Aggregates.Schedule.Schedule", null)
-                        .WithMany("BlockedTimeSlots")
-                        .HasForeignKey("ScheduleId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                    b.OwnsMany("Domain.Aggregates.Schedule.Values.TimeSlot", "BlockedTimeSlots", b1 =>
+                        {
+                            b1.Property<Guid>("ScheduleId")
+                                .HasColumnType("uuid");
+
+                            b1.Property<int>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("integer");
+
+                            NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b1.Property<int>("Id"));
+
+                            b1.Property<TimeOnly>("End")
+                                .HasColumnType("time without time zone")
+                                .HasColumnName("EndTime");
+
+                            b1.Property<TimeOnly>("Start")
+                                .HasColumnType("time without time zone")
+                                .HasColumnName("StartTime");
+
+                            b1.HasKey("ScheduleId", "Id");
+
+                            b1.ToTable("TimeSlot");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ScheduleId");
+                        });
+
+                    b.Navigation("BlockedTimeSlots");
                 });
 
             modelBuilder.Entity("Domain.Aggregates.Schedule.Entities.Appointment", b =>
@@ -329,8 +314,6 @@ namespace DomainModelPersistence.Migrations
             modelBuilder.Entity("Domain.Aggregates.Schedule.Schedule", b =>
                 {
                     b.Navigation("Appointments");
-
-                    b.Navigation("BlockedTimeSlots");
                 });
 #pragma warning restore 612, 618
         }

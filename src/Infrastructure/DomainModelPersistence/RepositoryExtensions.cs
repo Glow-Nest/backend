@@ -1,13 +1,10 @@
-using Domain.Aggregates.Appointment;
 using Domain.Aggregates.Client;
-using Domain.Aggregates.DailyAppointmentSchedule;
 using Domain.Aggregates.SalonOwner;
 using Domain.Aggregates.Schedule;
 using Domain.Common;
 using DomainModelPersistence.ClientPersistence;
 using DomainModelPersistence.EfcConfigs;
 using DomainModelPersistence.Repositories;
-using DomainModelPersistence.SalonOwnerPersistence;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DomainModelPersistence;

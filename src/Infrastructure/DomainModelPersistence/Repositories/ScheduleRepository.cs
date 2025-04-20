@@ -1,9 +1,5 @@
-using Domain.Aggregates.Appointment;
-using Domain.Aggregates.Appointment.Values;
-using Domain.Aggregates.DailyAppointmentSchedule;
-using Domain.Aggregates.DailyAppointmentSchedule.Values.Appointment;
-using Domain.Aggregates.DailyAppointmentSchedule.Values.DailySchedule;
 using Domain.Aggregates.Schedule;
+using Domain.Aggregates.Schedule.Values;
 using Domain.Common.OperationResult;
 using DomainModelPersistence.EfcConfigs;
 using DomainModelPersistence.Repositories.Common;

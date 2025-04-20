@@ -1,4 +1,4 @@
-using Domain.Aggregates.DailyAppointmentSchedule.Values.DailySchedule;
+using Domain.Aggregates.Schedule.Values;
 using Domain.Common.OperationResult;
 using Domain.Common.Repositories;
 

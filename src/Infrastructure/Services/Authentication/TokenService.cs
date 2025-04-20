@@ -37,7 +37,7 @@ public class TokenService:ITokenService
             var claims = new List<Claim>
             {
                 new(ClaimTypes.Email, email),
-                new(ClaimTypes.Role, role) 
+                new(ClaimTypes.Role, role),
             };
 
             var tokenDescriptor = new SecurityTokenDescriptor
@@ -46,7 +46,9 @@ public class TokenService:ITokenService
                 Expires = DateTime.UtcNow.AddHours(24),
                 SigningCredentials = new SigningCredentials(
                     new SymmetricSecurityKey(key),
-                    SecurityAlgorithms.HmacSha256Signature)
+                    SecurityAlgorithms.HmacSha256Signature),
+                Audience = "GlowNestAPI",
+                Issuer = "GlowNestServer",
             };
 
             var token = tokenHandler.CreateToken(tokenDescriptor);

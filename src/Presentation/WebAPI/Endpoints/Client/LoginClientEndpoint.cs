@@ -1,12 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using QueryContracts.Queries;
 using QueryContracts.QueryDispatching;
-using WebAPI.Endpoints.Common;
+using WebAPI.Endpoints.Common.Query;
 
 namespace WebAPI.Endpoints.Client;
 
-
-public class LoginClientEndpoint: QueryEndpoint.WithRequest<LoginUserQuery>.WithResponse<LoginUserResponse>
+public class LoginClientEndpoint: PublicQueryWithRequestAndResponse<LoginUserQuery, LoginUserResponse>
 {
     [HttpPost("clients/login")]
     public override Task<ActionResult<LoginUserResponse>> HandleAsync(LoginUserQuery request, IQueryDispatcher queryDispatcher)
