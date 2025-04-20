@@ -7,8 +7,17 @@ namespace Domain.Aggregates.Service;
 public class Service : AggregateRoot
 {
     internal ServiceId ServiceId { get;}
-
-
+    internal Name Name { get; private set; }
+    internal Description Description { get; private set; }
+    internal Price Price { get; private set; }
+    internal TimeSpan Duration { get; private set; }
+    
+    private Service()
+    {
+        // For EF
+    }
+    
+    
     private Service(ServiceId serviceId)
     {
         ServiceId = serviceId;
