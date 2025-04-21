@@ -13,7 +13,7 @@ public class GetBlockedTimeQueryHandler : IQueryHandler<GetBlockedTimeQuery, Res
 
     public GetBlockedTimeQueryHandler(DomainModelContext context)
     {
-        _context = context;
+        _context = context; 
     }
 
     public async Task<Result<GetBlockedTimeResponse>> HandleAsync(GetBlockedTimeQuery query)

@@ -1,6 +1,7 @@
 using Domain.Aggregates.Client;
 using Domain.Aggregates.SalonOwner;
 using Domain.Aggregates.Schedule;
+using Domain.Aggregates.Service;
 using Domain.Common;
 using DomainModelPersistence.ClientPersistence;
 using DomainModelPersistence.EfcConfigs;
@@ -24,6 +25,7 @@ public static class RepositoryExtensions
         serviceCollection.AddScoped<IClientRepository, ClientRepository>();
         serviceCollection.AddScoped<ISalonOwnerRepository, SalonOwnerRepository>();
         serviceCollection.AddScoped<IScheduleRepository, ScheduleRepository>();
+        serviceCollection.AddScoped<IServiceRepository, ServiceRepository>();
     }
     
     private static void RegisterUnitOfWork(this IServiceCollection serviceCollection)
