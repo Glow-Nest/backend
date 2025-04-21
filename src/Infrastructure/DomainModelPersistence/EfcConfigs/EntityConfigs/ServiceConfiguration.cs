@@ -37,20 +37,18 @@ public class ServiceConfiguration : IEntityTypeConfiguration<Service>
             .HasConversion(
                 t => t.TotalMinutes,
                 m => TimeSpan.FromMinutes(m));
+        
+        entityBuilder.OwnsMany(s => s.MediaUrls, mediaBuilder =>
+        {
+            mediaBuilder.ToTable("MediaUrls"); // Optional custom table name
+            mediaBuilder.WithOwner().HasForeignKey("ServiceId");
 
-        // entityBuilder.OwnsMany(service => service.MediaUrls, mediaBuilder =>
-        // {
-        //     mediaBuilder.WithOwner().HasForeignKey("ServiceId");
-        //
-        //     mediaBuilder.Property(m => m.Value)
-        //         .HasColumnName("Url")
-        //         .IsRequired();
-        //
-        //     mediaBuilder.HasKey("ServiceId", "Url");
-        //
-        //     mediaBuilder.ToTable("ServiceMediaUrls");
-        // });
-        //
-        // entityBuilder.Navigation(service => service.MediaUrls).AutoInclude();
+            mediaBuilder.Property<Guid>("Id"); // Shadow property for primary key
+            mediaBuilder.HasKey("Id");
+
+            mediaBuilder.Property(m => m.Value)
+                .HasColumnName("Url")
+                .IsRequired();
+        });
     }
 }
