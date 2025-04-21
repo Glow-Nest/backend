@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using DomainModelPersistence.EfcConfigs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DomainModelPersistence.Migrations
 {
     [DbContext(typeof(DomainModelContext))]
-    partial class DomainModelContextModelSnapshot : ModelSnapshot
+    [Migration("20250421125225_Service")]
+    partial class Service
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -351,35 +354,6 @@ namespace DomainModelPersistence.Migrations
                         .HasForeignKey("ServiceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Domain.Aggregates.Service.Service", b =>
-                {
-                    b.OwnsMany("Domain.Aggregates.Service.Values.MediaUrl", "MediaUrls", b1 =>
-                        {
-                            b1.Property<Guid>("Id")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("uuid");
-
-                            b1.Property<Guid>("ServiceId")
-                                .HasColumnType("uuid");
-
-                            b1.Property<string>("Value")
-                                .IsRequired()
-                                .HasColumnType("text")
-                                .HasColumnName("Url");
-
-                            b1.HasKey("Id");
-
-                            b1.HasIndex("ServiceId");
-
-                            b1.ToTable("MediaUrls", (string)null);
-
-                            b1.WithOwner()
-                                .HasForeignKey("ServiceId");
-                        });
-
-                    b.Navigation("MediaUrls");
                 });
 
             modelBuilder.Entity("Domain.Aggregates.Schedule.Entities.Appointment", b =>
