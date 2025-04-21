@@ -3,12 +3,14 @@ using Domain.Common.OperationResult;
 
 namespace Domain.Aggregates.Service.Values;
 
-public class MediaUrl : ValueObject
+public class MediaUrl
 {
     
-    internal string Value { get; private set; }
+    public string Value { get; private set; }
     
-    private MediaUrl(string value)
+    private MediaUrl() { } // For EFC
+    
+    public MediaUrl(string value)
     {
         Value = value;
     }
@@ -21,10 +23,5 @@ public class MediaUrl : ValueObject
         }
         
         return Result<MediaUrl>.Success(new MediaUrl(mediaUrl));
-    }
-    
-    protected override IEnumerable<object> GetEqualityComponents()
-    {
-        throw new NotImplementedException();
     }
 }

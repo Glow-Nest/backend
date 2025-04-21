@@ -11,22 +11,27 @@ public class Service : AggregateRoot
     internal Description Description { get; private set; }
     internal Price Price { get; private set; }
     internal TimeSpan Duration { get; private set; }
+    internal List<MediaUrl> MediaUrls { get; private set; }
     
     private Service()
     {
         // For EF
     }
-    
-    
-    private Service(ServiceId serviceId)
+
+    public Service(ServiceId serviceId, Name name, Description description, Price price, TimeSpan duration, List<MediaUrl> mediaUrls)
     {
         ServiceId = serviceId;
+        Name = name;
+        Description = description;
+        Price = price;
+        Duration = duration;
+        MediaUrls = mediaUrls;
     }
 
-    public static async Task<Result<Service>> Create()
+    public static async Task<Result<Service>> Create(Name name, Description description, Price price, TimeSpan duration, List<MediaUrl> mediaUrls)
     {
         var serviceId = ServiceId.Create();
-        var service = new Service(serviceId);
+        var service = new Service(serviceId, name,description,price, duration,mediaUrls);
         return Result<Service>.Success(service);
     }
 }

@@ -106,7 +106,16 @@ public class ScheduleRepoTest
 
     private static async Task<Service> PersistServiceAsync(ServiceRepository repo, DomainModelContext context)
     {
-        var serviceResult = await Service.Create();
+        var serviceName = Name.Create("Valid Service").Data;
+        var serviceDescription = Description.Create("Valid Service Description").Data;
+        var servicePrice = Price.Create(100).Data;
+        var serviceDuration = TimeSpan.FromHours(1);
+        var serviceMediaUrls = new List<MediaUrl>
+        {
+            MediaUrl.Create("http://example.com/image1.jpg").Data,
+            MediaUrl.Create("http://example.com/image2.jpg").Data
+        };
+        var serviceResult = await Service.Create(serviceName, serviceDescription, servicePrice, serviceDuration, serviceMediaUrls);
         await repo.AddAsync(serviceResult.Data);
         await context.SaveChangesAsync();
         return serviceResult.Data;

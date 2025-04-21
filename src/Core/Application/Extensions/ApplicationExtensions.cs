@@ -1,11 +1,13 @@
 using Application.AppEntry;
 using Application.AppEntry.Commands.Client;
 using Application.AppEntry.Commands.Schedule;
+using Application.AppEntry.Commands.Service;
 using Application.AppEntry.Decorators;
 using Application.AppEntry.Dispatchers;
 using Application.Handlers.ClientHandlers;
 using Application.Handlers.DomainEvents;
 using Application.Handlers.ScheduleHandlers;
+using Application.Handlers.ServiceHandlers;
 using Domain.Aggregates.Client.DomainEvents;
 using Domain.Common;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,6 +32,7 @@ public static class ApplicationExtensions
         serviceCollection.AddScoped<ICommandHandler<ResetPasswordCommand>, ResetPasswordHandler>();
         serviceCollection.AddScoped<ICommandHandler<InitiateResetPasswordCommand>, InitiateResetPasswordHandler>();
         serviceCollection.AddScoped<ICommandHandler<AddBlockedTimeCommand>, AddBlockedTimeHandler>();
+        serviceCollection.AddScoped<ICommandHandler<CreateServiceCommand>, CreateServiceHandler>();
 
         serviceCollection.AddScoped<IDomainEventHandler<OtpCreatedDomainEvent>, OtpCreatedDomainEventHandler>();
     }
