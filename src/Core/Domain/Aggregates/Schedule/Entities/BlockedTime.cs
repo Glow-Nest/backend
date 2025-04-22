@@ -37,6 +37,13 @@ public class BlockedTime : Entity<BlockedTimeId>
         {
             return Result<BlockedTime>.Fail(ScheduleErrorMessage.BlockedTimeInPast());
         }
+        
+        // check if time slot is after/before opening hour
+        if (!ScheduleBusinessHours.IsWithinWorkingHours(timeSlot.Start) ||
+            !ScheduleBusinessHours.IsWithinWorkingHours(timeSlot.End))
+        {
+            return Result<BlockedTime>.Fail(ScheduleErrorMessage.BlockedTimeOutsideWorkingHours());
+        }
 
         var id = BlockedTimeId.Create();
         

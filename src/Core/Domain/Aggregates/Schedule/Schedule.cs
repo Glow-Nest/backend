@@ -94,9 +94,9 @@ public class Schedule : AggregateRoot
     {
         var timePeriods = new Dictionary<string, (TimeOnly Start, TimeOnly End)>
         {
-            ["Morning"] = (new TimeOnly(9, 0), new TimeOnly(12, 0)),
+            ["Morning"] = (ScheduleBusinessHours.OpeningHour, new TimeOnly(12, 0)),
             ["Afternoon"] = (new TimeOnly(12, 30), new TimeOnly(15, 0)),
-            ["Evening"] = (new TimeOnly(15, 0), new TimeOnly(18, 0))
+            ["Evening"] = (new TimeOnly(15, 0), ScheduleBusinessHours.ClosingHour)
         };
 
         var timeSlots = new Dictionary<string, List<TimeSlot>>();
