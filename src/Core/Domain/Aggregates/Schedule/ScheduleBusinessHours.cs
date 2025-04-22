@@ -1,6 +1,6 @@
 namespace Domain.Aggregates.Schedule;
 
-public class ScheduleBusinessHours
+public static class ScheduleBusinessHours
 {
     public static TimeOnly OpeningHour { get; } = new(9, 0);
     public static TimeOnly ClosingHour { get; } = new(18, 0);
