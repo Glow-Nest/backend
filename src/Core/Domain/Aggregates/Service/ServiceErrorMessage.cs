@@ -11,4 +11,6 @@ public class ServiceErrorMessage
     public static Error EmptyServiceDescription() => new("Service.EmptyServiceDescription", "Service description cannot be empty.");
     public static Error InvalidServicePrice() => new("Service.InvalidPrice", "Invalid service price.");
     public static Error EmptyServiceMediaUrl() => new("Service.EmptyServiceMediaUrl", "Service media URL cannot be empty.");
+    
+    public static Error InvalidDuration() => new("Service.InvalidDuration", "Invalid service duration. Duration must be 0 or 30 minutes.");
 }

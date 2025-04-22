@@ -1,4 +1,3 @@
-using Domain.Aggregates.Appointment.Values;
 using Domain.Aggregates.Service.Values;
 using Domain.Common.Repositories;
 

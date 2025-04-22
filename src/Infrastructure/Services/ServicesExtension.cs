@@ -2,6 +2,7 @@ using Application.Interfaces;
 using Domain.Aggregates.Appointment.Contracts;
 using Domain.Aggregates.Client.Contracts;
 using Domain.Aggregates.Client.Values;
+using Domain.Aggregates.Schedule.Contracts;
 using Domain.Common.Contracts;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,6 +11,7 @@ using Services.Authentication;
 using Services.Contracts.Appointment;
 using Services.Contracts.Client;
 using Services.Contracts.Common;
+using Services.Contracts.Schedule;
 using Services.Email;
 
 namespace Services;

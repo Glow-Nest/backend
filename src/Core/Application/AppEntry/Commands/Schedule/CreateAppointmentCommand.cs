@@ -1,7 +1,6 @@
-using Domain.Aggregates.Appointment.Values;
 using Domain.Aggregates.Client.Values;
 using Domain.Aggregates.Schedule.Values;
-using Domain.Aggregates.Schedule.Values.Appointment;
+using Domain.Aggregates.Schedule.Values.AppointmentValues;
 using Domain.Aggregates.Service.Values;
 using Domain.Common;
 using Domain.Common.OperationResult;

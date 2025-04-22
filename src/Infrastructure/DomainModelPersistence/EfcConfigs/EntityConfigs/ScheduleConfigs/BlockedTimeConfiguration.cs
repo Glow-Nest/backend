@@ -1,6 +1,6 @@
 using Domain.Aggregates.Schedule.Entities;
 using Domain.Aggregates.Schedule.Values;
-using Domain.Aggregates.Schedule.Values.BlockedTime;
+using Domain.Aggregates.Schedule.Values.BlockedTimeValues;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

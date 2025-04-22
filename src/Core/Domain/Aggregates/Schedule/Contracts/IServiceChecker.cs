@@ -1,6 +1,6 @@
 using Domain.Aggregates.Service.Values;
 
-namespace Domain.Aggregates.Appointment.Contracts;
+namespace Domain.Aggregates.Schedule.Contracts;
 
 public interface IServiceChecker
 {

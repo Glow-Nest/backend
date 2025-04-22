@@ -13,6 +13,7 @@ public class ScheduleRepository(DomainModelContext context) : RepositoryBase<Sch
     {
         var schedule = await context.Set<Schedule>()
             .Include(s => s.Appointments)
+            .Include(s => s.BlockedTimeSlots)
             .FirstOrDefaultAsync(s => s.ScheduleDate == date);
 
         return schedule is null

@@ -15,7 +15,7 @@ public class Service : AggregateRoot
     
     private Service()
     {
-        // For EF
+        // For EFC Core
     }
 
     public Service(ServiceId serviceId, Name name, Description description, Price price, TimeSpan duration, List<MediaUrl> mediaUrls)
@@ -31,6 +31,13 @@ public class Service : AggregateRoot
     public static async Task<Result<Service>> Create(Name name, Description description, Price price, TimeSpan duration, List<MediaUrl> mediaUrls)
     {
         var serviceId = ServiceId.Create();
+        
+        // validate if duration is 0 or 30 minutes
+        if (duration.Minutes != 0 && duration.Minutes != 30)
+        {
+            return Result<Service>.Fail(ServiceErrorMessage.InvalidDuration());
+        }
+        
         var service = new Service(serviceId, name,description,price, duration,mediaUrls);
         return Result<Service>.Success(service);
     }

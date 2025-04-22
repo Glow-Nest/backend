@@ -1,8 +1,9 @@
 using Domain.Aggregates.Appointment.Contracts;
 using Domain.Aggregates.Client.Values;
 using Domain.Aggregates.Schedule;
+using Domain.Aggregates.Schedule.Contracts;
 using Domain.Aggregates.Schedule.Values;
-using Domain.Aggregates.Schedule.Values.BlockedTime;
+using Domain.Aggregates.Schedule.Values.BlockedTimeValues;
 using Domain.Aggregates.Service.Values;
 using Domain.Common.Contracts;
 using Moq;

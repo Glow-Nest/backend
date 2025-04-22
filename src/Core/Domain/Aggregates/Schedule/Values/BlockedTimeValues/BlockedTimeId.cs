@@ -1,6 +1,6 @@
 using Domain.Common.BaseClasses;
 
-namespace Domain.Aggregates.Schedule.Values.BlockedTime;
+namespace Domain.Aggregates.Schedule.Values.BlockedTimeValues;
 
 public class BlockedTimeId : ValueObject
 {

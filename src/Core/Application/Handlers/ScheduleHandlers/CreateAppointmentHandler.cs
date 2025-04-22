@@ -2,6 +2,7 @@ using Application.AppEntry;
 using Application.AppEntry.Commands.Schedule;
 using Domain.Aggregates.Appointment.Contracts;
 using Domain.Aggregates.Schedule;
+using Domain.Aggregates.Schedule.Contracts;
 using Domain.Aggregates.Schedule.Entities;
 using Domain.Common.Contracts;
 using Domain.Common.OperationResult;

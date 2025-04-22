@@ -1,7 +1,7 @@
 using Domain.Common.BaseClasses;
 using Domain.Common.OperationResult;
 
-namespace Domain.Aggregates.Schedule.Values.Appointment;
+namespace Domain.Aggregates.Schedule.Values.AppointmentValues;
 
 public class AppointmentNote : ValueObject
 {

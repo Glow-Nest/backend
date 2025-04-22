@@ -1,7 +1,7 @@
 using Domain.Common.BaseClasses;
 using Domain.Common.OperationResult;
 
-namespace Domain.Aggregates.Schedule.Values.BlockedTime;
+namespace Domain.Aggregates.Schedule.Values.BlockedTimeValues;
 
 public class BlockReason : ValueObject
 {
