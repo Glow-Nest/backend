@@ -13,6 +13,7 @@ using Services.Contracts.Client;
 using Services.Contracts.Common;
 using Services.Contracts.Schedule;
 using Services.Email;
+using Services.Jobs;
 
 namespace Services;
 
@@ -23,7 +24,7 @@ public static class ServicesExtension
         RegisterContracts(serviceCollection);
         RegisterApplicationServices(serviceCollection);
     }
-    
+
     private static void RegisterContracts(this IServiceCollection serviceCollection)
     {
         serviceCollection.AddScoped<IEmailUniqueChecker, EmailUniqueChecker>();
@@ -37,5 +38,7 @@ public static class ServicesExtension
     {
         serviceCollection.AddScoped<IEmailSender, EmailSender>();
         serviceCollection.AddScoped<ITokenService, TokenService>();
+
+        serviceCollection.AddScoped<ScheduleSeederJob>();
     }
 }

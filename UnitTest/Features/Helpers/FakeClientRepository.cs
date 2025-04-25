@@ -25,6 +25,11 @@ public class FakeClientRepository : IClientRepository
         return await Task.FromResult(Result.Success());
     }
 
+    public Task<Result> AddRangeAsync(IEnumerable<Client> aggregates)
+    {
+        throw new NotImplementedException();
+    }
+
     public Task<Result<Client>> GetAsync(ClientId clientId)
     {
         throw new NotImplementedException();

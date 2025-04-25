@@ -39,4 +39,10 @@ public class RepositoryBase<TAggr, TId>(DbContext context) : IGenericRepository<
         await context.Set<TAggr>().AddAsync(aggregate);
         return Result.Success();
     }
+
+    public virtual async Task<Result> AddRangeAsync(IEnumerable<TAggr> aggregates)
+    {
+        await context.Set<TAggr>().AddRangeAsync(aggregates);
+        return Result.Success();
+    }
 }

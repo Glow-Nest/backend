@@ -25,13 +25,19 @@ public static class ApplicationExtensions
 
     private static void RegisterHandlers(this IServiceCollection serviceCollection)
     {
+        // client handlers
         serviceCollection.AddScoped<ICommandHandler<CreateClientCommand>, CreateClientHandler>();
         serviceCollection.AddScoped<ICommandHandler<CreateOtpCommand>, CreateOtpHandler>();
         serviceCollection.AddScoped<ICommandHandler<VerifyOtpCommand>, VerifyOtpHandler>();
-        serviceCollection.AddScoped<ICommandHandler<CreateAppointmentCommand>, CreateAppointmentHandler>();
         serviceCollection.AddScoped<ICommandHandler<ResetPasswordCommand>, ResetPasswordHandler>();
         serviceCollection.AddScoped<ICommandHandler<InitiateResetPasswordCommand>, InitiateResetPasswordHandler>();
+        
+        // schedule handlers
+        serviceCollection.AddScoped<ICommandHandler<CreateAppointmentCommand>, CreateAppointmentHandler>();
         serviceCollection.AddScoped<ICommandHandler<AddBlockedTimeCommand>, AddBlockedTimeHandler>();
+        serviceCollection.AddScoped<ICommandHandler<CreateFutureSchedulesCommand>, CreateFutureSchedulesHandler>();
+        
+        // service handlers
         serviceCollection.AddScoped<ICommandHandler<CreateServiceCommand>, CreateServiceHandler>();
 
         serviceCollection.AddScoped<IDomainEventHandler<OtpCreatedDomainEvent>, OtpCreatedDomainEventHandler>();
