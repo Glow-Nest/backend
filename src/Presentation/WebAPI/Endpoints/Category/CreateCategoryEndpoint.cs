@@ -11,7 +11,7 @@ public record CreateCategoryRequest(
     List<string> MediaUrls
 );
 
-public class CreateCategoryEndpoint : ProtectedWithRequest<CreateCategoryRequest>
+public class CreateCategoryEndpoint : ProtectedOwnerWithRequest<CreateCategoryRequest>
 {
     [HttpPost("category/create")]
     public override async Task<ActionResult> HandleAsync(CreateCategoryRequest request, ICommandDispatcher commandDispatcher)

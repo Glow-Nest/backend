@@ -42,7 +42,7 @@ public class CategoryConfiguration : IEntityTypeConfiguration<Category>
          });
         
         // configure services
-        entityBuilder.HasMany<Service>(cat => cat._services)
+        entityBuilder.HasMany<Service>(cat => cat.Services)
             .WithOne()
             .HasForeignKey("CategoryId")
             .OnDelete(DeleteBehavior.Cascade);

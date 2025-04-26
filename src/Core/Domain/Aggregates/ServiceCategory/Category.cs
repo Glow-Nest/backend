@@ -8,10 +8,10 @@ namespace Domain.Aggregates.ServiceCategory;
 public class Category : AggregateRoot
 {
     internal CategoryId CategoryId { get; }
-    internal CategoryName CategoryName { get; private set; }
-    internal CategoryDescription Description { get; private set; }
-    internal List<MediaUrl> MediaUrls { get; private set; }
-    internal List<Entities.Service> _services { get; private set; } = new();
+    internal CategoryName CategoryName { get; }
+    internal CategoryDescription Description { get; }
+    internal List<MediaUrl> MediaUrls { get;}
+    internal List<Service> Services { get;} = new();
     
     private Category() // for efc
     {
@@ -33,18 +33,18 @@ public class Category : AggregateRoot
     }
     
     //AddService
-    public async Task<Result<Entities.Service>> AddService(ServiceName name, Price price, TimeSpan duration)
+    public async Task<Result<Service>> AddService(ServiceName name, Price price, TimeSpan duration)
     {
-        var serviceResult = await Entities.Service.Create(name, price, duration);
+        var serviceResult = await Service.Create(name, price, duration);
         if (!serviceResult.IsSuccess)
         {
-            return Result<Entities.Service>.Fail(ServiceCategoryErrorMessage.ServiceNotFound());
+            return Result<Service>.Fail(ServiceCategoryErrorMessage.ServiceNotFound());
         }
         
         var service = serviceResult.Data;
-        _services.Add(service);
+        Services.Add(service);
         
-        return Result<Entities.Service>.Success(service);
+        return Result<Service>.Success(service);
     }
     
 }

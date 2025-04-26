@@ -12,4 +12,7 @@ public class ServiceCategoryErrorMessage
     public static Error EmptyServiceMediaUrl() => new("Service.EmptyServiceMediaUrl", "Service media URL cannot be empty.");
     
     public static Error InvalidDuration() => new("Service.InvalidDuration", "Invalid service duration. Duration must be 0 or 30 minutes.");
+    
+    // category errors
+    public static Error CategoryNotFound() => new ("Category.NotFound", "Category not found.");
 }

@@ -25,7 +25,7 @@ public class GetAllCategoryWithServiceQueryHandler (ICategoryRepository category
             c.CategoryName.Value,
             c.Description.Value,
             c.MediaUrls.Select(m => m.Value).ToList(),
-            c._services.Select(s => new GetAllCategoriesWithServices.ServiceDto(
+            c.Services.Select(s => new GetAllCategoriesWithServices.ServiceDto(
                 s.ServiceId.Value.ToString(),
                 s.Name.Value,
                 s.Price.Value,

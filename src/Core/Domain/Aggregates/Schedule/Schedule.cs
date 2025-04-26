@@ -35,8 +35,7 @@ public class Schedule : AggregateRoot
     }
 
     public async Task<Result<Schedule>> AddAppointment(CreateAppointmentDto appointmentDto,
-        IServiceChecker serviceChecker,
-        IClientChecker clientChecker, IDateTimeProvider dateTimeProvider)
+        IServiceChecker serviceChecker, IClientChecker clientChecker, IDateTimeProvider dateTimeProvider)
     {
         var appointmentTimeSlot = appointmentDto.TimeSlot;
 

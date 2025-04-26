@@ -1,10 +1,8 @@
-using Domain.Aggregates.Appointment;
-using Domain.Aggregates.Appointment.Contracts;
-using Domain.Aggregates.Appointment.Values;
 using Domain.Aggregates.Client;
 using Domain.Aggregates.Client.Values;
+using Domain.Aggregates.Schedule.Contracts;
 using Domain.Aggregates.Schedule.Values;
-using Domain.Aggregates.Schedule.Values.Appointment;
+using Domain.Aggregates.Schedule.Values.AppointmentValues;
 using Domain.Aggregates.ServiceCategory;
 using Domain.Aggregates.ServiceCategory.Values;
 using Domain.Common.BaseClasses;
@@ -18,6 +16,7 @@ public record CreateAppointmentDto(
     TimeSlot TimeSlot,
     DateOnly BookingDate,
     List<ServiceId> ServiceIds,
+    List<CategoryId> CategoryIds,
     ClientId BookedByClient
 );
 
@@ -54,7 +53,8 @@ public class Appointment : Entity<AppointmentId>
         var status = AppointmentStatus.CREATED;
 
         // validate services
-        var servicesResult = await ValidateServicesExist(appointmentDto.ServiceIds, serviceChecker);
+        var servicesResult =
+            await ValidateServicesExist(appointmentDto.CategoryIds, appointmentDto.ServiceIds, serviceChecker);
         if (!servicesResult.IsSuccess) return servicesResult.ToGeneric<Appointment>();
 
         // validate client
@@ -72,13 +72,17 @@ public class Appointment : Entity<AppointmentId>
         return Result<Appointment>.Success(appointment);
     }
 
-    private static async Task<Result> ValidateServicesExist(List<ServiceId> serviceIds, IServiceChecker serviceChecker)
+    private static async Task<Result> ValidateServicesExist(List<CategoryId> categoryIds, List<ServiceId> serviceIds,
+        IServiceChecker serviceChecker)
     {
-        foreach (var serviceId in serviceIds)
+        foreach (var categoryId in categoryIds)
         {
-            if (!await serviceChecker.DoesServiceExistsAsync(serviceId))
+            foreach (var serviceId in serviceIds)
             {
-                return Result.Fail(ServiceCategoryErrorMessage.ServiceNotFound());
+                if (!await serviceChecker.DoesServiceExistsAsync(categoryId, serviceId))
+                {
+                    return Result.Fail(ServiceCategoryErrorMessage.ServiceNotFound());
+                }
             }
         }
 

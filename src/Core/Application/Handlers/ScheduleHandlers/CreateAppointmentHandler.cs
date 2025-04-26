@@ -39,6 +39,7 @@ public class CreateAppointmentHandler(IServiceChecker serviceChecker, IClientChe
             command.timeSlot,
             command.appointmentDate,
             command.serviceIds,
+            command.categoryIds,
             command.bookedByClient
         );
     }

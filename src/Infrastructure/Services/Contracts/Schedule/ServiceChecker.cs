@@ -1,16 +1,21 @@
 using Domain.Aggregates.Schedule.Contracts;
-using Domain.Aggregates.Service;
-using Domain.Aggregates.Service.Values;
+using Domain.Aggregates.ServiceCategory;
+using Domain.Aggregates.ServiceCategory.Values;
 
 namespace Services.Contracts.Schedule;
 
-public class ServiceChecker(IServiceRepository serviceRepository) : IServiceChecker
+public class ServiceChecker(ICategoryRepository categoryRepository) : IServiceChecker
 {
-    private readonly IServiceRepository _serviceRepository = serviceRepository;
+    private readonly ICategoryRepository _categoryRepository = categoryRepository;
 
-    public async Task<bool> DoesServiceExistsAsync(ServiceId serviceId)
+    public async Task<bool> DoesServiceExistsAsync(CategoryId categoryId, ServiceId serviceId)
     {
-        var serviceResult = await _serviceRepository.GetAsync(serviceId);
-        return serviceResult.IsSuccess;
+        var categoryResult = await _categoryRepository.FindServiceWithIdAsync(categoryId, serviceId);
+        if (!categoryResult.IsSuccess)
+        {
+            return false;
+        }
+        
+        return categoryResult.IsSuccess;
     }
 }

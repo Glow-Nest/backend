@@ -12,7 +12,7 @@ public record AddServiceRequest(
     string CategoryId
 );
 
-public class AddServiceEndpoint : ProtectedWithRequest<AddServiceRequest>
+public class AddServiceEndpoint : ProtectedOwnerWithRequest<AddServiceRequest>
 {
     [HttpPost("category/service/add")]
     public override async Task<ActionResult> HandleAsync(AddServiceRequest request, ICommandDispatcher commandDispatcher)
