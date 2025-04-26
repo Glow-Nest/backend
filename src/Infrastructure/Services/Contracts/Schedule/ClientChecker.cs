@@ -1,12 +1,16 @@
-using Domain.Aggregates.Appointment.Contracts;
+using Domain.Aggregates.Client;
 using Domain.Aggregates.Client.Values;
+using Domain.Aggregates.Schedule.Contracts;
 
-namespace Services.Contracts.Appointment;
+namespace Services.Contracts.Schedule;
 
-public class ClientChecker : IClientChecker
+public class ClientChecker(IClientRepository clientRepository) : IClientChecker
 {
-    public Task<bool> DoesClientExistsAsync(ClientId clientId)
+    private readonly IClientRepository _clientRepository = clientRepository;
+
+    public async Task<bool> DoesClientExistsAsync(ClientId id)
     {
-        throw new NotImplementedException();
+        var client = await _clientRepository.GetAsync(id);
+        return client != null;
     }
 }

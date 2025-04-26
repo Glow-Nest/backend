@@ -8,7 +8,7 @@ namespace WebAPI.Endpoints.Schedule;
 
 public record CreateAppointmentRequest(string AppointmentNote, string AppointmentDate, string BookedByClient, List<string> ServiceIds, string StartTime, string EndTime);
 
-public class CreateAppointmentEndpoint : PublicWithRequest<CreateAppointmentRequest>
+public class CreateAppointmentEndpoint : ProtectedSharedWithRequest<CreateAppointmentRequest>
 {
     [HttpPost("schedule/appointment/create")]
     public override async Task<ActionResult> HandleAsync(CreateAppointmentRequest request, ICommandDispatcher commandDispatcher)

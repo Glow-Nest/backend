@@ -29,6 +29,7 @@ public class GetServiceByIdQueryHandler : IQueryHandler<GetServiceByIdQuery, Res
             return Result<GetServiceByIdResponse>.Fail(ServiceErrorMessage.ServiceNotFound());
 
         var dto = new ServiceDto(
+            service.ServiceId.Value,
             service.Name.Value,
             service.Description.Value,
             service.Price.Value,

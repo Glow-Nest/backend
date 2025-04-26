@@ -7,7 +7,7 @@ namespace WebAPI.Endpoints.Service;
 
 public record CreateServiceRequest(string Name, string Description, double Price, string Duration, List<string> MediaUrls);
 
-public class CreateServiceEndpoint :ProtectedWithRequest<CreateServiceRequest>
+public class CreateServiceEndpoint :ProtectedOwnerWithRequest<CreateServiceRequest>
 {
     [HttpPost("service/create")]
     public override async Task<ActionResult> HandleAsync(CreateServiceRequest request, ICommandDispatcher commandDispatcher)

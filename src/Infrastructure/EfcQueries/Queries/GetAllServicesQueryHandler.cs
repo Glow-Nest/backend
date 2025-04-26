@@ -20,10 +20,11 @@ public class GetAllServicesQueryHandler : IQueryHandler<GetAllServiceQuery, Resu
     public async Task<Result<GetAllServicesResponse>> HandleAsync(GetAllServiceQuery query)
     {
         var services = await _context.Set<Service>()
-            .Include(s => s.MediaUrls) 
+            // .Include(s => s.MediaUrls) 
             .ToListAsync();
         
         var serviceDtos = services.Select(s => new ServiceDto(
+            s.ServiceId.Value,
             s.Name.Value,
             s.Description.Value,
             s.Price.Value,

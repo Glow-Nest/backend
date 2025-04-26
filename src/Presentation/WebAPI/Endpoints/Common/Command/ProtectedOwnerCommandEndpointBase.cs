@@ -6,27 +6,27 @@ namespace WebAPI.Endpoints.Common.Command;
 [Authorize(Roles = "Salon Owner")]
 [ApiController]
 [Route("api/owner")]
-public abstract class ProtectedWithRequestAndResponse<TRequest, TResponse> : CommandEndpointWithRequestAndResponse<TRequest, TResponse>
+public abstract class ProtectedOwnerWithRequestAndResponse<TRequest, TResponse> : CommandEndpointWithRequestAndResponse<TRequest, TResponse>
 {
 }
 
 [Authorize(Roles = "Salon Owner")]
 [ApiController]
 [Route("api/owner")]
-public abstract class ProtectedWithRequest<TRequest> : CommandEndpointWithRequest<TRequest>
+public abstract class ProtectedOwnerWithRequest<TRequest> : CommandEndpointWithRequest<TRequest>
 {
 }
 
 [Authorize(Roles = "Salon Owner")]
 [ApiController]
 [Route("api/owner")]
-public abstract class ProtectedWithResponse<TResponse> : CommandEndpointWithResponse<TResponse>
+public abstract class ProtectedOwnerWithResponse<TResponse> : CommandEndpointWithResponse<TResponse>
 {
 }
 
 [Authorize(Roles = "Salon Owner")]
 [ApiController]
 [Route("api/owner")]
-public abstract class ProtectedEndpoint : CommandEndpoint
+public abstract class ProtectedOwnerEndpoint : CommandEndpoint
 {
 }

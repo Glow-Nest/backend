@@ -7,7 +7,7 @@ namespace WebAPI.Endpoints.Schedule;
 
 public record AddBlockedTimeRequest(string StartTime, string EndTime, string ScheduleDate, string BlockReason);
 
-public class AddBlockedTimeEndpoint : ProtectedWithRequest<AddBlockedTimeRequest>
+public class AddBlockedTimeEndpoint : ProtectedOwnerWithRequest<AddBlockedTimeRequest>
 {
     [HttpPost("schedule/blockTime/add")]
     public override async Task<ActionResult> HandleAsync(AddBlockedTimeRequest request,

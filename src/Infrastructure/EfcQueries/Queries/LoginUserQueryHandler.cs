@@ -15,23 +15,22 @@ public class LoginUserQueryHandler : IQueryHandler<LoginUserQuery, Result<LoginU
     private readonly DomainModelContext _context;
     private readonly ITokenService _tokenService;
     private readonly string _salonOwnerEmail;
-    
+
     public LoginUserQueryHandler(DomainModelContext context, ITokenService tokenService, IConfiguration? configuration)
     {
         _context = context;
-        _tokenService = tokenService; 
+        _tokenService = tokenService;
         _salonOwnerEmail = configuration?.GetSection("SalonOwner:Email").Value ?? string.Empty;
     }
 
     public async Task<Result<LoginUserResponse>> HandleAsync(LoginUserQuery query)
     {
         if (string.Equals(query.Email?.Trim(), _salonOwnerEmail, StringComparison.OrdinalIgnoreCase))
-
         {
             var salonOwner = await _context.Set<SalonOwner>()
-                .Where(c => c.Email.Value == query.Email) 
+                .Where(c => c.Email.Value == query.Email)
                 .FirstOrDefaultAsync();
-            
+
             if (salonOwner == null)
             {
                 return Result<LoginUserResponse>.Fail(SalonOwnerErrorMessage.SalonOwnerNotFound());
@@ -42,7 +41,7 @@ public class LoginUserQueryHandler : IQueryHandler<LoginUserQuery, Result<LoginU
             {
                 return Result<LoginUserResponse>.Fail(ClientErrorMessage.InvalidCredentials());
             }
-            
+
             var tokenResult = await _tokenService.GenerateTokenAsync(salonOwner.Email.Value, "Salon Owner");
             if (!tokenResult.IsSuccess)
             {
@@ -50,30 +49,31 @@ public class LoginUserQueryHandler : IQueryHandler<LoginUserQuery, Result<LoginU
             }
 
             var tokenInfo = tokenResult.Data;
-            var response = new LoginUserResponse(salonOwner.Email.Value, "Salon Owner", tokenInfo.Token, tokenInfo.Role);
+            var response = new LoginUserResponse(salonOwner.SalonOwnerId.Value, salonOwner.Email.Value, "Salon Owner", "", "91000000", tokenInfo.Token,
+                tokenInfo.Role);
             return Result<LoginUserResponse>.Success(response);
         }
 
         {
             var client = await _context.Set<Client>()
                 .FirstOrDefaultAsync(c => c.Email.Value == query.Email);
-                
+
             if (client == null)
             {
                 return Result<LoginUserResponse>.Fail(ClientErrorMessage.ClientNotFound());
             }
-            
+
             // Password verification
             if (!client.Password.Verify(query.Password))
             {
                 return Result<LoginUserResponse>.Fail(ClientErrorMessage.InvalidCredentials());
             }
-            
+
             if (!client.IsVerified)
             {
                 return Result<LoginUserResponse>.Fail(ClientErrorMessage.ClientNotVerified());
             }
-                
+
             var tokenResult = await _tokenService.GenerateTokenAsync(client.Email.Value, "Client");
             if (!tokenResult.IsSuccess)
             {
@@ -81,9 +81,9 @@ public class LoginUserQueryHandler : IQueryHandler<LoginUserQuery, Result<LoginU
             }
 
             var tokenInfo = tokenResult.Data;
-            var response = new LoginUserResponse(client.Email.Value, client.FullName.FirstName, tokenInfo.Token, tokenInfo.Role);
+            var response = new LoginUserResponse(client.ClientId.Value, client.Email.Value, client.FullName.FirstName,
+                client.FullName.LastName, client.PhoneNumber.Value, tokenInfo.Token, tokenInfo.Role);
             return Result<LoginUserResponse>.Success(response);
         }
-        
     }
 }
