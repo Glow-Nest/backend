@@ -41,6 +41,7 @@ builder.Services.AddSwaggerGen(options =>
     {
         { securityScheme, new string[] { } }
     });
+    options.CustomSchemaIds(type => type.FullName);
 });
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("Smtp"));
 

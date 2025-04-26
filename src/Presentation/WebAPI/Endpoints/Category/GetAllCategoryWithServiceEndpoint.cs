@@ -7,7 +7,7 @@ namespace WebAPI.Endpoints.Category;
 
 public class GetAllCategoryWithServiceEndpoint : PublicQueryWithRequestAndResponse<GetAllCategoriesWithServices.Query, GetAllCategoriesWithServices.Answer>
 {
-    [HttpPost("categories/services/all")]
+    [HttpPost("category/services/all")]
     public override async Task<ActionResult<GetAllCategoriesWithServices.Answer>> HandleAsync(GetAllCategoriesWithServices.Query request, IQueryDispatcher queryDispatcher)
     {
         var dispatchResult = await queryDispatcher.DispatchAsync(request);
