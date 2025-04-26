@@ -1,7 +1,8 @@
+using Domain.Aggregates.Appointment.Values;
 using Domain.Aggregates.Client.Values;
 using Domain.Aggregates.Schedule.Values;
-using Domain.Aggregates.Schedule.Values.AppointmentValues;
-using Domain.Aggregates.Service.Values;
+using Domain.Aggregates.Schedule.Values.Appointment;
+using Domain.Aggregates.ServiceCategory.Values;
 using Domain.Common;
 using Domain.Common.OperationResult;
 
@@ -16,7 +17,7 @@ public class CreateAppointmentCommand(AppointmentNote appointmentNote, TimeSlot 
     internal readonly ClientId bookedByClient = bookedByClient;
 
     public static Result<CreateAppointmentCommand> Create(string appointmentNote, string startTime, string endTime,
-        string appointmentDate, List<string> servicesIds, string clientEmail)
+        string appointmentDate, List<string> servicesIds, string clientId)
     {
         var listOfErrors = new List<Error>();
         
@@ -65,7 +66,7 @@ public class CreateAppointmentCommand(AppointmentNote appointmentNote, TimeSlot 
         }
         
         // client id
-        var clientIdParseResult = Guid.TryParse(clientEmail, out var clientGuid);
+        var clientIdParseResult = Guid.TryParse(clientId, out var clientGuid);
         if (!clientIdParseResult)
         {
             listOfErrors.Add(GenericErrorMessage.ErrorParsingGuid());

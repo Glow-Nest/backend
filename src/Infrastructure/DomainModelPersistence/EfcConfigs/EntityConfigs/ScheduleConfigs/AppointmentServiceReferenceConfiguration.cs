@@ -1,7 +1,8 @@
+using Domain.Aggregates.Appointment.Values;
 using Domain.Aggregates.Schedule.Entities;
-using Domain.Aggregates.Schedule.Values.AppointmentValues;
-using Domain.Aggregates.Service;
-using Domain.Aggregates.Service.Values;
+using Domain.Aggregates.Schedule.Values.Appointment;
+using Domain.Aggregates.ServiceCategory.Entities;
+using Domain.Aggregates.ServiceCategory.Values;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

@@ -1,12 +1,12 @@
 using Domain.Aggregates.Appointment;
 using Domain.Aggregates.Appointment.Contracts;
+using Domain.Aggregates.Appointment.Values;
 using Domain.Aggregates.Client.Contracts;
 using Domain.Aggregates.Client.Values;
-using Domain.Aggregates.Schedule.Contracts;
 using Domain.Aggregates.Schedule.Entities;
 using Domain.Aggregates.Schedule.Values;
-using Domain.Aggregates.Schedule.Values.AppointmentValues;
-using Domain.Aggregates.Service.Values;
+using Domain.Aggregates.Schedule.Values.Appointment;
+using Domain.Aggregates.ServiceCategory.Values;
 using Domain.Common.Contracts;
 using Domain.Common.OperationResult;
 using Moq;

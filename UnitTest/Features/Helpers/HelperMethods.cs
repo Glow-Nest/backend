@@ -1,8 +1,9 @@
+using Domain.Aggregates.Appointment.Values;
 using Domain.Aggregates.Client.Values;
 using Domain.Aggregates.Schedule.Entities;
 using Domain.Aggregates.Schedule.Values;
-using Domain.Aggregates.Schedule.Values.AppointmentValues;
-using Domain.Aggregates.Service.Values;
+using Domain.Aggregates.Schedule.Values.Appointment;
+using Domain.Aggregates.ServiceCategory.Values;
 
 namespace UnitTest.Features.Helpers;
 
