@@ -1,8 +1,8 @@
-using Domain.Aggregates.Appointment.Contracts;
 using Domain.Aggregates.Client.Values;
 using Domain.Aggregates.Schedule;
+using Domain.Aggregates.Schedule.Contracts;
 using Domain.Aggregates.Schedule.Values;
-using Domain.Aggregates.Schedule.Values.BlockedTime;
+using Domain.Aggregates.Schedule.Values.BlockedTimeValues;
 using Domain.Aggregates.ServiceCategory.Values;
 using Domain.Common.Contracts;
 using Moq;
@@ -18,7 +18,7 @@ public class AddBlockedTimeAggregateTest
 
     private void SetupMocksForValidScenario()
     {
-        _serviceCheckerMock.Setup(s => s.DoesServiceExistsAsync(It.IsAny<ServiceId>())).ReturnsAsync(true);
+        _serviceCheckerMock.Setup(s => s.DoesServiceExistsAsync(It.IsAny<CategoryId>(), It.IsAny<ServiceId>())).ReturnsAsync(true);
         _clientCheckerMock.Setup(c => c.DoesClientExistsAsync(It.IsAny<ClientId>())).ReturnsAsync(true);
         _dateTimeProviderMock.Setup(d => d.GetNow()).Returns(DateTime.Now);
     }

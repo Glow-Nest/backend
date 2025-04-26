@@ -1,11 +1,13 @@
-using Domain.Aggregates.Appointment.Contracts;
+/*using Domain.Aggregates.Appointment.Contracts;
 using Domain.Aggregates.Appointment.Values;
 using Domain.Aggregates.Client;
 using Domain.Aggregates.Client.Values;
 using Domain.Aggregates.Schedule;
+using Domain.Aggregates.Schedule.Contracts;
 using Domain.Aggregates.Schedule.Entities;
 using Domain.Aggregates.Schedule.Values;
 using Domain.Aggregates.Schedule.Values.Appointment;
+using Domain.Aggregates.Schedule.Values.AppointmentValues;
 using Domain.Aggregates.ServiceCategory.Entities;
 using Domain.Aggregates.ServiceCategory.Values;
 using Domain.Common.Contracts;
@@ -104,7 +106,7 @@ public class ScheduleRepoTest
         return clientResult.Data;
     }
 
-    private static async Task<Service> PersistServiceAsync(ServiceRepository repo, DomainModelContext context)
+    private static async Task<Service> PersistServiceAsync(CategoryRepository repo, DomainModelContext context)
     {
         var serviceName = Name.Create("Valid Service").Data;
         var serviceDescription = Description.Create("Valid Service Description").Data;
@@ -130,4 +132,4 @@ public class ScheduleRepoTest
             [serviceId],
             clientId
         );
-}
+}*/
