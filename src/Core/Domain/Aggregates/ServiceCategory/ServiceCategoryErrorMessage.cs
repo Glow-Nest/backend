@@ -1,9 +1,8 @@
-using System.Runtime.InteropServices.JavaScript;
-using Domain.Common.OperationResult;
+﻿using Domain.Common.OperationResult;
 
-namespace Domain.Aggregates.Service;
+namespace Domain.Aggregates.ServiceCategory;
 
-public class ServiceErrorMessage
+public class ServiceCategoryErrorMessage
 {
     public static Error ServiceNotFound() => new("Service.ServiceNotFound", "Service not found.");
     public static Error NoServicesSelected() => new("Service.NoServiceSelected", "No service selected.");
@@ -13,4 +12,7 @@ public class ServiceErrorMessage
     public static Error EmptyServiceMediaUrl() => new("Service.EmptyServiceMediaUrl", "Service media URL cannot be empty.");
     
     public static Error InvalidDuration() => new("Service.InvalidDuration", "Invalid service duration. Duration must be 0 or 30 minutes.");
+    
+    // category errors
+    public static Error CategoryNotFound() => new ("Category.NotFound", "Category not found.");
 }

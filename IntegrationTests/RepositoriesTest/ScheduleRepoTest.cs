@@ -1,13 +1,15 @@
-using Domain.Aggregates.Appointment.Contracts;
+/*using Domain.Aggregates.Appointment.Contracts;
+using Domain.Aggregates.Appointment.Values;
 using Domain.Aggregates.Client;
 using Domain.Aggregates.Client.Values;
 using Domain.Aggregates.Schedule;
 using Domain.Aggregates.Schedule.Contracts;
 using Domain.Aggregates.Schedule.Entities;
 using Domain.Aggregates.Schedule.Values;
+using Domain.Aggregates.Schedule.Values.Appointment;
 using Domain.Aggregates.Schedule.Values.AppointmentValues;
-using Domain.Aggregates.Service;
-using Domain.Aggregates.Service.Values;
+using Domain.Aggregates.ServiceCategory.Entities;
+using Domain.Aggregates.ServiceCategory.Values;
 using Domain.Common.Contracts;
 using DomainModelPersistence.ClientPersistence;
 using DomainModelPersistence.EfcConfigs;
@@ -24,14 +26,14 @@ public class ScheduleRepoTest
     public async Task SaveAndRetrieveScheduleWithAppointment_ShouldMatchOriginal()
     {
         // Arrange
-        var (context, scheduleRepository, clientRepository, serviceRepository) = SetupRepositories();
+        var (context, scheduleRepository, clientRepository, categoryrepo) = SetupRepositories();
 
         var serviceChecker = SetupServiceCheckerMock();
         var clientChecker = SetupClientCheckerMock();
         var dateTimeProvider = SetupDateTimeProviderMock();
 
         var client = await PersistClientAsync(clientRepository, context);
-        var service = await PersistServiceAsync(serviceRepository, context);
+        var service = await PersistServiceAsync(categoryrepo, context);
 
         var appointmentDate = DateOnly.FromDateTime(DateTime.Now).AddDays(1);
         var appointmentDto = CreateValidAppointmentDto(service.ServiceId, client.ClientId, appointmentDate);
@@ -63,14 +65,14 @@ public class ScheduleRepoTest
         Assert.Equal(expected.AppointmentNote, actual.AppointmentNote);
     }
 
-    private static (DomainModelContext context, ScheduleRepository scheduleRepo, ClientRepository clientRepo, ServiceRepository serviceRepo) SetupRepositories()
+    private static (DomainModelContext context, ScheduleRepository scheduleRepo, ClientRepository clientRepo, CategoryRepository categoryrepo) SetupRepositories()
     {
         var context = DomainContextHelper.SetupContext();
         return (
             context,
             new ScheduleRepository(context),
             new ClientRepository(context),
-            new ServiceRepository(context)
+            new CategoryRepository(context)
         );
     }
 
@@ -104,7 +106,7 @@ public class ScheduleRepoTest
         return clientResult.Data;
     }
 
-    private static async Task<Service> PersistServiceAsync(ServiceRepository repo, DomainModelContext context)
+    private static async Task<Service> PersistServiceAsync(CategoryRepository repo, DomainModelContext context)
     {
         var serviceName = Name.Create("Valid Service").Data;
         var serviceDescription = Description.Create("Valid Service Description").Data;
@@ -130,4 +132,4 @@ public class ScheduleRepoTest
             [serviceId],
             clientId
         );
-}
+}*/

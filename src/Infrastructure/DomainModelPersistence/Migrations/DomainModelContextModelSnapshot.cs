@@ -232,15 +232,22 @@ namespace DomainModelPersistence.Migrations
                     b.ToTable("AppointmentServiceReference");
                 });
 
-            modelBuilder.Entity("Domain.Aggregates.Service.Service", b =>
+            modelBuilder.Entity("Domain.Aggregates.ServiceCategory.Category", b =>
                 {
-                    b.Property<Guid>("ServiceId")
+                    b.Property<Guid>("CategoryId")
                         .HasColumnType("uuid");
 
-                    b.Property<double>("Duration")
-                        .HasColumnType("double precision");
+                    b.ComplexProperty<Dictionary<string, object>>("CategoryName", "Domain.Aggregates.ServiceCategory.Category.CategoryName#CategoryName", b1 =>
+                        {
+                            b1.IsRequired();
 
-                    b.ComplexProperty<Dictionary<string, object>>("Description", "Domain.Aggregates.Service.Service.Description#Description", b1 =>
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasColumnType("text")
+                                .HasColumnName("CategoryName");
+                        });
+
+                    b.ComplexProperty<Dictionary<string, object>>("Description", "Domain.Aggregates.ServiceCategory.Category.Description#CategoryDescription", b1 =>
                         {
                             b1.IsRequired();
 
@@ -250,7 +257,23 @@ namespace DomainModelPersistence.Migrations
                                 .HasColumnName("Description");
                         });
 
-                    b.ComplexProperty<Dictionary<string, object>>("Name", "Domain.Aggregates.Service.Service.Name#Name", b1 =>
+                    b.HasKey("CategoryId");
+
+                    b.ToTable("Category");
+                });
+
+            modelBuilder.Entity("Domain.Aggregates.ServiceCategory.Entities.Service", b =>
+                {
+                    b.Property<Guid>("ServiceId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("CategoryId")
+                        .HasColumnType("uuid");
+
+                    b.Property<double>("Duration")
+                        .HasColumnType("double precision");
+
+                    b.ComplexProperty<Dictionary<string, object>>("Name", "Domain.Aggregates.ServiceCategory.Entities.Service.Name#ServiceName", b1 =>
                         {
                             b1.IsRequired();
 
@@ -260,7 +283,7 @@ namespace DomainModelPersistence.Migrations
                                 .HasColumnName("Name");
                         });
 
-                    b.ComplexProperty<Dictionary<string, object>>("Price", "Domain.Aggregates.Service.Service.Price#Price", b1 =>
+                    b.ComplexProperty<Dictionary<string, object>>("Price", "Domain.Aggregates.ServiceCategory.Entities.Service.Price#Price", b1 =>
                         {
                             b1.IsRequired();
 
@@ -270,6 +293,8 @@ namespace DomainModelPersistence.Migrations
                         });
 
                     b.HasKey("ServiceId");
+
+                    b.HasIndex("CategoryId");
 
                     b.ToTable("Service");
                 });
@@ -346,22 +371,22 @@ namespace DomainModelPersistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Aggregates.Service.Service", null)
+                    b.HasOne("Domain.Aggregates.ServiceCategory.Entities.Service", null)
                         .WithMany()
                         .HasForeignKey("ServiceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Domain.Aggregates.Service.Service", b =>
+            modelBuilder.Entity("Domain.Aggregates.ServiceCategory.Category", b =>
                 {
-                    b.OwnsMany("Domain.Aggregates.Service.Values.MediaUrl", "MediaUrls", b1 =>
+                    b.OwnsMany("Domain.Aggregates.ServiceCategory.Values.MediaUrl", "MediaUrls", b1 =>
                         {
                             b1.Property<Guid>("Id")
                                 .ValueGeneratedOnAdd()
                                 .HasColumnType("uuid");
 
-                            b1.Property<Guid>("ServiceId")
+                            b1.Property<Guid>("CategoryId")
                                 .HasColumnType("uuid");
 
                             b1.Property<string>("Value")
@@ -371,15 +396,23 @@ namespace DomainModelPersistence.Migrations
 
                             b1.HasKey("Id");
 
-                            b1.HasIndex("ServiceId");
+                            b1.HasIndex("CategoryId");
 
                             b1.ToTable("MediaUrls", (string)null);
 
                             b1.WithOwner()
-                                .HasForeignKey("ServiceId");
+                                .HasForeignKey("CategoryId");
                         });
 
                     b.Navigation("MediaUrls");
+                });
+
+            modelBuilder.Entity("Domain.Aggregates.ServiceCategory.Entities.Service", b =>
+                {
+                    b.HasOne("Domain.Aggregates.ServiceCategory.Category", null)
+                        .WithMany("_services")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Domain.Aggregates.Schedule.Entities.Appointment", b =>
@@ -392,6 +425,11 @@ namespace DomainModelPersistence.Migrations
                     b.Navigation("Appointments");
 
                     b.Navigation("BlockedTimeSlots");
+                });
+
+            modelBuilder.Entity("Domain.Aggregates.ServiceCategory.Category", b =>
+                {
+                    b.Navigation("_services");
                 });
 #pragma warning restore 612, 618
         }

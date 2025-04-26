@@ -1,7 +1,6 @@
-﻿using Domain.Common.BaseClasses;
-using Domain.Common.OperationResult;
+﻿using Domain.Common.OperationResult;
 
-namespace Domain.Aggregates.Service.Values;
+namespace Domain.Aggregates.ServiceCategory.Values;
 
 public class MediaUrl
 {
@@ -19,7 +18,7 @@ public class MediaUrl
     {
         if (string.IsNullOrWhiteSpace(mediaUrl))
         {
-            return Result<MediaUrl>.Fail(ServiceErrorMessage.EmptyServiceMediaUrl());
+            return Result<MediaUrl>.Fail(ServiceCategoryErrorMessage.EmptyServiceMediaUrl());
         }
         
         return Result<MediaUrl>.Success(new MediaUrl(mediaUrl));

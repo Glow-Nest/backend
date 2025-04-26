@@ -1,12 +1,11 @@
 using Application.AppEntry.Commands.Schedule;
 using Application.Handlers.ScheduleHandlers;
-using Domain.Aggregates.Appointment.Contracts;
 using Domain.Aggregates.Client.Values;
 using Domain.Aggregates.Schedule;
 using Domain.Aggregates.Schedule.Contracts;
 using Domain.Aggregates.Schedule.Values;
 using Domain.Aggregates.Schedule.Values.AppointmentValues;
-using Domain.Aggregates.Service.Values;
+using Domain.Aggregates.ServiceCategory.Values;
 using Domain.Common.Contracts;
 using Domain.Common.OperationResult;
 using Moq;
@@ -29,13 +28,14 @@ public class CreateAppointmentHandlerTest
             AppointmentNote.Create("Valid Note").Data,
             TimeSlot.Create(TimeOnly.Parse("10:00"), TimeOnly.Parse("11:00")).Data,
             [ServiceId.Create()],
+            [CategoryId.Create()],
             ClientId.Create(),
             bookingDate
         );
 
         var schedule = Schedule.CreateSchedule(bookingDate).Data;
 
-        _serviceChecker.Setup(s => s.DoesServiceExistsAsync(It.IsAny<ServiceId>())).ReturnsAsync(true);
+        _serviceChecker.Setup(s => s.DoesServiceExistsAsync(It.IsAny<CategoryId>(), It.IsAny<ServiceId>())).ReturnsAsync(true);
         _clientChecker.Setup(c => c.DoesClientExistsAsync(It.IsAny<ClientId>())).ReturnsAsync(true);
         _dateTimeProvider.Setup(d => d.GetNow()).Returns(DateTime.Now);
         _scheduleRepository.Setup(r => r.GetScheduleByDateAsync(It.IsAny<DateOnly>()))
