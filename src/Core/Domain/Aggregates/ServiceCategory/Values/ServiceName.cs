@@ -1,27 +1,27 @@
 ﻿using Domain.Common.BaseClasses;
 using Domain.Common.OperationResult;
 
-namespace Domain.Aggregates.Service.Values;
+namespace Domain.Aggregates.ServiceCategory.Values;
 
-public class Name : ValueObject
+public class ServiceName : ValueObject
 {
     
     internal string Value { get; private set; }
     
-    private Name(string value)
+    private ServiceName(string value)
     {
         Value = value;
     }
-
-    public static Result<Name> Create(string name)
+    
+    public static Result<ServiceName> Create(string name)
     {
         
         if (string.IsNullOrWhiteSpace(name))
         {
-            return Result<Name>.Fail(ServiceErrorMessage.EmptyServiceName());
+            return Result<ServiceName>.Fail(ServiceCategoryErrorMessage.EmptyServiceName());
         }
         
-        return Result<Name>.Success(new Name(name));
+        return Result<ServiceName>.Success(new ServiceName(name));
     }
     
     protected override IEnumerable<object> GetEqualityComponents()

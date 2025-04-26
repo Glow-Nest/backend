@@ -1,6 +1,6 @@
 using Domain.Common.BaseClasses;
 
-namespace Domain.Aggregates.Service.Values;
+namespace Domain.Aggregates.ServiceCategory.Values;
 
 public class ServiceId : ValueObject
 {

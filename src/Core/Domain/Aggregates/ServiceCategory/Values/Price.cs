@@ -1,7 +1,7 @@
 ﻿using Domain.Common.BaseClasses;
 using Domain.Common.OperationResult;
 
-namespace Domain.Aggregates.Service.Values;
+namespace Domain.Aggregates.ServiceCategory.Values;
 
 public class Price : ValueObject
 {
@@ -17,7 +17,7 @@ public class Price : ValueObject
     {
         if (price <= 0)
         {
-            return Result<Price>.Fail(ServiceErrorMessage.InvalidServicePrice());
+            return Result<Price>.Fail(ServiceCategoryErrorMessage.InvalidServicePrice());
         }
         
         return Result<Price>.Success(new Price(price));

@@ -1,5 +1,5 @@
 using Domain.Aggregates.Appointment.Contracts;
-using Domain.Aggregates.Service.Values;
+using Domain.Aggregates.ServiceCategory.Values;
 
 namespace Services.Contracts.Appointment;
 

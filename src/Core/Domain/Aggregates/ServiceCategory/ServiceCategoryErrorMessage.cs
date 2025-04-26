@@ -1,9 +1,8 @@
-using System.Runtime.InteropServices.JavaScript;
-using Domain.Common.OperationResult;
+﻿using Domain.Common.OperationResult;
 
-namespace Domain.Aggregates.Service;
+namespace Domain.Aggregates.ServiceCategory;
 
-public class ServiceErrorMessage
+public class ServiceCategoryErrorMessage
 {
     public static Error ServiceNotFound() => new("Service.ServiceNotFound", "Service not found.");
     public static Error NoServicesSelected() => new("Service.NoServiceSelected", "No service selected.");

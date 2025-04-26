@@ -5,7 +5,7 @@ using WebAPI.Endpoints.Common.Query;
 
 namespace WebAPI.Endpoints.Client;
 
-public class LoginClientEndpoint: PublicQueryWithRequestAndResponse<LoginUserQuery, LoginUserResponse>
+public class LoginEndpoint: PublicQueryWithRequestAndResponse<LoginUserQuery, LoginUserResponse>
 {
     [HttpPost("clients/login")]
     public override Task<ActionResult<LoginUserResponse>> HandleAsync(LoginUserQuery request, IQueryDispatcher queryDispatcher)

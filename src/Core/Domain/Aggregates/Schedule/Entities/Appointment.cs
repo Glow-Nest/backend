@@ -5,8 +5,8 @@ using Domain.Aggregates.Client;
 using Domain.Aggregates.Client.Values;
 using Domain.Aggregates.Schedule.Values;
 using Domain.Aggregates.Schedule.Values.Appointment;
-using Domain.Aggregates.Service;
-using Domain.Aggregates.Service.Values;
+using Domain.Aggregates.ServiceCategory;
+using Domain.Aggregates.ServiceCategory.Values;
 using Domain.Common.BaseClasses;
 using Domain.Common.Contracts;
 using Domain.Common.OperationResult;
@@ -78,7 +78,7 @@ public class Appointment : Entity<AppointmentId>
         {
             if (!await serviceChecker.DoesServiceExistsAsync(serviceId))
             {
-                return Result.Fail(ServiceErrorMessage.ServiceNotFound());
+                return Result.Fail(ServiceCategoryErrorMessage.ServiceNotFound());
             }
         }
 

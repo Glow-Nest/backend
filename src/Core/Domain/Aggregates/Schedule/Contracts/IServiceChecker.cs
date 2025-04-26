@@ -1,4 +1,4 @@
-using Domain.Aggregates.Service.Values;
+using Domain.Aggregates.ServiceCategory.Values;
 
 namespace Domain.Aggregates.Appointment.Contracts;
 

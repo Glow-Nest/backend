@@ -17,8 +17,7 @@ public static class EfcQueriesExtension
     {
         services.AddScoped<IQueryHandler<LoginUserQuery, Result<LoginUserResponse>>, LoginUserQueryHandler>();
         services.AddScoped<IQueryHandler<GetBlockedTimeQuery, Result<GetBlockedTimeResponse>>, GetBlockedTimeQueryHandler>();
-        services.AddScoped<IQueryHandler<GetAllServiceQuery, Result<GetAllServicesResponse>>, GetAllServicesQueryHandler>();
-        services.AddScoped<IQueryHandler<GetServiceByIdQuery, Result<GetServiceByIdResponse>>, GetServiceByIdQueryHandler>();
+        services.AddScoped<IQueryHandler<GetAllCategory.Query, Result<GetAllCategory.Answer>>, GetAllCategoryQueryHandler>();
     }
 
     public static void RegisterDatabase(this IServiceCollection serviceCollection, IConfiguration configuration)

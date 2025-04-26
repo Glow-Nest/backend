@@ -3,7 +3,7 @@ using Domain.Aggregates.Client.Values;
 using Domain.Aggregates.Schedule;
 using Domain.Aggregates.Schedule.Values;
 using Domain.Aggregates.Schedule.Values.BlockedTime;
-using Domain.Aggregates.Service.Values;
+using Domain.Aggregates.ServiceCategory.Values;
 using Domain.Common.Contracts;
 using Moq;
 using UnitTest.Features.Helpers;

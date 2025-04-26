@@ -7,8 +7,8 @@ using Domain.Aggregates.Schedule;
 using Domain.Aggregates.Schedule.Entities;
 using Domain.Aggregates.Schedule.Values;
 using Domain.Aggregates.Schedule.Values.BlockedTime;
-using Domain.Aggregates.Service;
-using Domain.Aggregates.Service.Values;
+using Domain.Aggregates.ServiceCategory;
+using Domain.Aggregates.ServiceCategory.Values;
 using Domain.Common.Contracts;
 using Moq;
 using UnitTest.Features.Helpers;
@@ -62,7 +62,7 @@ public class CreateAppointmentAggregateTest
         
         // Assert
         Assert.False(result.IsSuccess);
-        Assert.Contains(ServiceErrorMessage.ServiceNotFound(), result.Errors);
+        Assert.Contains(ServiceCategoryErrorMessage.ServiceNotFound(), result.Errors);
         Assert.Empty(schedule.Appointments);
     }
 
