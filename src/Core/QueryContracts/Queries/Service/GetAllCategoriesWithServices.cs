@@ -14,8 +14,7 @@ public class GetAllCategoriesWithServices
         List<ServiceDto> Services
     );
     
-    public record Query() : IQuery<Result<Answer>>;
+    public record Query : IQuery<Result<Answer>>;
     public record Answer(List<CategoryWithServicesDto> Categories);
-
     
 }
