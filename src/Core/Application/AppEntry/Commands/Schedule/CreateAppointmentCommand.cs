@@ -7,14 +7,14 @@ using Domain.Common.OperationResult;
 
 namespace Application.AppEntry.Commands.Schedule;
 
-public class CreateAppointmentCommand(AppointmentNote appointmentNote, TimeSlot timeSlot, List<ServiceId> serviceIds, List<CategoryId> categoryIds, ClientId bookedByClient, DateOnly appointmentDate)
+public class CreateAppointmentCommand(AppointmentNote appointmentNote, TimeSlot timeSlot, List<ServiceId> serviceIds, List<CategoryId> categoryIds, Email email, DateOnly appointmentDate)
 {
     internal readonly AppointmentNote appointmentNote = appointmentNote;
     internal readonly TimeSlot timeSlot = timeSlot;
     internal readonly DateOnly appointmentDate = appointmentDate;
     internal readonly List<ServiceId> serviceIds = serviceIds;
     internal readonly List<CategoryId> categoryIds = categoryIds;
-    internal readonly ClientId bookedByClient = bookedByClient;
+    internal readonly Email email = email;
 
     public static Result<CreateAppointmentCommand> Create(string appointmentNote, string startTime, string endTime,
         string appointmentDate, List<string> servicesIdsStr, List<string> categoryIdsStr, string clientId)
@@ -80,12 +80,18 @@ public class CreateAppointmentCommand(AppointmentNote appointmentNote, TimeSlot 
         }
         
         // client id
-        var clientIdParseResult = Guid.TryParse(clientId, out var clientGuid);
+        /*var clientIdParseResult = Guid.TryParse(clientId, out var clientGuid);
         if (!clientIdParseResult)
         {
             listOfErrors.Add(GenericErrorMessage.ErrorParsingGuid());
         }
-        var clientIdResult = ClientId.FromGuid(clientGuid);
+        var clientIdResult = ClientId.FromGuid(clientGuid);*/
+        
+        var emailResult = Email.Create(clientId);
+        if (!emailResult.IsSuccess)
+        {
+            listOfErrors.AddRange(emailResult.Errors);
+        }
 
         if (listOfErrors.Any())
         {
@@ -93,7 +99,7 @@ public class CreateAppointmentCommand(AppointmentNote appointmentNote, TimeSlot 
         }
         
         var command = new CreateAppointmentCommand(appointmentNoteResult.Data, timeSlotResult.Data,
-             serviceIds, categoryIds, clientIdResult, appointmentDateParsed);
+             serviceIds, categoryIds, emailResult.Data, appointmentDateParsed);
         return Result<CreateAppointmentCommand>.Success(command);
     }
 }
