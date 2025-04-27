@@ -1,12 +1,9 @@
-using Domain.Aggregates.Appointment;
-using Domain.Aggregates.Appointment.Contracts;
-using Domain.Aggregates.Appointment.Values;
-using Domain.Aggregates.Client.Contracts;
 using Domain.Aggregates.Client.Values;
+using Domain.Aggregates.Schedule.Contracts;
 using Domain.Aggregates.Schedule.Entities;
 using Domain.Aggregates.Schedule.Values;
-using Domain.Aggregates.Schedule.Values.Appointment;
-using Domain.Aggregates.Service.Values;
+using Domain.Aggregates.Schedule.Values.AppointmentValues;
+using Domain.Aggregates.ServiceCategory.Values;
 using Domain.Common.Contracts;
 using Domain.Common.OperationResult;
 using Moq;
@@ -20,6 +17,7 @@ public class AppointmentBuilder
     private TimeOnly _endTime = new TimeOnly(11, 0);
     private DateOnly _appointmentDate = DateOnly.FromDateTime(DateTime.Now);
     private List<Guid> _serviceIds = [Guid.NewGuid()];
+    private List<Guid> _categoryIds = [Guid.NewGuid()];
     private Guid _bookedByClient = Guid.NewGuid();
 
     private Mock<IServiceChecker> _serviceCheckerMock = new();
@@ -32,8 +30,9 @@ public class AppointmentBuilder
     {
         _dateTimeProviderMock.Setup(x => x.GetNow())
             .Returns(DateTime.Now.AddDays(-1));
-        
+
         var serviceIds = new List<ServiceId>();
+        var categoryIds = new List<CategoryId>();
 
         var appointmentNoteResult = AppointmentNote.Create(_appointmentNote);
         var timeSlotResult = TimeSlot.Create(_startTime, _endTime);
@@ -43,6 +42,13 @@ public class AppointmentBuilder
         {
             var id = ServiceId.FromGuid(serviceId);
             serviceIds.Add(id);
+        }
+
+
+        foreach (var categoryId in _categoryIds)
+        {
+            var id = CategoryId.FromGuid(categoryId);
+            categoryIds.Add(id);
         }
 
         if (!appointmentNoteResult.IsSuccess)
@@ -60,19 +66,21 @@ public class AppointmentBuilder
             timeSlotResult.Data,
             _appointmentDate,
             serviceIds,
+            categoryIds,
             clientId
         );
 
-        var result = await Appointment.Create(createAppointmentDto, _serviceCheckerMock.Object, _clientCheckerMock.Object, _dateTimeProviderMock.Object);
-        
+        var result = await Appointment.Create(createAppointmentDto, _serviceCheckerMock.Object,
+            _clientCheckerMock.Object, _dateTimeProviderMock.Object);
+
         if (!result.IsSuccess)
         {
             return Result<Appointment>.Fail(result.Errors);
         }
-        
+
         return Result<Appointment>.Success(result.Data);
     }
-    
+
     public Result<CreateAppointmentDto> BuildDto()
     {
         var appointmentNoteResult = AppointmentNote.Create(_appointmentNote);
@@ -81,6 +89,10 @@ public class AppointmentBuilder
 
         var serviceIds = _serviceIds
             .Select(ServiceId.FromGuid)
+            .ToList(); 
+        
+        var categoryIds = _categoryIds
+            .Select(CategoryId.FromGuid)
             .ToList();
 
         if (!appointmentNoteResult.IsSuccess)
@@ -98,61 +110,62 @@ public class AppointmentBuilder
             timeSlotResult.Data,
             _appointmentDate,
             serviceIds,
+            categoryIds,
             clientId
         );
 
         return Result<CreateAppointmentDto>.Success(dto);
     }
 
-    
+
     public AppointmentBuilder WithNote(string note)
     {
         _appointmentNote = note;
         return this;
     }
-    
+
     public AppointmentBuilder WithStartTime(TimeOnly startTime)
     {
         _startTime = startTime;
         return this;
     }
-    
+
     public AppointmentBuilder WithEndTime(TimeOnly endTime)
     {
         _endTime = endTime;
         return this;
     }
-    
+
     public AppointmentBuilder WithAppointmentDate(DateOnly appointmentDate)
     {
         _appointmentDate = appointmentDate;
         return this;
     }
-    
+
     public AppointmentBuilder WithServiceIds(List<Guid> serviceIds)
     {
         _serviceIds = serviceIds;
         return this;
     }
-    
+
     public AppointmentBuilder WithBookedByClient(Guid bookedByClient)
     {
         _bookedByClient = bookedByClient;
         return this;
     }
-    
+
     public AppointmentBuilder WithServiceCheckerMock(Mock<IServiceChecker> serviceCheckerMock)
     {
         _serviceCheckerMock = serviceCheckerMock;
         return this;
     }
-    
+
     public AppointmentBuilder WithClientCheckerMock(Mock<IClientChecker> clientCheckerMock)
     {
         _clientCheckerMock = clientCheckerMock;
         return this;
     }
-    
+
     public AppointmentBuilder WithDateTimeProviderMock(Mock<IDateTimeProvider> dateTimeProviderMock)
     {
         _dateTimeProviderMock = dateTimeProviderMock;

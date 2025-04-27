@@ -1,23 +1,23 @@
-using Domain.Aggregates.Appointment.Values;
 using Domain.Aggregates.Client.Values;
 using Domain.Aggregates.Schedule.Values;
-using Domain.Aggregates.Schedule.Values.Appointment;
-using Domain.Aggregates.Service.Values;
+using Domain.Aggregates.Schedule.Values.AppointmentValues;
+using Domain.Aggregates.ServiceCategory.Values;
 using Domain.Common;
 using Domain.Common.OperationResult;
 
 namespace Application.AppEntry.Commands.Schedule;
 
-public class CreateAppointmentCommand(AppointmentNote appointmentNote, TimeSlot timeSlot, List<ServiceId> serviceIds, ClientId bookedByClient, DateOnly appointmentDate)
+public class CreateAppointmentCommand(AppointmentNote appointmentNote, TimeSlot timeSlot, List<ServiceId> serviceIds, List<CategoryId> categoryIds, ClientId bookedByClient, DateOnly appointmentDate)
 {
     internal readonly AppointmentNote appointmentNote = appointmentNote;
     internal readonly TimeSlot timeSlot = timeSlot;
     internal readonly DateOnly appointmentDate = appointmentDate;
     internal readonly List<ServiceId> serviceIds = serviceIds;
+    internal readonly List<CategoryId> categoryIds = categoryIds;
     internal readonly ClientId bookedByClient = bookedByClient;
 
     public static Result<CreateAppointmentCommand> Create(string appointmentNote, string startTime, string endTime,
-        string appointmentDate, List<string> servicesIds, string clientId)
+        string appointmentDate, List<string> servicesIdsStr, List<string> categoryIdsStr, string clientId)
     {
         var listOfErrors = new List<Error>();
         
@@ -52,7 +52,7 @@ public class CreateAppointmentCommand(AppointmentNote appointmentNote, TimeSlot 
         
         // services ids
         var serviceIds = new List<ServiceId>();
-        foreach (var serviceId in servicesIds)
+        foreach (var serviceId in servicesIdsStr)
         {
             var idParseResult = Guid.TryParse(serviceId, out var guid);
             
@@ -63,6 +63,20 @@ public class CreateAppointmentCommand(AppointmentNote appointmentNote, TimeSlot 
 
             var id = ServiceId.FromGuid(guid);
             serviceIds.Add(id);
+        }
+        
+        // category ids
+        var categoryIds = new List<CategoryId>();
+        foreach (var categoryId in categoryIdsStr)
+        {
+            var idParseResult = Guid.TryParse(categoryId, out var guid);
+            if (!idParseResult)
+            {
+                listOfErrors.Add(GenericErrorMessage.ErrorParsingGuid());
+            }
+            
+            var id = CategoryId.FromGuid(guid);
+            categoryIds.Add(id);
         }
         
         // client id
@@ -79,7 +93,7 @@ public class CreateAppointmentCommand(AppointmentNote appointmentNote, TimeSlot 
         }
         
         var command = new CreateAppointmentCommand(appointmentNoteResult.Data, timeSlotResult.Data,
-             serviceIds, clientIdResult, appointmentDateParsed);
+             serviceIds, categoryIds, clientIdResult, appointmentDateParsed);
         return Result<CreateAppointmentCommand>.Success(command);
     }
 }

@@ -2,6 +2,7 @@ using Application.Interfaces;
 using Domain.Aggregates.Appointment.Contracts;
 using Domain.Aggregates.Client.Contracts;
 using Domain.Aggregates.Client.Values;
+using Domain.Aggregates.Schedule.Contracts;
 using Domain.Common.Contracts;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,7 +11,9 @@ using Services.Authentication;
 using Services.Contracts.Appointment;
 using Services.Contracts.Client;
 using Services.Contracts.Common;
+using Services.Contracts.Schedule;
 using Services.Email;
+using Services.Jobs;
 
 namespace Services;
 
@@ -21,7 +24,7 @@ public static class ServicesExtension
         RegisterContracts(serviceCollection);
         RegisterApplicationServices(serviceCollection);
     }
-    
+
     private static void RegisterContracts(this IServiceCollection serviceCollection)
     {
         serviceCollection.AddScoped<IEmailUniqueChecker, EmailUniqueChecker>();
@@ -35,5 +38,7 @@ public static class ServicesExtension
     {
         serviceCollection.AddScoped<IEmailSender, EmailSender>();
         serviceCollection.AddScoped<ITokenService, TokenService>();
+
+        serviceCollection.AddScoped<ScheduleSeederJob>();
     }
 }

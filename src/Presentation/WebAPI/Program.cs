@@ -3,12 +3,15 @@ using System.Text;
 using Application.Extensions;
 using DomainModelPersistence;
 using EfcQueries.Extension;
+using Hangfire;
+using Hangfire.PostgreSql;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Scalar.AspNetCore;
 using Services;
 using Services.Email;
+using Services.Jobs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,8 +39,9 @@ builder.Services.AddSwaggerGen(options =>
     options.AddSecurityDefinition(securityScheme.Reference.Id, securityScheme);
     options.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
-        {securityScheme, new string[] { }}
+        { securityScheme, new string[] { } }
     });
+    options.CustomSchemaIds(type => type.FullName);
 });
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("Smtp"));
 
@@ -69,16 +73,34 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Configuration.GetConnectionString("CloudSqlConnection");
 
+builder.Services.AddHangfire(configuration =>
+    configuration.UsePostgreSqlStorage(config =>
+        config.UseNpgsqlConnection(builder.Configuration.GetConnectionString("DefaultConnection"))));
+
+builder.Services.AddHangfireServer();
+
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+    var recurringJobs = scope.ServiceProvider.GetRequiredService<IRecurringJobManager>();
+
+    recurringJobs.AddOrUpdate<ScheduleSeederJob>(
+        "SeedFutureSchedules",
+        job => job.SeedFutureSchedulesAsync(),
+        Cron.Daily(0));
+}
+
+
 app.MapControllers();
+app.UseHangfireDashboard();
 
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
     app.UseSwagger();
     app.UseSwaggerUI();
-    
+
     app.MapScalarApiReference();
 }
 

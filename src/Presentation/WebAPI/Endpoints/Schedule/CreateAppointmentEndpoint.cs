@@ -6,9 +6,9 @@ using WebAPI.Endpoints.Common.Command;
 
 namespace WebAPI.Endpoints.Schedule;
 
-public record CreateAppointmentRequest(string AppointmentNote, string AppointmentDate, string BookedByClient, List<string> ServiceIds, string StartTime, string EndTime);
+public record CreateAppointmentRequest(string AppointmentNote, string AppointmentDate, string BookedByClient, List<string> ServiceIds, List<string> CategoryIds, string StartTime, string EndTime);
 
-public class CreateAppointmentEndpoint : PublicWithRequest<CreateAppointmentRequest>
+public class CreateAppointmentEndpoint : ProtectedSharedWithRequest<CreateAppointmentRequest>
 {
     [HttpPost("schedule/appointment/create")]
     public override async Task<ActionResult> HandleAsync(CreateAppointmentRequest request, ICommandDispatcher commandDispatcher)
@@ -19,6 +19,7 @@ public class CreateAppointmentEndpoint : PublicWithRequest<CreateAppointmentRequ
             request.EndTime,
             request.AppointmentDate,
             request.ServiceIds,
+            request.CategoryIds,
             request.BookedByClient
         );
 

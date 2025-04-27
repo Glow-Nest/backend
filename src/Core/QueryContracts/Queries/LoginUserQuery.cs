@@ -3,7 +3,7 @@ using QueryContracts.Contracts;
 
 namespace QueryContracts.Queries;
 
-public record LoginUserResponse(string Email, string Username, string Token, string Role);
+public record LoginUserResponse(Guid id, string Email, string FirstName, string LastName, string PhoneNumber, string Token, string Role);
 public class LoginUserQuery: IQuery<Result<LoginUserResponse>>
 {
     public string Email { get; private set; }

@@ -16,6 +16,11 @@ public class FakeSalonOwnerRepository : ISalonOwnerRepository
         return Task.FromResult(Result.Success());
     }
 
+    public Task<Result> AddRangeAsync(IEnumerable<SalonOwner> aggregates)
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task<Result> AddAsync(SalonOwner salonOwner)
     {
         _listOfSalonOwners.Add(salonOwner);

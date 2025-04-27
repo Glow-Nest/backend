@@ -15,10 +15,11 @@ public class CreateAppointmentCommandTest
         string endTime = "11:00";
         string date = DateTime.Now.AddDays(1).ToString("yyyy-MM-dd");
         List<string> serviceId = [Guid.NewGuid().ToString()];
+        List<string> categoryId = [Guid.NewGuid().ToString()];
         string clientId = Guid.NewGuid().ToString();
         
         // Act
-        var command = CreateAppointmentCommand.Create(note, startTime, endTime, date, serviceId, clientId);
+        var command = CreateAppointmentCommand.Create(note, startTime, endTime, date, serviceId, categoryId, clientId);
         
         // Assert
         Assert.True(command.IsSuccess);
@@ -35,10 +36,11 @@ public class CreateAppointmentCommandTest
         string endTime = "11:00";
         string date = DateTime.Now.AddDays(1).ToString("yyyy-MM-dd");
         List<string> serviceId = [Guid.NewGuid().ToString()];
+        List<string> categoryId = [Guid.NewGuid().ToString()];
         string clientId = "Invalid guid!";
         
         // Act
-        var command = CreateAppointmentCommand.Create(note, startTime, endTime, date, serviceId, clientId);
+        var command = CreateAppointmentCommand.Create(note, startTime, endTime, date, categoryId, serviceId, clientId);
         
         // Assert
         Assert.False(command.IsSuccess);
@@ -54,10 +56,11 @@ public class CreateAppointmentCommandTest
         string endTime = "11:00";
         string date = DateTime.Now.AddDays(1).ToString("yyyy-MM-dd");
         List<string> serviceId = [Guid.NewGuid().ToString()];
+        List<string> categoryId = [Guid.NewGuid().ToString()];
         string clientId = Guid.NewGuid().ToString();
         
         // Act
-        var command = CreateAppointmentCommand.Create(note, startTime, endTime, date, serviceId, clientId);
+        var command = CreateAppointmentCommand.Create(note, startTime, endTime, date, serviceId, categoryId, clientId);
         
         // Assert
         Assert.False(command.IsSuccess);

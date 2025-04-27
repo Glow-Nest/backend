@@ -2,6 +2,7 @@ using Application.AppEntry;
 using Application.AppEntry.Commands.Schedule;
 using Domain.Aggregates.Appointment.Contracts;
 using Domain.Aggregates.Schedule;
+using Domain.Aggregates.Schedule.Contracts;
 using Domain.Aggregates.Schedule.Entities;
 using Domain.Common.Contracts;
 using Domain.Common.OperationResult;
@@ -14,7 +15,7 @@ public class CreateAppointmentHandler(IServiceChecker serviceChecker, IClientChe
     {
         var dto = ToDto(command);
 
-        var scheduleResult = await GetOrCreateScheduleAsync(command.appointmentDate);
+        var scheduleResult = await scheduleRepository.GetScheduleByDateAsync(command.appointmentDate);
         if (!scheduleResult.IsSuccess)
         {
             return scheduleResult.ToNonGeneric();
@@ -38,30 +39,8 @@ public class CreateAppointmentHandler(IServiceChecker serviceChecker, IClientChe
             command.timeSlot,
             command.appointmentDate,
             command.serviceIds,
+            command.categoryIds,
             command.bookedByClient
         );
-    }
-
-    private async Task<Result<Schedule>> GetOrCreateScheduleAsync(DateOnly date)
-    {
-        var result = await scheduleRepository.GetScheduleByDateAsync(date);
-        if (result.IsSuccess)
-        {
-            return result;
-        }
-
-        if (!result.HasError(ScheduleErrorMessage.ScheduleNotFound(date).ErrorId))
-        {
-            return result;
-        }
-
-        var newScheduleResult = Schedule.CreateSchedule(date);
-        if (!newScheduleResult.IsSuccess)
-        {
-            return newScheduleResult;
-        }
-
-        await scheduleRepository.AddAsync(newScheduleResult.Data);
-        return newScheduleResult;
     }
 }

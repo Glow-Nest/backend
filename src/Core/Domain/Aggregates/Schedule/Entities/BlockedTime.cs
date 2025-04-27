@@ -1,5 +1,5 @@
 using Domain.Aggregates.Schedule.Values;
-using Domain.Aggregates.Schedule.Values.BlockedTime;
+using Domain.Aggregates.Schedule.Values.BlockedTimeValues;
 using Domain.Common.BaseClasses;
 using Domain.Common.Contracts;
 using Domain.Common.OperationResult;
@@ -36,6 +36,13 @@ public class BlockedTime : Entity<BlockedTimeId>
             (scheduleDate == dateOnly && timeSlot.Start < timeOnly))
         {
             return Result<BlockedTime>.Fail(ScheduleErrorMessage.BlockedTimeInPast());
+        }
+        
+        // check if time slot is after/before opening hour
+        if (!ScheduleBusinessHours.IsWithinWorkingHours(timeSlot.Start) ||
+            !ScheduleBusinessHours.IsWithinWorkingHours(timeSlot.End))
+        {
+            return Result<BlockedTime>.Fail(ScheduleErrorMessage.BlockedTimeOutsideWorkingHours());
         }
 
         var id = BlockedTimeId.Create();

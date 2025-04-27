@@ -1,5 +1,5 @@
 using Domain.Aggregates.Schedule.Values;
-using Domain.Aggregates.Schedule.Values.BlockedTime;
+using Domain.Aggregates.Schedule.Values.BlockedTimeValues;
 using Domain.Common;
 using Domain.Common.OperationResult;
 

@@ -1,14 +1,12 @@
-using Domain.Aggregates.Appointment;
 using Domain.Aggregates.Appointment.Contracts;
-using Domain.Aggregates.Appointment.Values;
 using Domain.Aggregates.Client;
 using Domain.Aggregates.Client.Values;
 using Domain.Aggregates.Schedule;
-using Domain.Aggregates.Schedule.Entities;
+using Domain.Aggregates.Schedule.Contracts;
 using Domain.Aggregates.Schedule.Values;
-using Domain.Aggregates.Schedule.Values.BlockedTime;
-using Domain.Aggregates.Service;
-using Domain.Aggregates.Service.Values;
+using Domain.Aggregates.Schedule.Values.BlockedTimeValues;
+using Domain.Aggregates.ServiceCategory;
+using Domain.Aggregates.ServiceCategory.Values;
 using Domain.Common.Contracts;
 using Moq;
 using UnitTest.Features.Helpers;
@@ -24,7 +22,7 @@ public class CreateAppointmentAggregateTest
 
     private void SetupMocksForValidScenario()
     {
-        _serviceCheckerMock.Setup(s => s.DoesServiceExistsAsync(It.IsAny<ServiceId>())).ReturnsAsync(true);
+        _serviceCheckerMock.Setup(s => s.DoesServiceExistsAsync(It.IsAny<CategoryId>(), It.IsAny<ServiceId>())).ReturnsAsync(true);
         _clientCheckerMock.Setup(c => c.DoesClientExistsAsync(It.IsAny<ClientId>())).ReturnsAsync(true);
         _dateTimeProviderMock.Setup(d => d.GetNow()).Returns(DateTime.Now);
         _blockedTimeCheckerMock.Setup(b => b.IsBlockedTimeAsync(It.IsAny<DateOnly>(), It.IsAny<TimeOnly>(), It.IsAny<TimeOnly>())).ReturnsAsync(false);
@@ -53,7 +51,7 @@ public class CreateAppointmentAggregateTest
     {
         // Arrange
         var appointmentDto = HelperMethods.CreateValidAppointmentDto();
-        _serviceCheckerMock.Setup(s => s.DoesServiceExistsAsync(It.IsAny<ServiceId>())).ReturnsAsync(false);
+        _serviceCheckerMock.Setup(s => s.DoesServiceExistsAsync(It.IsAny<CategoryId>(), It.IsAny<ServiceId>())).ReturnsAsync(false);
         
         var schedule = Schedule.CreateSchedule(appointmentDto.BookingDate).Data;
         
@@ -62,7 +60,7 @@ public class CreateAppointmentAggregateTest
         
         // Assert
         Assert.False(result.IsSuccess);
-        Assert.Contains(ServiceErrorMessage.ServiceNotFound(), result.Errors);
+        Assert.Contains(ServiceCategoryErrorMessage.ServiceNotFound(), result.Errors);
         Assert.Empty(schedule.Appointments);
     }
 

@@ -23,4 +23,5 @@ public class ScheduleErrorMessage
     public static Error BlockTimeSlotOverlap() => new("BlockTimeSlot.Overlap", "Blocked time slot overlaps with another existing blocked time slot.");
     public static Error BlockTimeSlotOverlapsExistingAppointment() => new("BlockTimeSlot.OverlapsExistingAppointment", "Blocked time slot overlaps with an existing appointment.");
     public static Error BlockedTimeInPast() => new("BlockedTime.BlockedTimeInPast", "Blocked time slot cannot be in the past.");
+    public static Error BlockedTimeOutsideWorkingHours() => new("BlockedTime.OutsideWorkingHours", "Blocked time slot must be within working hours.");
 }
