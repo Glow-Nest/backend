@@ -40,6 +40,7 @@ public class CategoryRepository: RepositoryBase<Category,CategoryId>, ICategoryR
         var categories = await _context.Set<Category>()
             .Include(c => c.Services) 
             .Include(c => c.MediaUrls)
+            .AsSplitQuery()
             .ToListAsync();
         
         return Result<List<Category>>.Success(categories);
