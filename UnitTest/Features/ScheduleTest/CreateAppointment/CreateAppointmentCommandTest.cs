@@ -1,4 +1,5 @@
 using Application.AppEntry.Commands.Schedule;
+using Domain.Aggregates.Client;
 using Domain.Aggregates.Schedule;
 using Domain.Common;
 
@@ -16,10 +17,10 @@ public class CreateAppointmentCommandTest
         string date = DateTime.Now.AddDays(1).ToString("yyyy-MM-dd");
         List<string> serviceId = [Guid.NewGuid().ToString()];
         List<string> categoryId = [Guid.NewGuid().ToString()];
-        string clientId = Guid.NewGuid().ToString();
+        string email = "test@gmail.com";
         
         // Act
-        var command = CreateAppointmentCommand.Create(note, startTime, endTime, date, serviceId, categoryId, clientId);
+        var command = CreateAppointmentCommand.Create(note, startTime, endTime, date, serviceId, categoryId, email);
         
         // Assert
         Assert.True(command.IsSuccess);
@@ -28,7 +29,7 @@ public class CreateAppointmentCommandTest
     }
     
     [Fact]
-    public void ShouldFail_WhenInvalidClientIdProvided()
+    public void ShouldFail_WhenInvalidEmailProvided()
     {
         // Arrange
         string note = "This is note!";
@@ -37,14 +38,14 @@ public class CreateAppointmentCommandTest
         string date = DateTime.Now.AddDays(1).ToString("yyyy-MM-dd");
         List<string> serviceId = [Guid.NewGuid().ToString()];
         List<string> categoryId = [Guid.NewGuid().ToString()];
-        string clientId = "Invalid guid!";
+        string clientEmail = "invalid-email";
         
         // Act
-        var command = CreateAppointmentCommand.Create(note, startTime, endTime, date, categoryId, serviceId, clientId);
+        var command = CreateAppointmentCommand.Create(note, startTime, endTime, date, categoryId, serviceId, clientEmail);
         
         // Assert
         Assert.False(command.IsSuccess);
-        Assert.Contains(GenericErrorMessage.ErrorParsingGuid(), command.Errors);
+        Assert.Contains(ClientErrorMessage.InvalidEmailFormat(), command.Errors);
     }
     
     [Fact]
