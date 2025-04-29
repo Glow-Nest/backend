@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Services.Authentication;
+// using Services.Cloudinary;
 using Services.Contracts.Appointment;
 using Services.Contracts.Client;
 using Services.Contracts.Common;
@@ -38,6 +39,7 @@ public static class ServicesExtension
     {
         serviceCollection.AddScoped<IEmailSender, EmailSender>();
         serviceCollection.AddScoped<ITokenService, TokenService>();
+        // serviceCollection.AddScoped<ICloudinaryService, CloudinaryService>();
 
         serviceCollection.AddScoped<ScheduleSeederJob>();
     }

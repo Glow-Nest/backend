@@ -17,15 +17,15 @@ public class Category : AggregateRoot
     {
         // For EFC
     }
-    private Category(CategoryId categoryId, CategoryName categoryName, CategoryDescription description, List<MediaUrl> mediaUrls)
+    private Category(CategoryId categoryId, CategoryName categoryName, CategoryDescription description, List<MediaUrl>? mediaUrls)
     {
         CategoryId = categoryId;
         CategoryName = categoryName;
         Description = description;
-        MediaUrls = mediaUrls;
+        MediaUrls = mediaUrls?? new List<MediaUrl>();
     }
     
-    public static async Task<Result<Category>> Create(CategoryName name, CategoryDescription description, List<MediaUrl> mediaUrls)
+    public static async Task<Result<Category>> Create(CategoryName name, CategoryDescription description, List<MediaUrl>? mediaUrls)
     {
         var categoryId = CategoryId.Create();
         var category = new Category(categoryId, name, description, mediaUrls);

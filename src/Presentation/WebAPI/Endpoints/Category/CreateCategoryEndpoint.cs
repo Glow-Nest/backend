@@ -8,7 +8,7 @@ namespace WebAPI.Endpoints.Category;
 public record CreateCategoryRequest(
     string Name,
     string Description,
-    List<string> MediaUrls
+    List<string>? MediaUrls
 );
 
 public class CreateCategoryEndpoint : ProtectedOwnerWithRequest<CreateCategoryRequest>
