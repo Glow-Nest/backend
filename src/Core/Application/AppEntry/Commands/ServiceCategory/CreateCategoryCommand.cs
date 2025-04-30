@@ -9,7 +9,7 @@ public class CreateCategoryCommand (CategoryName name, CategoryDescription descr
     internal CategoryDescription description = description;
     internal List<MediaUrl> mediaUrls = mediaUrls;
 
-    public static Result<CreateCategoryCommand> Create(string namestr, string descriptionstr, List<string> mediaUrls)
+    public static Result<CreateCategoryCommand> Create(string namestr, string descriptionstr, List<string>? mediaUrls)
     {
         var listOfErrors = new List<Error>();
         var nameResult = CategoryName.Create(namestr);
@@ -25,16 +25,21 @@ public class CreateCategoryCommand (CategoryName name, CategoryDescription descr
         }
         
         var mediaUrlsList = new List<MediaUrl>();
-        foreach (var mediaUrl in mediaUrls)
+        if (mediaUrls != null)
         {
-            var mediaUrlResult = MediaUrl.Create(mediaUrl);
-            if (!mediaUrlResult.IsSuccess)
+            foreach (var mediaUrl in mediaUrls)
             {
-                listOfErrors.AddRange(mediaUrlResult.Errors);
-            }
-            else
-            {
-                mediaUrlsList.Add(mediaUrlResult.Data);
+                if (string.IsNullOrWhiteSpace(mediaUrl)) continue;
+                
+                var mediaUrlResult = MediaUrl.Create(mediaUrl);
+                if (!mediaUrlResult.IsSuccess)
+                {
+                    listOfErrors.AddRange(mediaUrlResult.Errors);
+                }
+                else
+                {
+                    mediaUrlsList.Add(mediaUrlResult.Data);
+                }
             }
         }
         

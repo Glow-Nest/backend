@@ -6,10 +6,13 @@ using EfcQueries.Extension;
 using Hangfire;
 using Hangfire.PostgreSql;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Scalar.AspNetCore;
 using Services;
+// using Services.Cloudinary;
 using Services.Email;
 using Services.Jobs;
 
@@ -44,6 +47,22 @@ builder.Services.AddSwaggerGen(options =>
     options.CustomSchemaIds(type => type.FullName);
 });
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("Smtp"));
+// builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("Cloudinary"));
+
+// builder.Services.Configure<IISServerOptions>(options =>
+// {
+//     options.MaxRequestBodySize = 52428800; 
+// });
+//
+// builder.Services.Configure<KestrelServerOptions>(options =>
+// {
+//     options.Limits.MaxRequestBodySize = 52428800; 
+// });
+//
+// builder.Services.Configure<FormOptions>(options =>
+// {
+//     options.MultipartBodyLengthLimit = 52428800;
+// });
 
 builder.Services.RegisterApplications();
 builder.Services.RegisterDmPersistence();
