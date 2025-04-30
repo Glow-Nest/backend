@@ -2,6 +2,8 @@ using Domain.Aggregates.Client;
 using Domain.Aggregates.Schedule.Entities;
 using Domain.Aggregates.Schedule.Values;
 using Domain.Aggregates.Schedule.Values.AppointmentValues;
+using Domain.Aggregates.ServiceCategory.Entities;
+using Domain.Aggregates.ServiceCategory.Values;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -43,6 +45,26 @@ public class AppointmentConfiguration : IEntityTypeConfiguration<Appointment>
             .HasConversion(
                 date => date.ToString("yyyy-MM-dd"),
                 dbValue => DateOnly.Parse(dbValue));
+
+        entityBuilder.OwnsMany<AppointmentServiceReference>(appointment => appointment.Services, builder =>
+        {
+            builder.WithOwner().HasForeignKey("AppointmentId");
+            
+
+            builder.Property(reference => reference.ServiceId)
+                .HasConversion(
+                    id => id.Value,
+                    dbValue => ServiceId.FromGuid(dbValue));
+
+            builder.HasKey("AppointmentId", "ServiceId");
+            
+            builder.HasOne<Service>()
+                .WithMany()
+                .HasForeignKey(reference => reference.ServiceId)
+                .OnDelete(DeleteBehavior.Restrict);
+            
+            builder.ToTable("AppointmentServices");
+        });
 
         entityBuilder.HasOne<Client>().WithMany().HasForeignKey(appointment => appointment.BookedByClient);
     }

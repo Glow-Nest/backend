@@ -17,6 +17,7 @@ public class ScheduleErrorMessage
     public static Error BlockedTimeSelected() => new("Appointment.BlockedTimeSelected", "Appointment time is blocked.");
     public static Error EmptyAppointmentNote() => new("Appointment.EmptyAppointmentNote", "Appointment note cannot be empty.");
     public static Error AppointmentOverlap() => new ("Appointment.Overlap", "Appointment time overlaps with another existing appointment.");
+    public static Error NoAppointmentsFound() => new("Appointment.NoAppointmentsFound", "No appointments found for the selected date.");
     
     // Block Time Slot Error
     public static Error EmptyBlockReason() => new("BlockTimeSlot.EmptyBlockReason", "Blocked time slot reason cannot be empty.");

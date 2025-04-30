@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using DomainModelPersistence.EfcConfigs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -63,7 +62,7 @@ public partial class PostgresContext : DbContext
     public virtual DbSet<Set> Sets { get; set; }
 
     public virtual DbSet<State> States { get; set; }
-
+    
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         var config = new ConfigurationBuilder()
@@ -74,8 +73,7 @@ public partial class PostgresContext : DbContext
         var connectionString = config.GetConnectionString("DefaultConnection");
         optionsBuilder.UseNpgsql(connectionString);
     }
-// #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasPostgresExtension("pg_stat_statements");
@@ -104,8 +102,7 @@ public partial class PostgresContext : DbContext
 
             entity.Property(e => e.Id).ValueGeneratedNever();
 
-            entity.HasOne(d => d.BookedByClientNavigation).WithMany(p => p.Appointments)
-                .HasForeignKey(d => d.BookedByClient);
+            entity.HasOne(d => d.BookedByClientNavigation).WithMany(p => p.Appointments).HasForeignKey(d => d.BookedByClient);
 
             entity.HasOne(d => d.Schedule).WithMany(p => p.Appointments)
                 .HasForeignKey(d => d.ScheduleId)
@@ -113,14 +110,16 @@ public partial class PostgresContext : DbContext
 
             entity.HasMany(d => d.Services).WithMany(p => p.Appointments)
                 .UsingEntity<Dictionary<string, object>>(
-                    "AppointmentServiceReference",
-                    r => r.HasOne<Service>().WithMany().HasForeignKey("ServiceId"),
+                    "AppointmentService",
+                    r => r.HasOne<Service>().WithMany()
+                        .HasForeignKey("ServiceId")
+                        .OnDelete(DeleteBehavior.Restrict),
                     l => l.HasOne<Appointment>().WithMany().HasForeignKey("AppointmentId"),
                     j =>
                     {
                         j.HasKey("AppointmentId", "ServiceId");
-                        j.ToTable("AppointmentServiceReference");
-                        j.HasIndex(new[] { "ServiceId" }, "IX_AppointmentServiceReference_ServiceId");
+                        j.ToTable("AppointmentServices");
+                        j.HasIndex(new[] { "ServiceId" }, "IX_AppointmentServices_ServiceId");
                     });
         });
 
@@ -210,8 +209,7 @@ public partial class PostgresContext : DbContext
 
             entity.HasIndex(e => e.Statename, "ix_hangfire_job_statename");
 
-            entity.HasIndex(e => e.Statename, "ix_hangfire_job_statename_is_not_null")
-                .HasFilter("(statename IS NOT NULL)");
+            entity.HasIndex(e => e.Statename, "ix_hangfire_job_statename_is_not_null").HasFilter("(statename IS NOT NULL)");
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Arguments)
@@ -256,8 +254,7 @@ public partial class PostgresContext : DbContext
 
             entity.ToTable("jobqueue", "hangfire");
 
-            entity.HasIndex(e => new { e.Fetchedat, e.Queue, e.Jobid }, "ix_hangfire_jobqueue_fetchedat_queue_jobid")
-                .HasNullSortOrder(new[] { NullSortOrder.NullsFirst, NullSortOrder.NullsLast, NullSortOrder.NullsLast });
+            entity.HasIndex(e => new { e.Fetchedat, e.Queue, e.Jobid }, "ix_hangfire_jobqueue_fetchedat_queue_jobid").HasNullSortOrder(new[] { NullSortOrder.NullsFirst, NullSortOrder.NullsLast, NullSortOrder.NullsLast });
 
             entity.HasIndex(e => new { e.Jobid, e.Queue }, "ix_hangfire_jobqueue_jobidandqueue");
 
