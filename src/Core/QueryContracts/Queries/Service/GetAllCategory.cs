@@ -8,6 +8,5 @@ public class GetAllCategory
     public record CategoryDto(string CategoryId, string Name, string Description, List<string> MediaUrls);
     public record Query() : IQuery<Result<Answer>>;
     public record Answer(List<CategoryDto> Categories);
-
 }
 

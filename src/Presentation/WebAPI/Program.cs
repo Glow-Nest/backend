@@ -3,11 +3,13 @@ using System.Text;
 using Application.Extensions;
 using DomainModelPersistence;
 using EfcQueries.Extension;
+using EfcQueries.Models;
 using Hangfire;
 using Hangfire.PostgreSql;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Scalar.AspNetCore;
@@ -95,6 +97,9 @@ builder.Configuration.GetConnectionString("CloudSqlConnection");
 builder.Services.AddHangfire(configuration =>
     configuration.UsePostgreSqlStorage(config =>
         config.UseNpgsqlConnection(builder.Configuration.GetConnectionString("DefaultConnection"))));
+
+builder.Services.AddDbContext<PostgresContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddHangfireServer();
 
