@@ -29,4 +29,12 @@
         
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Common\OperationResult\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Tools\OperationResult\OperationResult.csproj" />
+    </ItemGroup>
+
 </Project>
