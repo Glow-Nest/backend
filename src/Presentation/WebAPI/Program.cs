@@ -7,14 +7,11 @@ using EfcQueries.Models;
 using Hangfire;
 using Hangfire.PostgreSql;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Http.Features;
-using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Scalar.AspNetCore;
 using Services;
-// using Services.Cloudinary;
 using Services.Email;
 using Services.Jobs;
 
@@ -49,6 +46,7 @@ builder.Services.AddSwaggerGen(options =>
     options.CustomSchemaIds(type => type.FullName);
 });
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("Smtp"));
+
 // builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("Cloudinary"));
 
 // builder.Services.Configure<IISServerOptions>(options =>
@@ -114,7 +112,6 @@ using (var scope = app.Services.CreateScope())
         job => job.SeedFutureSchedulesAsync(),
         Cron.Daily(0));
 }
-
 
 app.MapControllers();
 app.UseHangfireDashboard();

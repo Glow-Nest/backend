@@ -21,6 +21,7 @@ public class GetAvailableSlotsForDateEndpoint(IQueryDispatcher queryDispatcher) 
             return BadRequest(dispatchResult.Errors);
         }
 
+
         return Ok(dispatchResult.Data);
     }
 }
