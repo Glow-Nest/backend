@@ -5,10 +5,10 @@ using WebAPI.Endpoints.Common.Query;
 
 namespace WebAPI.Endpoints.Schedule;
 
-public class GetAppointmentForDateEndpoint : PublicQueryWithRequestAndResponse<GetAppointmentsForDate.Query, GetAppointmentsForDate.Answer>
+public class GetAppointmentForDateEndpoint(IQueryDispatcher queryDispatcher) : PublicQueryWithRequestAndResponse<GetAppointmentsForDate.Query, GetAppointmentsForDate.Answer>
 {
     [HttpPost("schedule/appointments")]
-    public override async Task<ActionResult<GetAppointmentsForDate.Answer>> HandleAsync([FromQuery] GetAppointmentsForDate.Query request, IQueryDispatcher queryDispatcher)
+    public override async Task<ActionResult<GetAppointmentsForDate.Answer>> HandleAsync([FromQuery] GetAppointmentsForDate.Query request)
     {
         var dispatchResult = await queryDispatcher.DispatchAsync(request);
         if (!dispatchResult.IsSuccess)

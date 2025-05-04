@@ -5,10 +5,10 @@ using WebAPI.Endpoints.Common.Query;
 
 namespace WebAPI.Endpoints.Schedule;
 
-public class GetAvailableSlotsForDateEndpoint : PublicQueryWithRequestAndResponse<GetAvailableSlotsForDate.Query,GetAvailableSlotsForDate.Answer>
+public class GetAvailableSlotsForDateEndpoint(IQueryDispatcher queryDispatcher) : PublicQueryWithRequestAndResponse<GetAvailableSlotsForDate.Query,GetAvailableSlotsForDate.Answer>
 {
     [HttpPost("schedule/availableSlots")]
-    public override async Task<ActionResult<GetAvailableSlotsForDate.Answer>> HandleAsync([FromQuery] GetAvailableSlotsForDate.Query request, IQueryDispatcher queryDispatcher)
+    public override async Task<ActionResult<GetAvailableSlotsForDate.Answer>> HandleAsync([FromQuery] GetAvailableSlotsForDate.Query request)
     {
         var dispatchResult = await queryDispatcher.DispatchAsync(request);
         if (!dispatchResult.IsSuccess)

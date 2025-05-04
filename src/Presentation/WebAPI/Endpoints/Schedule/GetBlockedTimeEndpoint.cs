@@ -6,10 +6,10 @@ using WebAPI.Endpoints.Common.Query;
 namespace WebAPI.Endpoints.Schedule;
 
 
-public class GetBlockedTimeEndpoint : ProtectedQueryWithRequestAndResponse<GetBlockedTime.Query, GetBlockedTime.Answer>
+public class GetBlockedTimeEndpoint(IQueryDispatcher queryDispatcher) : ProtectedQueryWithRequestAndResponse<GetBlockedTime.Query, GetBlockedTime.Answer>
 {
     [HttpPost("schedule/blockTime")]
-    public override async Task<ActionResult<GetBlockedTime.Answer>> HandleAsync(GetBlockedTime.Query request, IQueryDispatcher queryDispatcher)
+    public override async Task<ActionResult<GetBlockedTime.Answer>> HandleAsync(GetBlockedTime.Query request)
     {
         var dispatchResult = await queryDispatcher.DispatchAsync(request);
         if (dispatchResult.IsSuccess)

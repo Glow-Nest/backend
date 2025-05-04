@@ -12,10 +12,10 @@ public record AddServiceRequest(
     string CategoryId
 );
 
-public class AddServiceEndpoint : ProtectedOwnerWithRequest<AddServiceRequest>
+public class AddServiceEndpoint(ICommandDispatcher commandDispatcher) : ProtectedOwnerWithRequest<AddServiceRequest>
 {
     [HttpPost("category/service/add")]
-    public override async Task<ActionResult> HandleAsync(AddServiceRequest request, ICommandDispatcher commandDispatcher)
+    public override async Task<ActionResult> HandleAsync(AddServiceRequest request)
     {
         var commandResult = AddServiceInCategoryCommand.Create(request.Name, request.Price, request.Duration, request.CategoryId);
         if (!commandResult.IsSuccess)

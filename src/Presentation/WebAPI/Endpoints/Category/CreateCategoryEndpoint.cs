@@ -11,10 +11,10 @@ public record CreateCategoryRequest(
     List<string>? MediaUrls
 );
 
-public class CreateCategoryEndpoint : ProtectedOwnerWithRequest<CreateCategoryRequest>
+public class CreateCategoryEndpoint(ICommandDispatcher commandDispatcher) : ProtectedOwnerWithRequest<CreateCategoryRequest>
 {
     [HttpPost("category/create")]
-    public override async Task<ActionResult> HandleAsync(CreateCategoryRequest request, ICommandDispatcher commandDispatcher)
+    public override async Task<ActionResult> HandleAsync(CreateCategoryRequest request)
     {
         var commandResult = CreateCategoryCommand.Create(request.Name, request.Description, request.MediaUrls);
         if (!commandResult.IsSuccess)

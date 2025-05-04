@@ -8,10 +8,10 @@ namespace WebAPI.Endpoints.Otp;
 
 public record CreateOtpRequest(string Email, string Purpose);
 
-public class CreateOtpEndpoint : PublicWithRequest<CreateOtpRequest>
+public class CreateOtpEndpoint(ICommandDispatcher commandDispatcher) : PublicWithRequest<CreateOtpRequest>
 {
     [HttpPost("clients/otp/create")]
-    public override async Task<ActionResult> HandleAsync(CreateOtpRequest request, ICommandDispatcher commandDispatcher)
+    public override async Task<ActionResult> HandleAsync(CreateOtpRequest request)
     {
         var result = CreateOtpCommand.Create(request.Email, request.Purpose);
 
