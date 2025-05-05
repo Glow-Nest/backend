@@ -58,11 +58,13 @@ public class GetAppointmentsByDateQueryHandler(PostgresContext context) : IQuery
         }
         
         var answer = appointments.Select(a => new GetAppointmentsByDate.AppointmentDto(
+            a.Id.ToString(),
             a.AppointmentDate,
             a.StartTime,
             a.EndTime,
             $"{a.BookedByClientNavigation.FirstName} {a.BookedByClientNavigation.LastName}",
-            a.Services.Select(s => s.Name).ToList()
+            a.Services.Select(s => s.Name).ToList(),
+            a.Note
         )).ToList();
         
         return Result<GetAppointmentsByDate.Answer>.Success(new GetAppointmentsByDate.Answer(answer));    }

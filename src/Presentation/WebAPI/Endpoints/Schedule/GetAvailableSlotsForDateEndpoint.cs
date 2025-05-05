@@ -1,3 +1,4 @@
+using Domain.Aggregates.Schedule;
 using Domain.Aggregates.Schedule.Values;
 using Microsoft.AspNetCore.Mvc;
 using QueryContracts.Queries.Schedule;
@@ -6,15 +7,12 @@ using WebAPI.Endpoints.Common.Query;
 
 namespace WebAPI.Endpoints.Schedule;
 
-public record GetAvailableSlotsForDateRequest([FromQuery] string SchedueleDate);
-public record GetAvailableSlotsForDateResponse(Dictionary<string, List<TimeSlot>> TimeSlots);
-
-public class GetAvailableSlotsForDateEndpoint(IQueryDispatcher queryDispatcher) : PublicQueryWithRequestAndResponse<GetAvailableSlotsForDateRequest,GetAvailableSlotsForDateResponse>
+public class GetAvailableSlotsForDateEndpoint(IQueryDispatcher queryDispatcher) : PublicQueryWithRequestAndResponse<GetAvailableSlotsForDateEndpoint.Request,GetAvailableSlotsForDateEndpoint.Response>
 {
     [HttpPost("schedule/availableSlots")]
-    public override async Task<ActionResult<GetAvailableSlotsForDateResponse>> HandleAsync(GetAvailableSlotsForDateRequest request)
+    public override async Task<ActionResult<Response>> HandleAsync([FromQuery] Request request)
     {
-        var query = new GetAvailableSlotsForDate.Query(request.SchedueleDate);
+        var query = new GetAvailableSlotsForDate.Query(request.ScheduleDate);
         var dispatchResult = await queryDispatcher.DispatchAsync(query);
         if (!dispatchResult.IsSuccess)
         {
@@ -24,4 +22,7 @@ public class GetAvailableSlotsForDateEndpoint(IQueryDispatcher queryDispatcher) 
 
         return Ok(dispatchResult.Data);
     }
+    
+    public new record Request([FromQuery] string ScheduleDate);
+    public new record Response(Dictionary<string, List<TimeSlot>> TimeSlots);
 }
