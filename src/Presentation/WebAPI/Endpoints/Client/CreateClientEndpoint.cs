@@ -8,10 +8,10 @@ namespace WebAPI.Endpoints.Client;
 
 public record CreateClientRequest(string FirstName, string LastName, string Email, string Password, string PhoneNumber);
 
-public class CreateClientEndpoint : PublicWithRequest<CreateClientRequest>
+public class CreateClientEndpoint(ICommandDispatcher commandDispatcher) : PublicWithRequest<CreateClientRequest>
 {
     [HttpPost("clients/create")]
-    public override async Task<ActionResult> HandleAsync(CreateClientRequest request, ICommandDispatcher commandDispatcher)
+    public override async Task<ActionResult> HandleAsync(CreateClientRequest request)
     {
         var commandResult = CreateClientCommand.Create(request.FirstName, request.LastName,
             request.Email, request.Password, request.PhoneNumber);

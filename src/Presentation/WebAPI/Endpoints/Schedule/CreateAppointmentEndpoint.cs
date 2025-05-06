@@ -8,10 +8,10 @@ namespace WebAPI.Endpoints.Schedule;
 
 public record CreateAppointmentRequest(string AppointmentNote, string AppointmentDate, string BookedByClient, List<string> ServiceIds, List<string> CategoryIds, string StartTime, string EndTime);
 
-public class CreateAppointmentEndpoint : ProtectedSharedWithRequest<CreateAppointmentRequest>
+public class CreateAppointmentEndpoint(ICommandDispatcher commandDispatcher) : ProtectedSharedWithRequest<CreateAppointmentRequest>
 {
     [HttpPost("schedule/appointment/create")]
-    public override async Task<ActionResult> HandleAsync(CreateAppointmentRequest request, ICommandDispatcher commandDispatcher)
+    public override async Task<ActionResult> HandleAsync(CreateAppointmentRequest request)
     {
         var commandResult = CreateAppointmentCommand.Create(
             request.AppointmentNote,

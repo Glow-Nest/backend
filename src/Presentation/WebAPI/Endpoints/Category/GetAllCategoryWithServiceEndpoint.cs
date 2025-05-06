@@ -5,10 +5,10 @@ using WebAPI.Endpoints.Common.Query;
 
 namespace WebAPI.Endpoints.Category;
 
-public class GetAllCategoryWithServiceEndpoint : PublicQueryWithResponse<GetAllCategoriesWithServices.Answer>
+public class GetAllCategoryWithServiceEndpoint(IQueryDispatcher queryDispatcher) : PublicQueryWithResponse<GetAllCategoriesWithServices.Answer>
 {
     [HttpPost("categories/services/all")]
-    public override async Task<ActionResult<GetAllCategoriesWithServices.Answer>> HandleAsync(IQueryDispatcher queryDispatcher)
+    public override async Task<ActionResult<GetAllCategoriesWithServices.Answer>> HandleAsync()
     {
         var query = new GetAllCategoriesWithServices.Query();
 

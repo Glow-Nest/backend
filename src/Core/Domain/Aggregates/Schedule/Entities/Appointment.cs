@@ -28,6 +28,8 @@ public class Appointment : Entity<AppointmentId>
     internal DateOnly AppointmentDate { get; }
     internal List<AppointmentServiceReference> Services { get; }
     internal ClientId BookedByClient { get; }
+    
+    // public IReadOnlyCollection<AppointmentServiceReference> _services => Services.AsReadOnly();
 
     public Appointment(AppointmentId id) : base(id)
     {

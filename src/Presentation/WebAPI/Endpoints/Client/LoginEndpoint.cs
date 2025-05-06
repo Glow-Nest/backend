@@ -5,10 +5,10 @@ using WebAPI.Endpoints.Common.Query;
 
 namespace WebAPI.Endpoints.Client;
 
-public class LoginEndpoint: PublicQueryWithRequestAndResponse<LoginUserQuery, LoginUserResponse>
+public class LoginEndpoint(IQueryDispatcher queryDispatcher): PublicQueryWithRequestAndResponse<LoginUserQuery, LoginUserResponse>
 {
     [HttpPost("clients/login")]
-    public override Task<ActionResult<LoginUserResponse>> HandleAsync(LoginUserQuery request, IQueryDispatcher queryDispatcher)
+    public override Task<ActionResult<LoginUserResponse>> HandleAsync(LoginUserQuery request)
     {
         var query = new LoginUserQuery(request.Email, request.Password);
         var dispatchResult = queryDispatcher.DispatchAsync(query).Result;

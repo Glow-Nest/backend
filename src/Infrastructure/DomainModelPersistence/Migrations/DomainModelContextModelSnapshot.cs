@@ -217,21 +217,6 @@ namespace DomainModelPersistence.Migrations
                     b.ToTable("Schedule");
                 });
 
-            modelBuilder.Entity("Domain.Aggregates.Schedule.Values.Appointment.AppointmentServiceReference", b =>
-                {
-                    b.Property<Guid>("AppointmentId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("ServiceId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("AppointmentId", "ServiceId");
-
-                    b.HasIndex("ServiceId");
-
-                    b.ToTable("AppointmentServiceReference");
-                });
-
             modelBuilder.Entity("Domain.Aggregates.ServiceCategory.Category", b =>
                 {
                     b.Property<Guid>("CategoryId")
@@ -353,6 +338,32 @@ namespace DomainModelPersistence.Migrations
                         .WithMany("Appointments")
                         .HasForeignKey("ScheduleId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.OwnsMany("Domain.Aggregates.Schedule.Values.AppointmentValues.AppointmentServiceReference", "Services", b1 =>
+                        {
+                            b1.Property<Guid>("AppointmentId")
+                                .HasColumnType("uuid");
+
+                            b1.Property<Guid>("ServiceId")
+                                .HasColumnType("uuid");
+
+                            b1.HasKey("AppointmentId", "ServiceId");
+
+                            b1.HasIndex("ServiceId");
+
+                            b1.ToTable("AppointmentServices", (string)null);
+
+                            b1.WithOwner()
+                                .HasForeignKey("AppointmentId");
+
+                            b1.HasOne("Domain.Aggregates.ServiceCategory.Entities.Service", null)
+                                .WithMany()
+                                .HasForeignKey("ServiceId")
+                                .OnDelete(DeleteBehavior.Restrict)
+                                .IsRequired();
+                        });
+
+                    b.Navigation("Services");
                 });
 
             modelBuilder.Entity("Domain.Aggregates.Schedule.Entities.BlockedTime", b =>
@@ -361,21 +372,6 @@ namespace DomainModelPersistence.Migrations
                         .WithMany("BlockedTimeSlots")
                         .HasForeignKey("ScheduleId")
                         .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Domain.Aggregates.Schedule.Values.Appointment.AppointmentServiceReference", b =>
-                {
-                    b.HasOne("Domain.Aggregates.Schedule.Entities.Appointment", null)
-                        .WithMany("Services")
-                        .HasForeignKey("AppointmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Aggregates.ServiceCategory.Entities.Service", null)
-                        .WithMany()
-                        .HasForeignKey("ServiceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Domain.Aggregates.ServiceCategory.Category", b =>
@@ -410,14 +406,9 @@ namespace DomainModelPersistence.Migrations
             modelBuilder.Entity("Domain.Aggregates.ServiceCategory.Entities.Service", b =>
                 {
                     b.HasOne("Domain.Aggregates.ServiceCategory.Category", null)
-                        .WithMany("_services")
+                        .WithMany("Services")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Domain.Aggregates.Schedule.Entities.Appointment", b =>
-                {
-                    b.Navigation("Services");
                 });
 
             modelBuilder.Entity("Domain.Aggregates.Schedule.Schedule", b =>
@@ -429,7 +420,7 @@ namespace DomainModelPersistence.Migrations
 
             modelBuilder.Entity("Domain.Aggregates.ServiceCategory.Category", b =>
                 {
-                    b.Navigation("_services");
+                    b.Navigation("Services");
                 });
 #pragma warning restore 612, 618
         }

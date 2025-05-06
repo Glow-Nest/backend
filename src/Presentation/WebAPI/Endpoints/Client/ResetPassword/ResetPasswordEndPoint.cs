@@ -8,10 +8,10 @@ namespace WebAPI.Endpoints.ResetPassword;
 
 public record CompletePasswordResetRequest(string Email, string NewPassword, string ConfirmPassword);
 
-public class ResetPasswordEndPoint : PublicWithRequest<CompletePasswordResetRequest>
+public class ResetPasswordEndPoint(ICommandDispatcher commandDispatcher) : PublicWithRequest<CompletePasswordResetRequest>
 {
     [HttpPost("clients/password/reset")]
-    public override async Task<ActionResult> HandleAsync(CompletePasswordResetRequest request, ICommandDispatcher commandDispatcher)
+    public override async Task<ActionResult> HandleAsync(CompletePasswordResetRequest request)
     {
         var result = ResetPasswordCommand.Create(request.Email, request.NewPassword, request.ConfirmPassword);
 
