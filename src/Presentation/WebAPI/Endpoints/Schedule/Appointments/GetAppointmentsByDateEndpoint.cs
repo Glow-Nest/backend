@@ -4,7 +4,7 @@ using QueryContracts.Queries.Schedule;
 using QueryContracts.QueryDispatching;
 using WebAPI.Endpoints.Common.Query;
 
-namespace WebAPI.Endpoints.Schedule;
+namespace WebAPI.Endpoints.Schedule.Appointments;
 
 public class GetAppointmentsByDateEndpoint(IQueryDispatcher queryDispatcher) : ProtectedQueryWithRequestAndResponse<GetAppointmentsByDateEndpoint.Request, GetAppointmentsByDateEndpoint.Response>
 {

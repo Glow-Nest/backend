@@ -1,4 +1,3 @@
-using Domain.Aggregates.Client;
 using Domain.Aggregates.Schedule;
 using Domain.Aggregates.Schedule.Values.AppointmentValues;
 using Domain.Common;
@@ -8,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using QueryContracts.Contracts;
 using QueryContracts.Queries.Schedule;
 
-namespace EfcQueries.Queries;
+namespace EfcQueries.Queries.Schedules;
 
 public enum AppointmentMode
 {
@@ -21,11 +20,6 @@ public class GetAppointmentsByDateQueryHandler(PostgresContext context) : IQuery
 {
     public async Task<Result<GetAppointmentsByDate.Answer>> HandleAsync(GetAppointmentsByDate.Query query)
     {
-        if (!DateOnly.TryParse(query.ScheduleDate, out var scheduleDate))
-        {
-            return Result<GetAppointmentsByDate.Answer>.Fail(GenericErrorMessage.ErrorParsingDate());
-        }
-
         if (!Enum.TryParse<AppointmentMode>(query.AppointmentMode, true, out var mode))
         {
             return Result<GetAppointmentsByDate.Answer>.Fail(ScheduleErrorMessage.InvalidAppointmentMode());

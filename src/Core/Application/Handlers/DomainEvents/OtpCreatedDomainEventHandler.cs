@@ -24,8 +24,6 @@ public class OtpCreatedDomainEventHandler :IDomainEventHandler<OtpCreatedDomainE
             return sendEmailResult;
         }
         
-        Console.WriteLine(domainEvent.OtpCode);
-        
-        return Result.Success();
+            return Result.Success();
     }
 }
