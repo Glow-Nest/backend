@@ -10,7 +10,6 @@ public class ScheduleErrorMessage
     public static Error ScheduleDateInPast() => new("Schedule.ScheduleDateInPast", "Schedule date must be in the future.");
     
     // Appointment Error
-    public static Error AppointmentNotFound() => new("Appointment.AppointmentNotFound", "Appointment not found.");
     public static Error AppointmentDateInPast() => new("Appointment.AppointmentInPast", "Appointment date must be in the future.");
     public static Error AppointmentDateTooFar() => new("Appointment.AppointmentTooFar", "Appointment date must be within 90 days.");
     public static Error OutsideBusinessHours() => new("Appointment.AppointmentOutsideBusinessHours", "Appointment date must be within business hours.");
@@ -20,6 +19,7 @@ public class ScheduleErrorMessage
     public static Error NoAppointmentsFound() => new("Appointment.NoAppointmentsFound", "No appointments found for the selected date.");
     
     public static Error InvalidAppointmentMode() => new ("Appointment.InvalidAppointmentMode", "Invalid appointment mode. Valid values are 'Today', 'Past', or 'Future'.");
+    public static Error InvalidAppointmentTimeFrame() => new ("Appointment.InvalidAppointmentTimeFrame", "Invalid appointment time frame. Valid values are 'Past' or 'Future'.");
     
     // Block Time Slot Error
     public static Error EmptyBlockReason() => new("BlockTimeSlot.EmptyBlockReason", "Blocked time slot reason cannot be empty.");
