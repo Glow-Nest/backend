@@ -1,5 +1,6 @@
 using Domain.Aggregates.Appointment.Contracts;
 using Domain.Aggregates.Schedule.Contracts;
+using Domain.Aggregates.Schedule.DomainEvents;
 using Domain.Aggregates.Schedule.Entities;
 using Domain.Aggregates.Schedule.Values;
 using Domain.Aggregates.Schedule.Values.BlockedTimeValues;
@@ -60,6 +61,16 @@ public class Schedule : AggregateRoot
         }
 
         Appointments.Add(appointmentResult.Data);
+        
+        // Raise domain event for appointment creation
+        var appointmentCreatedDomainEvent = AppointmentCreatedDomainEvent.Create(
+            appointmentDto.BookedByClient,
+            appointmentDto.BookingDate,
+            appointmentDto.TimeSlot
+        );
+        
+        AddDomainEvent(appointmentCreatedDomainEvent);
+        
         return Result<Schedule>.Success(this);
     }
 

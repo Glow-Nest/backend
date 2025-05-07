@@ -9,6 +9,7 @@ using Application.Handlers.DomainEvents;
 using Application.Handlers.ScheduleHandlers;
 using Application.Handlers.ServiceCategoryHandlers;
 using Domain.Aggregates.Client.DomainEvents;
+using Domain.Aggregates.Schedule.DomainEvents;
 using Domain.Common;
 using Microsoft.Extensions.DependencyInjection;
 using QueryContracts.QueryDispatching;
@@ -41,7 +42,9 @@ public static class ApplicationExtensions
         serviceCollection.AddScoped<ICommandHandler<CreateCategoryCommand>, CreateCategoryHandler>();
         serviceCollection.AddScoped<ICommandHandler<AddServiceInCategoryCommand>, AddServiceInCategoryHandler>();
 
+        
         serviceCollection.AddScoped<IDomainEventHandler<OtpCreatedDomainEvent>, OtpCreatedDomainEventHandler>();
+        serviceCollection.AddScoped<IDomainEventHandler<AppointmentCreatedDomainEvent>, AppointmentCreatedDomainEventHandler>();
     }
 
     private static void RegisterDispatcher(this IServiceCollection serviceCollection)

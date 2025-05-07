@@ -20,9 +20,9 @@
 - [x] Clients can **schedule appointments online**.
 - [x] Salon owners can **book appointments on behalf of clients**.
 - [x] Salon owners can **block off specific times** in the schedule.
-- [ ] Clients can **view upcoming and past bookings** in their account.
-- [ ] Salon owners can **view all upcoming appointments**.
-- [ ] Clients receive **email confirmation** for appointment bookings.
+- [x] Clients can **view upcoming and past bookings** in their account.
+- [x] Salon owners can **view all upcoming appointments**.
+- [x] Clients receive **email confirmation** for appointment bookings.
 
 ### Could Have
 - [ ] Salon owners can **specify time slots based on service type**.
