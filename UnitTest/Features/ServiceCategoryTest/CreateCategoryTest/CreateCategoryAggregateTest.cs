@@ -5,7 +5,7 @@ namespace UnitTest.Features.ServiceCategoryTest.CreateCategoryTest;
 
 public class CreateCategoryAggregateTest
 {
-         [Fact]
+    [Fact]
      public async Task ShouldCreate_Category_WithValidInput()
      {
          // Arrange
@@ -24,7 +24,7 @@ public class CreateCategoryAggregateTest
          Assert.True(result.IsSuccess);
      }
      
-          [Fact]
+     [Fact]
      public void ShouldFail_WhenCategoryNameIsEmpty()
      {
          // Arrange

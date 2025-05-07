@@ -34,6 +34,8 @@ public static class ApplicationExtensions
         serviceCollection.AddScoped<ICommandHandler<AddBlockedTimeCommand>, AddBlockedTimeHandler>();
         serviceCollection.AddScoped<ICommandHandler<CreateCategoryCommand>, CreateCategoryHandler>();
         serviceCollection.AddScoped<ICommandHandler<AddServiceInCategoryCommand>, AddServiceInCategoryHandler>();
+        serviceCollection.AddScoped<ICommandHandler<UpdateCategoryCommand>, UpdateCategoryHandler>();
+        serviceCollection.AddScoped<ICommandHandler<UpdateServiceCommand>, UpdateServiceHandler>();
 
         serviceCollection.AddScoped<IDomainEventHandler<OtpCreatedDomainEvent>, OtpCreatedDomainEventHandler>();
     }
