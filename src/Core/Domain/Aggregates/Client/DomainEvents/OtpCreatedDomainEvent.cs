@@ -7,7 +7,7 @@ public class OtpCreatedDomainEvent : IDomainEvent
 {
     public OtpCode OtpCode { get; private set; }
     public Client Client { get; private set; }
-
+    
     public OtpCreatedDomainEvent(OtpCode otpCode, Client client)
     {
         OtpCode = otpCode;

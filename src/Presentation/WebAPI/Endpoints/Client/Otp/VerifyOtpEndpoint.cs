@@ -8,10 +8,10 @@ namespace WebAPI.Endpoints.Otp;
 
 public record VerifyOtpRequest(string Email, string OtpCode);
 
-public class VerifyOtpEndpoint : PublicWithRequest<VerifyOtpRequest>
+public class VerifyOtpEndpoint(ICommandDispatcher commandDispatcher) : PublicWithRequest<VerifyOtpRequest>
 {
     [HttpPost("clients/otp/verify")]
-    public override async Task<ActionResult> HandleAsync(VerifyOtpRequest request, ICommandDispatcher commandDispatcher)
+    public override async Task<ActionResult> HandleAsync(VerifyOtpRequest request)
     {
         Console.WriteLine("Request received");
         

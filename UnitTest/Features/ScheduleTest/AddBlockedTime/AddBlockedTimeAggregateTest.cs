@@ -33,8 +33,7 @@ public class AddBlockedTimeAggregateTest
         var reason = BlockReason.Create("Test reason").Data;
 
         _dateTimeProviderMock.Setup(d => d.GetNow()).Returns(DateTime.Now.AddDays(-1));
-
-
+        
         // Act
         var result = schedule.AddBlockedTime(timeSlot.Data, reason, _dateTimeProviderMock.Object).Result;
 

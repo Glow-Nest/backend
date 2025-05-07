@@ -1,6 +1,7 @@
 using Domain.Aggregates.Client;
 using Domain.Aggregates.Client.Values;
 using Domain.Aggregates.Schedule.Contracts;
+using Domain.Aggregates.Schedule.DomainEvents;
 using Domain.Aggregates.Schedule.Values;
 using Domain.Aggregates.Schedule.Values.AppointmentValues;
 using Domain.Aggregates.ServiceCategory;
@@ -28,6 +29,8 @@ public class Appointment : Entity<AppointmentId>
     internal DateOnly AppointmentDate { get; }
     internal List<AppointmentServiceReference> Services { get; }
     internal ClientId BookedByClient { get; }
+    
+    // public IReadOnlyCollection<AppointmentServiceReference> _services => Services.AsReadOnly();
 
     public Appointment(AppointmentId id) : base(id)
     {
@@ -69,6 +72,7 @@ public class Appointment : Entity<AppointmentId>
 
         var appointment = new Appointment(appointmentId, status, appointmentDto.Note, appointmentDto.TimeSlot,
             appointmentDto.BookingDate, serviceReferences, appointmentDto.BookedByClient);
+        
         return Result<Appointment>.Success(appointment);
     }
 

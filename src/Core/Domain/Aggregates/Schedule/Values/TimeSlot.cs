@@ -22,7 +22,7 @@ public class TimeSlot : ValueObject
         {
             return Result<TimeSlot>.Fail(GenericErrorMessage.TimeMustBeOnHalfHour());
         }
-        
+
         if (end <= start)
         {
             return Result<TimeSlot>.Fail(ScheduleErrorMessage.EndTimeStartError());
@@ -31,7 +31,7 @@ public class TimeSlot : ValueObject
         var timeSlot = new TimeSlot(start, end);
         return Result<TimeSlot>.Success(timeSlot);
     }
-    
+
     private static bool IsValidInterval(TimeOnly time)
     {
         return time.Minute == 0 || time.Minute == 30;

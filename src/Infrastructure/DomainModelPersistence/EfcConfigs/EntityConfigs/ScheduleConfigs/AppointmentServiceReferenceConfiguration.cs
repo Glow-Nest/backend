@@ -1,4 +1,4 @@
-using Domain.Aggregates.Schedule.Entities;
+/*using Domain.Aggregates.Schedule.Entities;
 using Domain.Aggregates.Schedule.Values.AppointmentValues;
 using Domain.Aggregates.ServiceCategory.Entities;
 using Domain.Aggregates.ServiceCategory.Values;
@@ -26,4 +26,4 @@ public class AppointmentServiceReferenceConfiguration : IEntityTypeConfiguration
             .WithMany()
             .HasForeignKey(reference => reference.ServiceId);
     }
-}
+}*/

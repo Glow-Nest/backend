@@ -1,5 +1,6 @@
 using Domain.Aggregates.Appointment.Contracts;
 using Domain.Aggregates.Schedule.Contracts;
+using Domain.Aggregates.Schedule.DomainEvents;
 using Domain.Aggregates.Schedule.Entities;
 using Domain.Aggregates.Schedule.Values;
 using Domain.Aggregates.Schedule.Values.BlockedTimeValues;
@@ -60,6 +61,16 @@ public class Schedule : AggregateRoot
         }
 
         Appointments.Add(appointmentResult.Data);
+        
+        // Raise domain event for appointment creation
+        var appointmentCreatedDomainEvent = AppointmentCreatedDomainEvent.Create(
+            appointmentDto.BookedByClient,
+            appointmentDto.BookingDate,
+            appointmentDto.TimeSlot
+        );
+        
+        AddDomainEvent(appointmentCreatedDomainEvent);
+        
         return Result<Schedule>.Success(this);
     }
 
@@ -87,42 +98,5 @@ public class Schedule : AggregateRoot
 
         BlockedTimeSlots.Add(blockedTimeResult.Data);
         return Result<Schedule>.Success(this);
-    }
-
-    public async Task<Result<Dictionary<string, List<TimeSlot>>>> GetAvailableTimeSlots()
-    {
-        var timePeriods = new Dictionary<string, (TimeOnly Start, TimeOnly End)>
-        {
-            ["Morning"] = (ScheduleBusinessHours.OpeningHour, new TimeOnly(12, 0)),
-            ["Afternoon"] = (new TimeOnly(12, 30), new TimeOnly(17, 0)),
-            ["Evening"] = (new TimeOnly(17, 0), ScheduleBusinessHours.ClosingHour)
-        };
-
-        var timeSlots = new Dictionary<string, List<TimeSlot>>();
-
-        foreach (var (label, (start, end)) in timePeriods)
-        {
-            var time = start;
-            var timeSlotList = new List<TimeSlot>();
-
-            while (time < end)
-            {
-                var timeSlot = TimeSlot.Create(time, time.AddMinutes(30)).Data;
-
-                var isBlocked = BlockedTimeSlots.Any(blockedTime => blockedTime.TimeSlot.Overlaps(timeSlot));
-                var isBooked = Appointments.Any(appointment => appointment.TimeSlot.Overlaps(timeSlot));
-
-                if (!isBlocked && !isBooked)
-                {
-                    timeSlotList.Add(timeSlot);
-                }
-
-                time = time.AddMinutes(30);
-            }
-
-            timeSlots[label] = timeSlotList;
-        }
-
-        return Result<Dictionary<string, List<TimeSlot>>>.Success(timeSlots);
     }
 }

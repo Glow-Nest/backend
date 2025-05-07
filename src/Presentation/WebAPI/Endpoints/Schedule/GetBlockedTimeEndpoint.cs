@@ -5,18 +5,32 @@ using WebAPI.Endpoints.Common.Query;
 
 namespace WebAPI.Endpoints.Schedule;
 
-
-public class GetBlockedTimeEndpoint : ProtectedQueryWithRequestAndResponse<GetBlockedTimeQuery, GetBlockedTimeResponse>
+public class GetBlockedTimeEndpoint(IQueryDispatcher queryDispatcher) : ProtectedQueryWithRequestAndResponse<GetBlockedTimeEndpoint.Request, GetBlockedTimeEndpoint.Response>
 {
     [HttpPost("schedule/blockTime")]
-    public override async Task<ActionResult<GetBlockedTimeResponse>> HandleAsync([FromQuery] GetBlockedTimeQuery request, IQueryDispatcher queryDispatcher)
+    public override async Task<ActionResult<Response>> HandleAsync(Request request)
     {
-        var dispatchResult = await queryDispatcher.DispatchAsync(request);
-        if (dispatchResult.IsSuccess)
+        var query = new GetBlockedTime.Query(request.ScheduleDate);
+        var dispatchResult = await queryDispatcher.DispatchAsync(query);
+        
+        if (!dispatchResult.IsSuccess)
         {
-            Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(dispatchResult.Data));
-            return await Task.FromResult<ActionResult<GetBlockedTimeResponse>>(Ok(dispatchResult.Data));
+            return BadRequest(dispatchResult.Errors);
         }
-        return await Task.FromResult<ActionResult<GetBlockedTimeResponse>>(BadRequest(dispatchResult.Errors));
+        
+        var response = new Response(dispatchResult.Data.BlockedTimes.Select(x => new BlockedTimeDto(
+            x.StartTime,
+            x.EndTime,
+            x.ScheduleDate,
+            x.Reason
+        )).ToList());
+        
+        return Ok(response);
     }
+
+    public new record Request(string ScheduleDate);
+
+    public new record Response(List<BlockedTimeDto> BlockedTimes);
+    public record BlockedTimeDto(string StartTime, string EndTime, string ScheduleDate, string Reason);
+
 }
