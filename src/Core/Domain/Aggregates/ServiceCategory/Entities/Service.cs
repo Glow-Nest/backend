@@ -29,4 +29,30 @@ public class Service
         var service = new Service(serviceId, name,price, duration);
         return Result<Service>.Success(service);
     }
+    
+    public Result UpdateServiceName(ServiceName name)
+    {
+        var nameResult = ServiceName.Create(name.Value);
+        if (!nameResult.IsSuccess)
+            return Result.Fail(nameResult.Errors);
+        
+        Name = nameResult.Data;
+        return Result.Success();
+    }
+    
+    public Result UpdateServicePrice(Price price)
+    {
+        var priceResult = Price.Create(price.Value);
+        if (!priceResult.IsSuccess)
+            return Result.Fail(priceResult.Errors);
+        
+        Price = priceResult.Data;
+        return Result.Success();
+    }
+    
+    public Result UpdateServiceDuration(TimeSpan duration)
+    {
+        Duration = duration;
+        return Result.Success();
+    }
 }

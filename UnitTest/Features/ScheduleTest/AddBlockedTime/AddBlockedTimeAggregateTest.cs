@@ -29,7 +29,7 @@ public class AddBlockedTimeAggregateTest
         // Arrange
         var scheduleDate = DateOnly.FromDateTime(DateTime.Now.AddDays(1));
         var schedule = Schedule.CreateSchedule(scheduleDate).Data;
-        var timeSlot = TimeSlot.Create(new TimeOnly(11,0), new TimeOnly(12,0));
+        var timeSlot = TimeSlot.Create(TimeOnly.Parse("10:00"), TimeOnly.Parse("10:30"));
         var reason = BlockReason.Create("Test reason").Data;
 
         _dateTimeProviderMock.Setup(d => d.GetNow()).Returns(DateTime.Now.AddDays(-1));
