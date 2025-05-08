@@ -1,5 +1,6 @@
 using Application.AppEntry;
 using Application.AppEntry.Commands.Client;
+using Application.AppEntry.Commands.Product;
 using Application.AppEntry.Commands.Schedule;
 using Application.AppEntry.Commands.ServiceCategory;
 using Application.AppEntry.Commands.ServiceCategory.UpdateCategoryCommand;
@@ -8,6 +9,7 @@ using Application.AppEntry.Decorators;
 using Application.AppEntry.Dispatchers;
 using Application.Handlers.ClientHandlers;
 using Application.Handlers.DomainEvents;
+using Application.Handlers.ProductHandlers;
 using Application.Handlers.ScheduleHandlers;
 using Application.Handlers.ServiceCategoryHandlers;
 using Application.Handlers.ServiceCategoryHandlers.UpdateCategoryHandler;
@@ -51,7 +53,9 @@ public static class ApplicationExtensions
         serviceCollection.AddScoped<ICommandHandler<UpdateServiceNameCommand>, UpdateServiceNameHandler>();
         serviceCollection.AddScoped<ICommandHandler<UpdateServiceDurationCommand>, UpdateServiceDurationHandler>();
         serviceCollection.AddScoped<ICommandHandler<UpdateServicePriceCommand>, UpdateServicePriceHandler>();
-
+        
+        // product
+        serviceCollection.AddScoped<ICommandHandler<CreateProductCommand>, CreateProductHandler>();
         
         serviceCollection.AddScoped<IDomainEventHandler<OtpCreatedDomainEvent>, OtpCreatedDomainEventHandler>();
         serviceCollection.AddScoped<IDomainEventHandler<AppointmentCreatedDomainEvent>, AppointmentCreatedDomainEventHandler>();
