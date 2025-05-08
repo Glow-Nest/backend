@@ -8,10 +8,10 @@ namespace WebAPI.Endpoints.ResetPassword;
 
 public record InitiatePasswordResetRequest(string Email);
 
-public class InitiatePasswordResetEndpoint : PublicWithRequest<InitiatePasswordResetRequest>
+public class InitiatePasswordResetEndpoint(ICommandDispatcher commandDispatcher) : PublicWithRequest<InitiatePasswordResetRequest>
 {
     [HttpPost("clients/password/reset/initiate")]
-    public override async Task<ActionResult> HandleAsync(InitiatePasswordResetRequest request, ICommandDispatcher commandDispatcher)
+    public override async Task<ActionResult> HandleAsync(InitiatePasswordResetRequest request)
     {
         var result = InitiateResetPasswordCommand.Create(request.Email);
 

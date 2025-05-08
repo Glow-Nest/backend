@@ -1,17 +1,16 @@
 using Application.AppEntry;
 using Application.AppEntry.Commands.Schedule;
 using Microsoft.AspNetCore.Mvc;
-using WebAPI.Endpoints.Common;
 using WebAPI.Endpoints.Common.Command;
 
-namespace WebAPI.Endpoints.Schedule;
+namespace WebAPI.Endpoints.Schedule.Appointments;
 
 public record CreateAppointmentRequest(string AppointmentNote, string AppointmentDate, string BookedByClient, List<string> ServiceIds, List<string> CategoryIds, string StartTime, string EndTime);
 
-public class CreateAppointmentEndpoint : ProtectedSharedWithRequest<CreateAppointmentRequest>
+public class CreateAppointmentEndpoint(ICommandDispatcher commandDispatcher) : ProtectedSharedWithRequest<CreateAppointmentRequest>
 {
     [HttpPost("schedule/appointment/create")]
-    public override async Task<ActionResult> HandleAsync(CreateAppointmentRequest request, ICommandDispatcher commandDispatcher)
+    public override async Task<ActionResult> HandleAsync(CreateAppointmentRequest request)
     {
         var commandResult = CreateAppointmentCommand.Create(
             request.AppointmentNote,

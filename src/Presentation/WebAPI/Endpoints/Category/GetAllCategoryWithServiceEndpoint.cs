@@ -5,12 +5,14 @@ using WebAPI.Endpoints.Common.Query;
 
 namespace WebAPI.Endpoints.Category;
 
-public class GetAllCategoryWithServiceEndpoint : PublicQueryWithRequestAndResponse<GetAllCategoriesWithServices.Query, GetAllCategoriesWithServices.Answer>
+public class GetAllCategoryWithServiceEndpoint(IQueryDispatcher queryDispatcher) : PublicQueryWithResponse<GetAllCategoriesWithServices.Answer>
 {
-    [HttpPost("category/services/all")]
-    public override async Task<ActionResult<GetAllCategoriesWithServices.Answer>> HandleAsync(GetAllCategoriesWithServices.Query request, IQueryDispatcher queryDispatcher)
+    [HttpPost("categories/services/all")]
+    public override async Task<ActionResult<GetAllCategoriesWithServices.Answer>> HandleAsync()
     {
-        var dispatchResult = await queryDispatcher.DispatchAsync(request);
+        var query = new GetAllCategoriesWithServices.Query();
+
+        var dispatchResult = await queryDispatcher.DispatchAsync(query);
         if (!dispatchResult.IsSuccess)
         {
             return BadRequest(dispatchResult.Errors);

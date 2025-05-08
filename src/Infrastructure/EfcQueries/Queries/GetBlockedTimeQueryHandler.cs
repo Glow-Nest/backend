@@ -7,7 +7,7 @@ using QueryContracts.Queries.Schedule;
 
 namespace EfcQueries.Queries;
 
-public class GetBlockedTimeQueryHandler : IQueryHandler<GetBlockedTimeQuery, Result<GetBlockedTimeResponse>>
+public class GetBlockedTimeQueryHandler : IQueryHandler<GetBlockedTime.Query, Result<GetBlockedTime.Answer>>
 {
     private readonly DomainModelContext _context;
 
@@ -16,7 +16,7 @@ public class GetBlockedTimeQueryHandler : IQueryHandler<GetBlockedTimeQuery, Res
         _context = context; 
     }
 
-    public async Task<Result<GetBlockedTimeResponse>> HandleAsync(GetBlockedTimeQuery query)
+    public async Task<Result<GetBlockedTime.Answer>> HandleAsync(GetBlockedTime.Query query)
     {
         var scheduleDate = DateOnly.Parse(query.ScheduleDate);
 
@@ -25,14 +25,14 @@ public class GetBlockedTimeQueryHandler : IQueryHandler<GetBlockedTimeQuery, Res
             .ToListAsync();
 
         var blockedTimeDtos = blockedTimes
-            .Select(bt => new BlockedTimeDto(
+            .Select(bt => new GetBlockedTime.BlockedTimeDto(
                 bt.TimeSlot.Start.ToString("HH:mm"),
                 bt.TimeSlot.End.ToString("HH:mm"),
                 bt.ScheduledDate.ToString("yyyy-MM-dd"),
                 bt.Reason.Value))
             .ToList();
 
-        return Result<GetBlockedTimeResponse>.Success(
-            new GetBlockedTimeResponse(blockedTimeDtos));
+        return Result<GetBlockedTime.Answer>.Success(
+            new GetBlockedTime.Answer(blockedTimeDtos));
     }
 }

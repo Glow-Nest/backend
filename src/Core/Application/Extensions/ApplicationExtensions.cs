@@ -13,6 +13,7 @@ using Application.Handlers.ServiceCategoryHandlers;
 using Application.Handlers.ServiceCategoryHandlers.UpdateCategoryHandler;
 using Application.Handlers.ServiceCategoryHandlers.UpdateServiceHandler;
 using Domain.Aggregates.Client.DomainEvents;
+using Domain.Aggregates.Schedule.DomainEvents;
 using Domain.Common;
 using Microsoft.Extensions.DependencyInjection;
 using QueryContracts.QueryDispatching;
@@ -29,13 +30,19 @@ public static class ApplicationExtensions
 
     private static void RegisterHandlers(this IServiceCollection serviceCollection)
     {
+        // client
         serviceCollection.AddScoped<ICommandHandler<CreateClientCommand>, CreateClientHandler>();
         serviceCollection.AddScoped<ICommandHandler<CreateOtpCommand>, CreateOtpHandler>();
         serviceCollection.AddScoped<ICommandHandler<VerifyOtpCommand>, VerifyOtpHandler>();
-        serviceCollection.AddScoped<ICommandHandler<CreateAppointmentCommand>, CreateAppointmentHandler>();
         serviceCollection.AddScoped<ICommandHandler<ResetPasswordCommand>, ResetPasswordHandler>();
         serviceCollection.AddScoped<ICommandHandler<InitiateResetPasswordCommand>, InitiateResetPasswordHandler>();
+
+        // schedule
+        serviceCollection.AddScoped<ICommandHandler<CreateAppointmentCommand>, CreateAppointmentHandler>();
         serviceCollection.AddScoped<ICommandHandler<AddBlockedTimeCommand>, AddBlockedTimeHandler>();
+        serviceCollection.AddScoped<ICommandHandler<CreateFutureSchedulesCommand>, CreateFutureSchedulesHandler>();
+
+        // category and service
         serviceCollection.AddScoped<ICommandHandler<CreateCategoryCommand>, CreateCategoryHandler>();
         serviceCollection.AddScoped<ICommandHandler<AddServiceInCategoryCommand>, AddServiceInCategoryHandler>();
         serviceCollection.AddScoped<ICommandHandler<UpdateCategoryNameCommand>, UpdateCategoryNameHandler>();
@@ -45,7 +52,9 @@ public static class ApplicationExtensions
         serviceCollection.AddScoped<ICommandHandler<UpdateServiceDurationCommand>, UpdateServiceDurationHandler>();
         serviceCollection.AddScoped<ICommandHandler<UpdateServicePriceCommand>, UpdateServicePriceHandler>();
 
+        
         serviceCollection.AddScoped<IDomainEventHandler<OtpCreatedDomainEvent>, OtpCreatedDomainEventHandler>();
+        serviceCollection.AddScoped<IDomainEventHandler<AppointmentCreatedDomainEvent>, AppointmentCreatedDomainEventHandler>();
     }
 
     private static void RegisterDispatcher(this IServiceCollection serviceCollection)
