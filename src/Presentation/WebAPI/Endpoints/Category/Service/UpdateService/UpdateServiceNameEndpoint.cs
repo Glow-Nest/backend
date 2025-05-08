@@ -3,20 +3,21 @@ using Application.AppEntry.Commands.ServiceCategory.UpdateServiceCommand;
 using Microsoft.AspNetCore.Mvc;
 using WebAPI.Endpoints.Common.Command;
 
-namespace WebAPI.Endpoints.Service.UpdateService;
+namespace WebAPI.Endpoints.Category.Service.UpdateService;
 
-public record UpdateServiceDurationRequest(
+
+public record UpdateServiceNameRequest(
     string CategoryId,
     string Id,
-    string Duration
+    string Name
 );
 
-public class UpdateServiceDurationEndpoint(ICommandDispatcher commandDispatcher) : ProtectedOwnerWithRequest<UpdateServiceDurationRequest>
+public class UpdateServiceNameEndpoint(ICommandDispatcher commandDispatcher) : ProtectedOwnerWithRequest<UpdateServiceNameRequest>
 {
-    [HttpPost("service/update/duration")]
-    public override async Task<ActionResult> HandleAsync(UpdateServiceDurationRequest request)
+    [HttpPost("service/update/name")]
+    public override async Task<ActionResult> HandleAsync(UpdateServiceNameRequest request)
     {
-        var commandResult = UpdateServiceDurationCommand.Create(request.CategoryId, request.Id, TimeSpan.Parse(request.Duration));
+        var commandResult = UpdateServiceNameCommand.Create(request.CategoryId, request.Id, request.Name);
         if (!commandResult.IsSuccess)
         {
             return await Task.FromResult<ActionResult>(BadRequest(commandResult.Errors));
