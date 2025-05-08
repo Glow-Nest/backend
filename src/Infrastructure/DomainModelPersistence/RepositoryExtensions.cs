@@ -1,4 +1,5 @@
 using Domain.Aggregates.Client;
+using Domain.Aggregates.Product;
 using Domain.Aggregates.SalonOwner;
 using Domain.Aggregates.Schedule;
 using Domain.Aggregates.ServiceCategory;
@@ -26,6 +27,7 @@ public static class RepositoryExtensions
         serviceCollection.AddScoped<ISalonOwnerRepository, SalonOwnerRepository>();
         serviceCollection.AddScoped<IScheduleRepository, ScheduleRepository>();
         serviceCollection.AddScoped<ICategoryRepository, CategoryRepository>();
+        serviceCollection.AddScoped<IProductRepository, ProductRepository>();
     }
     
     private static void RegisterUnitOfWork(this IServiceCollection serviceCollection)
