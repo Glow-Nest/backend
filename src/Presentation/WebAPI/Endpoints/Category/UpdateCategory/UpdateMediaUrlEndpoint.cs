@@ -11,9 +11,10 @@ public record UpdateMediaUrlRequest(
     List<string> MediaUrls
 );
 
-public class UpdateMediaUrlEndpoint : ProtectedOwnerWithRequest<UpdateMediaUrlRequest>
+public class UpdateMediaUrlEndpoint(ICommandDispatcher commandDispatcher) : ProtectedOwnerWithRequest<UpdateMediaUrlRequest>
 {
-    public override async Task<ActionResult> HandleAsync(UpdateMediaUrlRequest request, ICommandDispatcher commandDispatcher)
+    [HttpPost("category/update/media-url")]
+    public override async Task<ActionResult> HandleAsync(UpdateMediaUrlRequest request)
     {
         var commandResult = UpdateMediaUrlCommand.Create(request.Id, request.MediaUrls);
         if (!commandResult.IsSuccess)

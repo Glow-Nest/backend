@@ -1,5 +1,6 @@
 ﻿using Application.AppEntry;
 using Application.AppEntry.Commands.ServiceCategory;
+using Application.AppEntry.Commands.ServiceCategory.UpdateServiceCommand;
 using Domain.Aggregates.ServiceCategory;
 using Domain.Common.OperationResult;
 

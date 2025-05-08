@@ -11,10 +11,10 @@ public record UpdateCategoryDescriptionRequest(
     string Description
 );
     
-public class UpdateCategoryDescriptionEndpoint : ProtectedOwnerWithRequest<UpdateCategoryDescriptionRequest>
+public class UpdateCategoryDescriptionEndpoint(ICommandDispatcher commandDispatcher) : ProtectedOwnerWithRequest<UpdateCategoryDescriptionRequest>
 {
     [HttpPost("category/update/description")]
-    public override async Task<ActionResult> HandleAsync(UpdateCategoryDescriptionRequest request, ICommandDispatcher commandDispatcher)
+    public override async Task<ActionResult> HandleAsync(UpdateCategoryDescriptionRequest request)
     {
         var commandResult = UpdateCategoryDescriptionCommand.Create(request.Id, request.Description);
         if (!commandResult.IsSuccess)

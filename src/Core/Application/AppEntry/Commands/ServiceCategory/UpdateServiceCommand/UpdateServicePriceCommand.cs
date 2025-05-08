@@ -1,8 +1,7 @@
-﻿using Application.AppEntry.Commands.ServiceCategory.UpdateServiceCommand;
-using Domain.Aggregates.ServiceCategory.Values;
+﻿using Domain.Aggregates.ServiceCategory.Values;
 using Domain.Common.OperationResult;
 
-namespace Application.AppEntry.Commands.ServiceCategory;
+namespace Application.AppEntry.Commands.ServiceCategory.UpdateServiceCommand;
 
 public class UpdateServicePriceCommand : UpdateServiceCommandBase
 {

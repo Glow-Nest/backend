@@ -12,10 +12,10 @@ public record UpdateServiceNameRequest(
     string Name
 );
 
-public class UpdateServiceNameEndpoint : ProtectedOwnerWithRequest<UpdateServiceNameRequest>
+public class UpdateServiceNameEndpoint(ICommandDispatcher commandDispatcher) : ProtectedOwnerWithRequest<UpdateServiceNameRequest>
 {
     [HttpPost("service/update/name")]
-    public override async Task<ActionResult> HandleAsync(UpdateServiceNameRequest request, ICommandDispatcher commandDispatcher)
+    public override async Task<ActionResult> HandleAsync(UpdateServiceNameRequest request)
     {
         var commandResult = UpdateServiceNameCommand.Create(request.CategoryId, request.Id, request.Name);
         if (!commandResult.IsSuccess)

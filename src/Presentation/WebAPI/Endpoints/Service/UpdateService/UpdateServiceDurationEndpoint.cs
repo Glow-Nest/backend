@@ -11,10 +11,10 @@ public record UpdateServiceDurationRequest(
     string Duration
 );
 
-public class UpdateServiceDurationEndpoint : ProtectedOwnerWithRequest<UpdateServiceDurationRequest>
+public class UpdateServiceDurationEndpoint(ICommandDispatcher commandDispatcher) : ProtectedOwnerWithRequest<UpdateServiceDurationRequest>
 {
     [HttpPost("service/update/duration")]
-    public override async Task<ActionResult> HandleAsync(UpdateServiceDurationRequest request, ICommandDispatcher commandDispatcher)
+    public override async Task<ActionResult> HandleAsync(UpdateServiceDurationRequest request)
     {
         var commandResult = UpdateServiceDurationCommand.Create(request.CategoryId, request.Id, TimeSpan.Parse(request.Duration));
         if (!commandResult.IsSuccess)

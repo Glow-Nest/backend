@@ -1,5 +1,6 @@
 ﻿using Application.AppEntry;
 using Application.AppEntry.Commands.ServiceCategory;
+using Application.AppEntry.Commands.ServiceCategory.UpdateServiceCommand;
 using Microsoft.AspNetCore.Mvc;
 using WebAPI.Endpoints.Common.Command;
 
@@ -11,10 +12,10 @@ public record UpdateServicePriceRequest(
     double Price
 );
 
-public class UpdateServicePriceEndpoint : ProtectedOwnerWithRequest<UpdateServicePriceRequest>
+public class UpdateServicePriceEndpoint(ICommandDispatcher commandDispatcher) : ProtectedOwnerWithRequest<UpdateServicePriceRequest>
 {
     [HttpPost("service/update/price")]
-    public override async Task<ActionResult> HandleAsync(UpdateServicePriceRequest request, ICommandDispatcher commandDispatcher)
+    public override async Task<ActionResult> HandleAsync(UpdateServicePriceRequest request)
     {
         var commandResult = UpdateServicePriceCommand.Create(request.CategoryId, request.Id, request.Price);
         if (!commandResult.IsSuccess)
