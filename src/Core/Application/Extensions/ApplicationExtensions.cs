@@ -2,12 +2,16 @@ using Application.AppEntry;
 using Application.AppEntry.Commands.Client;
 using Application.AppEntry.Commands.Schedule;
 using Application.AppEntry.Commands.ServiceCategory;
+using Application.AppEntry.Commands.ServiceCategory.UpdateCategoryCommand;
+using Application.AppEntry.Commands.ServiceCategory.UpdateServiceCommand;
 using Application.AppEntry.Decorators;
 using Application.AppEntry.Dispatchers;
 using Application.Handlers.ClientHandlers;
 using Application.Handlers.DomainEvents;
 using Application.Handlers.ScheduleHandlers;
 using Application.Handlers.ServiceCategoryHandlers;
+using Application.Handlers.ServiceCategoryHandlers.UpdateCategoryHandler;
+using Application.Handlers.ServiceCategoryHandlers.UpdateServiceHandler;
 using Domain.Aggregates.Client.DomainEvents;
 using Domain.Common;
 using Microsoft.Extensions.DependencyInjection;
@@ -34,8 +38,12 @@ public static class ApplicationExtensions
         serviceCollection.AddScoped<ICommandHandler<AddBlockedTimeCommand>, AddBlockedTimeHandler>();
         serviceCollection.AddScoped<ICommandHandler<CreateCategoryCommand>, CreateCategoryHandler>();
         serviceCollection.AddScoped<ICommandHandler<AddServiceInCategoryCommand>, AddServiceInCategoryHandler>();
-        serviceCollection.AddScoped<ICommandHandler<UpdateCategoryCommand>, UpdateCategoryHandler>();
-        serviceCollection.AddScoped<ICommandHandler<UpdateServiceCommand>, UpdateServiceHandler>();
+        serviceCollection.AddScoped<ICommandHandler<UpdateCategoryNameCommand>, UpdateCategoryNameHandler>();
+        serviceCollection.AddScoped<ICommandHandler<UpdateCategoryDescriptionCommand>, UpdateCategoryDescriptionHandler>();
+        serviceCollection.AddScoped<ICommandHandler<UpdateMediaUrlCommand>, UpdateMediaUrlHandler>();
+        serviceCollection.AddScoped<ICommandHandler<UpdateServiceNameCommand>, UpdateServiceNameHandler>();
+        serviceCollection.AddScoped<ICommandHandler<UpdateServiceDurationCommand>, UpdateServiceDurationHandler>();
+        serviceCollection.AddScoped<ICommandHandler<UpdateServicePriceCommand>, UpdateServicePriceHandler>();
 
         serviceCollection.AddScoped<IDomainEventHandler<OtpCreatedDomainEvent>, OtpCreatedDomainEventHandler>();
     }

@@ -1,12 +1,12 @@
 ﻿using Domain.Aggregates.ServiceCategory.Entities;
 using Domain.Aggregates.ServiceCategory.Values;
 
-namespace UnitTest.Features.ServiceCategoryTest.UpdateServiceTest;
+namespace UnitTest.Features.ServiceCategoryTest.UpdateServiceDurationTest;
 
-public class UpdateServiceAggregateTest
+public class UpdateServiceDurationAggregateTest
 {
     [Fact]
-    public async Task ShouldUpdate_Service_WithValidInput()
+    public async Task ShouldUpdate_ServiceDuration_WithValidInput()
     {
         // Arrange
         var serviceName = ServiceName.Create("service1").Data;
@@ -15,13 +15,11 @@ public class UpdateServiceAggregateTest
         
         var result = await Service.Create(serviceName, servicePrice, serviceDuration);
         var service = result.Data;
-        
-        var updateServiceName = ServiceName.Create("service2").Data;
-        var updateServicePrice = Price.Create(200).Data;
-        var updateServiceDuration = TimeSpan.FromHours(2);
+
+        var updateServiceDuration = TimeSpan.FromHours(5);
         
         // Act
-        var updateResult = service.UpdateService(updateServiceName, updateServicePrice, updateServiceDuration);
+        var updateResult = service.UpdateServiceDuration(updateServiceDuration);
         
         // Assert
         Assert.True(updateResult.IsSuccess);

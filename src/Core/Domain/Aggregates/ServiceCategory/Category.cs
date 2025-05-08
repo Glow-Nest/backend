@@ -46,54 +46,68 @@ public class Category : AggregateRoot
         
         return Result<Service>.Success(service);
     }
-    
-    //Update Category
-    public Result UpdateCategory(CategoryName name, CategoryDescription description, List<MediaUrl> mediaUrls)
+
+    public Result UpdateCategoryName(CategoryName name)
     {
         var nameResult = CategoryName.Create(name.Value);
         if (!nameResult.IsSuccess)
             return Result.Fail(nameResult.Errors);
-
-        var descriptionResult = CategoryDescription.Create(description.Value);
-        if (!descriptionResult.IsSuccess)
-            return Result.Fail(descriptionResult.Errors);
-
-        var newMediaUrls = new List<MediaUrl>();
-        foreach (var url in mediaUrls)
-        {
-            var mediaUrlResult = MediaUrl.Create(url.Value);
-            if (!mediaUrlResult.IsSuccess)
-                return Result.Fail(mediaUrlResult.Errors);
-
-            newMediaUrls.Add(mediaUrlResult.Data);
-        }
-
         CategoryName = nameResult.Data;
-        Description = descriptionResult.Data;
-        MediaUrls = newMediaUrls; 
-
         return Result.Success();
     }
     
-    //UpdateService
-    public Result UpdateService(ServiceId serviceId, ServiceName name, Price price, TimeSpan duration)
+    public Result UpdateCategoryDescription(CategoryDescription description)
     {
-        var service = Services.FirstOrDefault(s => s.ServiceId.Equals(serviceId));
-        if (service == null)
+        var descriptionResult = CategoryDescription.Create(description.Value);
+        if (!descriptionResult.IsSuccess)
+            return Result.Fail(descriptionResult.Errors);
+        Description = descriptionResult.Data;
+        return Result.Success();
+    }
+    
+    public Result UpdateCategoryMediaUrls(List<MediaUrl> mediaUrls)
+    {
+        var mediaUrlsList = new List<MediaUrl>();
+        foreach (var mediaUrl in mediaUrls)
         {
-            return Result.Fail(ServiceCategoryErrorMessage.ServiceNotFound());
+            if (string.IsNullOrWhiteSpace(mediaUrl.Value)) continue;
+
+            var mediaUrlResult = MediaUrl.Create(mediaUrl.Value);
+            if (!mediaUrlResult.IsSuccess)
+            {
+                return Result.Fail(mediaUrlResult.Errors);
+            }
+            mediaUrlsList.Add(mediaUrlResult.Data);
         }
 
-        var nameResult = ServiceName.Create(name.Value);
-        if (!nameResult.IsSuccess)
-            return Result.Fail(nameResult.Errors);
-
-        var priceResult = Price.Create(price.Value);
-        if (!priceResult.IsSuccess)
-            return Result.Fail(priceResult.Errors);
-
-        service.UpdateService(nameResult.Data, priceResult.Data, duration);
-
+        MediaUrls = mediaUrlsList;
         return Result.Success();
+    }
+    
+    public Result UpdateServiceName(ServiceId serviceId, ServiceName name)
+    {
+        var service = Services.FirstOrDefault(x => x.ServiceId.Equals(serviceId));
+        if (service == null)
+            return Result.Fail(ServiceCategoryErrorMessage.ServiceNotFound());
+        
+        return service.UpdateServiceName(name);
+    }
+    
+    public Result UpdateServicePrice(ServiceId serviceId, Price price)
+    {
+        var service = Services.FirstOrDefault(x => x.ServiceId.Equals(serviceId));
+        if (service == null)
+            return Result.Fail(ServiceCategoryErrorMessage.ServiceNotFound());
+        
+        return service.UpdateServicePrice(price);
+    }
+    
+    public Result UpdateServiceDuration(ServiceId serviceId, TimeSpan duration)
+    {
+        var service = Services.FirstOrDefault(x => x.ServiceId.Equals(serviceId));
+        if (service == null)
+            return Result.Fail(ServiceCategoryErrorMessage.ServiceNotFound());
+        
+        return service.UpdateServiceDuration(duration);
     }
 }

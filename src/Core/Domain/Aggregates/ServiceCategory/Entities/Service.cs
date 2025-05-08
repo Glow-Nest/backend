@@ -30,20 +30,29 @@ public class Service
         return Result<Service>.Success(service);
     }
     
-    public Result UpdateService(ServiceName namestr, Price pricestr, TimeSpan durationstr)
+    public Result UpdateServiceName(ServiceName name)
     {
-        var nameResult = ServiceName.Create(namestr.Value);
+        var nameResult = ServiceName.Create(name.Value);
         if (!nameResult.IsSuccess)
             return Result.Fail(nameResult.Errors);
-
-        var priceResult = Price.Create(pricestr.Value);
+        
+        Name = nameResult.Data;
+        return Result.Success();
+    }
+    
+    public Result UpdateServicePrice(Price price)
+    {
+        var priceResult = Price.Create(price.Value);
         if (!priceResult.IsSuccess)
             return Result.Fail(priceResult.Errors);
-
-        Name = nameResult.Data;
+        
         Price = priceResult.Data;
-        Duration = durationstr;
-
+        return Result.Success();
+    }
+    
+    public Result UpdateServiceDuration(TimeSpan duration)
+    {
+        Duration = duration;
         return Result.Success();
     }
 }
