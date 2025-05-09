@@ -9,7 +9,7 @@ public record UpdatePasswordRequest(string Id, string NewPassword, string Confir
 
 public class UpdatePasswordEndpoint(ICommandDispatcher commandDispatcher): PublicWithRequest<UpdatePasswordRequest>
 {
-    [HttpPost("client/update/password")]
+    [HttpPost("clients/update/password")]
     public override async Task<ActionResult> HandleAsync(UpdatePasswordRequest request)
     {
         var commandResult = UpdatePasswordCommand.Create(request.Id, request.NewPassword, request.ConfirmPassword);

@@ -10,7 +10,7 @@ public record UpdatePhoneNumberRequest(string Id, string PhoneNumber);
 
 public class UpdatePhoneNumberEndpoint(ICommandDispatcher commandDispatcher) : PublicWithRequest<UpdatePhoneNumberRequest>
 {
-    [HttpPost("client/update/phoneNumber")]
+    [HttpPost("clients/update/phoneNumber")]
     public override async Task<ActionResult> HandleAsync(UpdatePhoneNumberRequest request)
     {
         var commandResult = UpdatePhoneNumberCommand.Create(request.Id, request.PhoneNumber);

@@ -10,7 +10,7 @@ public record UpdateFullNameRequest(string Id, string FirstName, string LastName
 
 public class UpdateFullNameEndpoint(ICommandDispatcher commandDispatcher) : PublicWithRequest<UpdateFullNameRequest>
 {
-    [HttpPost("client/update/fullname")]
+    [HttpPost("clients/update/fullname")]
     public override async Task<ActionResult> HandleAsync(UpdateFullNameRequest request)
     {
         var commandResult = UpdateFullNameCommand.Create(request.Id, request.FirstName, request.LastName);
