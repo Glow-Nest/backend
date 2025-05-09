@@ -21,7 +21,13 @@ public class DeleteServiceHandler : ICommandHandler<DeleteServiceCommand>
         {
             return categoryResult.ToNonGeneric();
         }
+        var category = categoryResult.Data;
+        var service = category.Services.FirstOrDefault(x => x.ServiceId == command.ServiceId);
         
+        if (service == null)
+        {
+            return Result.Fail(ServiceCategoryErrorMessage.ServiceNotFound());
+        }
         await _categoryRepository.DeleteServiceAsync(command.CategoryId, command.ServiceId);
         return Result.Success();
     }
