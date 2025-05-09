@@ -2,6 +2,7 @@
 using Domain.Aggregates.ServiceCategory.Values;
 using Domain.Common.OperationResult;
 using EfcQueries.Queries;
+using EfcQueries.Queries.Category;
 using Moq;
 using QueryContracts.Queries.Service;
 
