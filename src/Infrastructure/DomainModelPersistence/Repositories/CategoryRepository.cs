@@ -63,10 +63,17 @@ public class CategoryRepository: RepositoryBase<Category,CategoryId>, ICategoryR
         return Result<bool>.Success(serviceExists);
     }
 
-    public Task<Result> DeleteAsync(Category category)
+    public async Task<Result> DeleteAsync(CategoryId category)
     {
-        _context.Set<Category>().Remove(category);
-        return Task.FromResult(Result.Success());
+        var categoryToDelete = await _context.Set<Category>()
+            .FirstOrDefaultAsync(c => c.CategoryId == category);
+        if (categoryToDelete is null)
+        {
+            return  Result.Fail(ServiceCategoryErrorMessage.CategoryNotFound());
+        }
+
+        _context.Set<Category>().Remove(categoryToDelete);
+        return Result.Success();
     }
 
     public async Task<Result> DeleteServiceAsync(CategoryId categoryId, ServiceId serviceId)

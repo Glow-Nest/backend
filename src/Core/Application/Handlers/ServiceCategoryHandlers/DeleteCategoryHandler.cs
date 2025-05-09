@@ -18,7 +18,12 @@ public class DeleteCategoryHandler : ICommandHandler<DeleteCategoryCommand>
     {
         var category = await _categoryRepository.GetAsync(command.CategoryId);
         
-        var deleteResult = await _categoryRepository.DeleteAsync(category.Data);
+        if (!category.IsSuccess)
+        {
+            return category.ToNonGeneric();
+        }
+        
+        var deleteResult = await _categoryRepository.DeleteAsync(command.CategoryId);
         if (!deleteResult.IsSuccess)
         {
             return deleteResult;

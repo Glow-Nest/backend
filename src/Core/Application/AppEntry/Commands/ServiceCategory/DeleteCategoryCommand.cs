@@ -1,4 +1,6 @@
-﻿using Domain.Aggregates.ServiceCategory.Values;
+﻿using Application.AppEntry.Commands.Schedule;
+using Domain.Aggregates.ServiceCategory.Values;
+using Domain.Common;
 using Domain.Common.OperationResult;
 
 namespace Application.AppEntry.Commands.ServiceCategory;
@@ -14,8 +16,11 @@ public class DeleteCategoryCommand
     
     public static Result<DeleteCategoryCommand> Create(string categoryId)
     {
-        var categoryIdResult = CategoryId.FromGuid(Guid.Parse(categoryId));
+        if (!Guid.TryParse(categoryId, out Guid id))
+        {
+            return Result<DeleteCategoryCommand>.Fail(GenericErrorMessage.ErrorParsingGuid());
+        }
         
-        return Result<DeleteCategoryCommand>.Success(new DeleteCategoryCommand(categoryIdResult));
+        return Result<DeleteCategoryCommand>.Success(new DeleteCategoryCommand(CategoryId.FromGuid(id)));
     }
 }

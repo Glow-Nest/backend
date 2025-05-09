@@ -16,7 +16,11 @@ public class DeleteServiceHandler : ICommandHandler<DeleteServiceCommand>
     
     public async Task<Result> HandleAsync(DeleteServiceCommand command)
     {
-        await _categoryRepository.GetAsync(command.CategoryId);
+        var categoryResult= await _categoryRepository.GetAsync(command.CategoryId);
+        if (!categoryResult.IsSuccess)
+        {
+            return categoryResult.ToNonGeneric();
+        }
         
         await _categoryRepository.DeleteServiceAsync(command.CategoryId, command.ServiceId);
         return Result.Success();
