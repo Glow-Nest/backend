@@ -118,4 +118,31 @@ public class Client : AggregateRoot
         
         return Result.Success();
     }
+    
+    public Result UpdateFullName(FullName fullName)
+    {
+        var fullNameResult = FullName.Create(fullName.FirstName, fullName.LastName);
+        if (!fullNameResult.IsSuccess)
+            return Result.Fail(fullNameResult.Errors);
+        FullName = fullNameResult.Data;
+        return Result.Success();
+    }
+    
+    public Result UpdatePassword(Password password)
+    {
+        var passwordResult = Password.Create(password.Value);
+        if (!passwordResult.IsSuccess)
+            return Result.Fail(passwordResult.Errors);
+        Password = passwordResult.Data;
+        return Result.Success();
+    }
+    
+    public Result UpdatePhoneNumber(PhoneNumber phoneNumber)
+    {
+        var phoneNumberResult = PhoneNumber.Create(phoneNumber.Value);
+        if (!phoneNumberResult.IsSuccess)
+            return Result.Fail(phoneNumberResult.Errors);
+        PhoneNumber = phoneNumberResult.Data;
+        return Result.Success();
+    }
 }
