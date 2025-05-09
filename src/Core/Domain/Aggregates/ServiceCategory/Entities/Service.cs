@@ -32,21 +32,13 @@ public class Service
     
     public Result UpdateServiceName(ServiceName name)
     {
-        var nameResult = ServiceName.Create(name.Value);
-        if (!nameResult.IsSuccess)
-            return Result.Fail(nameResult.Errors);
-        
-        Name = nameResult.Data;
+        Name = name;
         return Result.Success();
     }
     
     public Result UpdateServicePrice(Price price)
     {
-        var priceResult = Price.Create(price.Value);
-        if (!priceResult.IsSuccess)
-            return Result.Fail(priceResult.Errors);
-        
-        Price = priceResult.Data;
+        Price = price;
         return Result.Success();
     }
     

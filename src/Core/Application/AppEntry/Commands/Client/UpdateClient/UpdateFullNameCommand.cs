@@ -6,7 +6,7 @@ namespace Application.AppEntry.Commands.Client.UpdateClient;
 public class UpdateFullNameCommand : UpdateClientCommandBase
 {
     internal FullName FullName { get; }
-    protected UpdateFullNameCommand(ClientId clientId, FullName fullName) : base(clientId)
+    public UpdateFullNameCommand(ClientId clientId, FullName fullName) : base(clientId)
     {
         FullName = fullName;
     }

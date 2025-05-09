@@ -24,7 +24,7 @@ public class UpdatePasswordHandler : ICommandHandler<UpdatePasswordCommand>
         }
 
         var client = findClientResult.Data;
-        var updateResult = client.UpdatePassword(command.Password);
+        var updateResult = client.UpdatePassword(command.NewPassword);
         
         if (!updateResult.IsSuccess)
         {

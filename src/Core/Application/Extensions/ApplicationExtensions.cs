@@ -1,5 +1,6 @@
 using Application.AppEntry;
 using Application.AppEntry.Commands.Client;
+using Application.AppEntry.Commands.Client.UpdateClient;
 using Application.AppEntry.Commands.Product;
 using Application.AppEntry.Commands.Schedule;
 using Application.AppEntry.Commands.ServiceCategory;
@@ -8,6 +9,7 @@ using Application.AppEntry.Commands.ServiceCategory.UpdateServiceCommand;
 using Application.AppEntry.Decorators;
 using Application.AppEntry.Dispatchers;
 using Application.Handlers.ClientHandlers;
+using Application.Handlers.ClientHandlers.UpdateClientHandler;
 using Application.Handlers.DomainEvents;
 using Application.Handlers.ProductHandlers;
 using Application.Handlers.ScheduleHandlers;
@@ -38,6 +40,9 @@ public static class ApplicationExtensions
         serviceCollection.AddScoped<ICommandHandler<VerifyOtpCommand>, VerifyOtpHandler>();
         serviceCollection.AddScoped<ICommandHandler<ResetPasswordCommand>, ResetPasswordHandler>();
         serviceCollection.AddScoped<ICommandHandler<InitiateResetPasswordCommand>, InitiateResetPasswordHandler>();
+        serviceCollection.AddScoped<ICommandHandler<UpdateFullNameCommand>, UpdateFullNameHandler>();
+        serviceCollection.AddScoped<ICommandHandler<UpdatePhoneNumberCommand>, UpdatePhoneNumberHandler>();
+        serviceCollection.AddScoped<ICommandHandler<UpdatePasswordCommand>, UpdatePasswordHandler>();
 
         // schedule
         serviceCollection.AddScoped<ICommandHandler<CreateAppointmentCommand>, CreateAppointmentHandler>();
