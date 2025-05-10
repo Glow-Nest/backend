@@ -34,6 +34,7 @@ public static class EfcQueriesExtension
         
         // product
         services.AddScoped<IQueryHandler<GetAllProductsQuery.Query, Result<GetAllProductsQuery.Answer>>, GetAllProductsQueryHandler>();
+        services.AddScoped<IQueryHandler<GetProductByIdQuery.Query, Result<GetProductByIdQuery.Answer>>, GetProductByIdQueryHandler>();
     }
 
     public static void RegisterDatabase(this IServiceCollection serviceCollection, IConfiguration configuration)

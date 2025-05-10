@@ -9,4 +9,5 @@ public class ProductErrorMessage
     public static Error EmptyDescription() => new Error("Product.EmptyDescription", "Product description cannot be empty.");
     public static Error EmptyImageUrl() => new Error("Product.EmptyImageUrl", "Product image URL cannot be empty.");
     public static Error InvalidInventoryCount() => new Error("Product.InvalidInventoryCount", "Product inventory count cannot be negative.");
+    public static Error ProductNotFound() => new Error("Product.NotFound", "Product not found.");
 }
