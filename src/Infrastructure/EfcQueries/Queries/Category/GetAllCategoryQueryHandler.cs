@@ -1,11 +1,9 @@
 ﻿using Domain.Aggregates.ServiceCategory;
 using Domain.Common.OperationResult;
-using DomainModelPersistence.EfcConfigs;
-using Microsoft.EntityFrameworkCore;
 using QueryContracts.Contracts;
 using QueryContracts.Queries.Service;
 
-namespace EfcQueries.Queries;
+namespace EfcQueries.Queries.Category;
 
 public class GetAllCategoryQueryHandler(ICategoryRepository categoryRepository) : IQueryHandler<GetAllCategory.Query,Result<GetAllCategory.Answer>>
 {

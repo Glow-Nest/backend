@@ -47,6 +47,8 @@ public partial class PostgresContext : DbContext
 
     public virtual DbSet<OtpSession> OtpSessions { get; set; }
 
+    public virtual DbSet<Product> Products { get; set; }
+
     public virtual DbSet<SalonOwner> SalonOwners { get; set; }
 
     public virtual DbSet<SalonOwner2> SalonOwner2s { get; set; }
@@ -62,7 +64,7 @@ public partial class PostgresContext : DbContext
     public virtual DbSet<Set> Sets { get; set; }
 
     public virtual DbSet<State> States { get; set; }
-    
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         var config = new ConfigurationBuilder()
@@ -317,6 +319,13 @@ public partial class PostgresContext : DbContext
             entity.HasIndex(e => e.ClientId, "IX_OtpSessions_ClientId").IsUnique();
 
             entity.HasOne(d => d.Client).WithOne(p => p.OtpSession).HasForeignKey<OtpSession>(d => d.ClientId);
+        });
+
+        modelBuilder.Entity<Product>(entity =>
+        {
+            entity.ToTable("Product");
+
+            entity.Property(e => e.ProductId).ValueGeneratedNever();
         });
 
         modelBuilder.Entity<SalonOwner>(entity =>

@@ -1,12 +1,15 @@
 ﻿using Domain.Common.OperationResult;
 using DomainModelPersistence.EfcConfigs;
 using EfcQueries.Queries;
+using EfcQueries.Queries.Category;
+using EfcQueries.Queries.Product;
 using EfcQueries.Queries.Schedules;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using QueryContracts.Contracts;
 using QueryContracts.Queries;
+using QueryContracts.Queries.Product;
 using QueryContracts.Queries.Schedule;
 using QueryContracts.Queries.Service;
 
@@ -25,10 +28,13 @@ public static class EfcQueriesExtension
         services.AddScoped<IQueryHandler<GetAppointmentsByDate.Query, Result<GetAppointmentsByDate.Answer>>, GetAppointmentsByDateQueryHandler>();
         services.AddScoped<IQueryHandler<GetClientsAppointment.Query, Result<GetClientsAppointment.Answer>>, GetClientAppointmentsQueryHandler>();
         
-        
         // category and service
         services.AddScoped<IQueryHandler<GetAllCategory.Query, Result<GetAllCategory.Answer>>, GetAllCategoryQueryHandler>();
         services.AddScoped<IQueryHandler<GetAllCategoriesWithServices.Query, Result<GetAllCategoriesWithServices.Answer>>, GetAllCategoryWithServiceQueryHandler>();
+        
+        // product
+        services.AddScoped<IQueryHandler<GetAllProductsQuery.Query, Result<GetAllProductsQuery.Answer>>, GetAllProductsQueryHandler>();
+        services.AddScoped<IQueryHandler<GetProductByIdQuery.Query, Result<GetProductByIdQuery.Answer>>, GetProductByIdQueryHandler>();
     }
 
     public static void RegisterDatabase(this IServiceCollection serviceCollection, IConfiguration configuration)
