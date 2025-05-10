@@ -49,38 +49,19 @@ public class Category : AggregateRoot
 
     public Result UpdateCategoryName(CategoryName name)
     {
-        var nameResult = CategoryName.Create(name.Value);
-        if (!nameResult.IsSuccess)
-            return Result.Fail(nameResult.Errors);
-        CategoryName = nameResult.Data;
+        CategoryName = name;
         return Result.Success();
     }
     
     public Result UpdateCategoryDescription(CategoryDescription description)
     {
-        var descriptionResult = CategoryDescription.Create(description.Value);
-        if (!descriptionResult.IsSuccess)
-            return Result.Fail(descriptionResult.Errors);
-        Description = descriptionResult.Data;
+        Description = description;
         return Result.Success();
     }
     
     public Result UpdateCategoryMediaUrls(List<MediaUrl> mediaUrls)
     {
-        var mediaUrlsList = new List<MediaUrl>();
-        foreach (var mediaUrl in mediaUrls)
-        {
-            if (string.IsNullOrWhiteSpace(mediaUrl.Value)) continue;
-
-            var mediaUrlResult = MediaUrl.Create(mediaUrl.Value);
-            if (!mediaUrlResult.IsSuccess)
-            {
-                return Result.Fail(mediaUrlResult.Errors);
-            }
-            mediaUrlsList.Add(mediaUrlResult.Data);
-        }
-
-        MediaUrls = mediaUrlsList;
+        MediaUrls = mediaUrls;
         return Result.Success();
     }
     

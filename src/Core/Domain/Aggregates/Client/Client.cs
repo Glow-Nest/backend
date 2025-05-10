@@ -118,4 +118,22 @@ public class Client : AggregateRoot
         
         return Result.Success();
     }
+    
+    public Result UpdateFullName(FullName fullName)
+    {
+        FullName = fullName;
+        return Result.Success();
+    }
+    
+    public Result UpdatePassword(Password password)
+    {
+        Password = password;
+        return Result.Success();
+    }
+    
+    public Result UpdatePhoneNumber(PhoneNumber phoneNumber)
+    {
+        PhoneNumber = phoneNumber;
+        return Result.Success();
+    }
 }
