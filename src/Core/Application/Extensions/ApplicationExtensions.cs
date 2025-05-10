@@ -53,6 +53,8 @@ public static class ApplicationExtensions
         serviceCollection.AddScoped<ICommandHandler<UpdateServiceNameCommand>, UpdateServiceNameHandler>();
         serviceCollection.AddScoped<ICommandHandler<UpdateServiceDurationCommand>, UpdateServiceDurationHandler>();
         serviceCollection.AddScoped<ICommandHandler<UpdateServicePriceCommand>, UpdateServicePriceHandler>();
+        serviceCollection.AddScoped<ICommandHandler<DeleteCategoryCommand>, DeleteCategoryHandler>();
+        serviceCollection.AddScoped<ICommandHandler<DeleteServiceCommand>, DeleteServiceHandler>();
         
         // product
         serviceCollection.AddScoped<ICommandHandler<CreateProductCommand>, CreateProductHandler>();
