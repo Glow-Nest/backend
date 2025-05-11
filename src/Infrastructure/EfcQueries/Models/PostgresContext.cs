@@ -67,13 +67,17 @@ public partial class PostgresContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        var config = new ConfigurationBuilder()
-            .SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "../../Presentation/WebAPI"))
-            .AddJsonFile("appsettings.json", optional: false)
-            .Build();
+        if (!optionsBuilder.IsConfigured)
+        {
+            var config = new ConfigurationBuilder()
+                .SetBasePath(AppContext.BaseDirectory)
+                .AddJsonFile("appsettings.json", optional: true)
+                .AddEnvironmentVariables()
+                .Build();
 
-        var connectionString = config.GetConnectionString("DefaultConnection");
-        optionsBuilder.UseNpgsql(connectionString);
+            var connectionString = config.GetConnectionString("DefaultConnection");
+            optionsBuilder.UseNpgsql(connectionString);
+        }
     }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
