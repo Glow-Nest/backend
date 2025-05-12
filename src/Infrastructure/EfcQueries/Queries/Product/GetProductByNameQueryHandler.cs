@@ -17,7 +17,9 @@ public class GetProductByNameQueryHandler(PostgresContext context) : IQueryHandl
             .Where(p => EF.Functions.ILike(p.Name, $"%{query.ProductName}%"))
             .Select(p => new GetProductByNameQuery.Answer(
                 p.ProductId.ToString(),
-                p.Name))
+                p.Name,
+                p.Price,
+                p.ImageUrl))
             .ToListAsync();
 
         if (!products.Any())

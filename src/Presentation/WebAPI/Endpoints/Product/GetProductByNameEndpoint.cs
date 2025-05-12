@@ -7,7 +7,7 @@ namespace WebAPI.Endpoints.Product;
 
 public class GetProductByNameEndpoint(IQueryDispatcher queryDispatcher) : PublicQueryWithRequestAndResponse<GetProductByNameEndpoint.Request, GetProductByNameEndpoint.Response>
 {
-    public record ProductResponseDto(string ProductId, string Name);
+    public record ProductResponseDto(string ProductId, string Name, double Price,  string ImageUrl);
     public new record Request(string ProductName);
     public new record Response(List<ProductResponseDto> Products);
     
@@ -22,7 +22,7 @@ public class GetProductByNameEndpoint(IQueryDispatcher queryDispatcher) : Public
             return BadRequest(result.Errors);
         }
         var products = result.Data
-            .Select(p => new ProductResponseDto(p.ProductId, p.ProductName))
+            .Select(p => new ProductResponseDto(p.ProductId, p.ProductName, p.Price, p.ImageUrl))
             .ToList();
         var response = new Response(products);
         return Ok(response);
