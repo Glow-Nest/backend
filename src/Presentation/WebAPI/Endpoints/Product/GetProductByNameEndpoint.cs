@@ -7,23 +7,25 @@ namespace WebAPI.Endpoints.Product;
 
 public class GetProductByNameEndpoint(IQueryDispatcher queryDispatcher) : PublicQueryWithRequestAndResponse<GetProductByNameEndpoint.Request, GetProductByNameEndpoint.Response>
 {
+    public record ProductResponseDto(string ProductId, string Name);
     public new record Request(string ProductName);
-    public new record Response(string ProductId, string Name);
+    public new record Response(List<ProductResponseDto> Products);
     
     [HttpPost("products/name/{productName}")]
     public override async Task<ActionResult<Response>> HandleAsync([FromRoute] Request request)
     {
-        var queryResult = new GetProductByNameQuery.Query(request.ProductName);
+        var query = new GetProductByNameQuery.Query(request.ProductName);
+        var result = await queryDispatcher.DispatchAsync(query);
 
-        var dispatchResult = await queryDispatcher.DispatchAsync(queryResult);
-        if (!dispatchResult.IsSuccess)
+        if (!result.IsSuccess)
         {
-            return BadRequest(dispatchResult.Errors);
+            return BadRequest(result.Errors);
         }
-
-        var product = dispatchResult.Data;
-        var response = new Response(product.ProductId, product.ProductName);
-        
+        var products = result.Data
+            .Select(p => new ProductResponseDto(p.ProductId, p.ProductName))
+            .ToList();
+        var response = new Response(products);
         return Ok(response);
     }
+
 }

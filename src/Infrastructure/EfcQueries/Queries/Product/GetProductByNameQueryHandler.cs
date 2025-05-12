@@ -7,24 +7,24 @@ using QueryContracts.Queries.Product;
 
 namespace EfcQueries.Queries.Product;
 
-public class GetProductByNameQueryHandler(PostgresContext context) : IQueryHandler<GetProductByNameQuery.Query,Result<GetProductByNameQuery.Answer>>
+public class GetProductByNameQueryHandler(PostgresContext context) : IQueryHandler<GetProductByNameQuery.Query, Result<List<GetProductByNameQuery.Answer>>>
 {
     private readonly PostgresContext _context = context;
     
-    public async Task<Result<GetProductByNameQuery.Answer>> HandleAsync(GetProductByNameQuery.Query query)
+    public async Task<Result<List<GetProductByNameQuery.Answer>>> HandleAsync(GetProductByNameQuery.Query query)
     {
-        var product = await _context.Products
-            .Where(product => product.Name.Contains(query.ProductName))
-            .Select(product => new GetProductByNameQuery.Answer(
-                product.ProductId.ToString(),
-                product.Name))
-            .FirstOrDefaultAsync();
+        var products = await _context.Products
+            .Where(p => EF.Functions.ILike(p.Name, $"%{query.ProductName}%"))
+            .Select(p => new GetProductByNameQuery.Answer(
+                p.ProductId.ToString(),
+                p.Name))
+            .ToListAsync();
 
-        if (product == null)
+        if (!products.Any())
         {
-            return Result<GetProductByNameQuery.Answer>.Fail(ProductErrorMessage.ProductNotFound());
+            return Result<List<GetProductByNameQuery.Answer>>.Fail(ProductErrorMessage.ProductNotFound());
         }
-        
-        return Result<GetProductByNameQuery.Answer>.Success(product);
+
+        return Result<List<GetProductByNameQuery.Answer>>.Success(products);
     }
 }
