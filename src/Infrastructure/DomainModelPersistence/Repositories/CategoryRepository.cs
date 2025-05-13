@@ -2,10 +2,10 @@
 using Domain.Aggregates.ServiceCategory;
 using Domain.Aggregates.ServiceCategory.Entities;
 using Domain.Aggregates.ServiceCategory.Values;
-using Domain.Common.OperationResult;
 using DomainModelPersistence.EfcConfigs;
 using DomainModelPersistence.Repositories.Common;
 using Microsoft.EntityFrameworkCore;
+using OperationResult;
 
 namespace DomainModelPersistence.Repositories;
 

@@ -1,5 +1,5 @@
 using System.Windows.Input;
-using Domain.Common.OperationResult;
+using OperationResult;
 
 namespace Application.AppEntry;
 

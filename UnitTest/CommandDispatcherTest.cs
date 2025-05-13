@@ -4,9 +4,9 @@ using Application.AppEntry.Dispatchers;
 using Domain.Aggregates.Client;
 using Domain.Aggregates.Client.Contracts;
 using Domain.Common;
-using Domain.Common.OperationResult;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
+using OperationResult;
 
 namespace UnitTest;
 

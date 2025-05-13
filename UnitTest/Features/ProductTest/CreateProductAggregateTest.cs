@@ -1,5 +1,6 @@
 ﻿using Domain.Aggregates.Product;
 using Domain.Aggregates.Product.Values;
+using Domain.Common.Values;
 
 namespace UnitTest.Features.ProductTest;
 

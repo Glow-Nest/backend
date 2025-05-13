@@ -2,7 +2,7 @@
 using Application.AppEntry.Commands.ServiceCategory;
 using Application.AppEntry.Commands.ServiceCategory.UpdateServiceCommand;
 using Domain.Aggregates.ServiceCategory;
-using Domain.Common.OperationResult;
+using OperationResult;
 
 namespace Application.Handlers.ServiceCategoryHandlers.UpdateServiceHandler;
 

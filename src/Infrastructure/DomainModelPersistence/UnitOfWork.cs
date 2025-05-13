@@ -1,7 +1,7 @@
 using Domain.Common;
 using Domain.Common.BaseClasses;
-using Domain.Common.OperationResult;
 using DomainModelPersistence.EfcConfigs;
+using OperationResult;
 
 namespace DomainModelPersistence;
 

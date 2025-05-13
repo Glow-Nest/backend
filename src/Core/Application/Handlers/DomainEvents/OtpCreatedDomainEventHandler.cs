@@ -2,7 +2,7 @@ using Application.AppEntry;
 using Application.Common;
 using Application.Interfaces;
 using Domain.Aggregates.Client.DomainEvents;
-using Domain.Common.OperationResult;
+using OperationResult;
 
 namespace Application.Handlers.DomainEvents;
 

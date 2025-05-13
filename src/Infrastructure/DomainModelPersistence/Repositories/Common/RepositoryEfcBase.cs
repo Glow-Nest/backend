@@ -1,8 +1,8 @@
 using Domain.Common;
 using Domain.Common.BaseClasses;
-using Domain.Common.OperationResult;
 using Domain.Common.Repositories;
 using Microsoft.EntityFrameworkCore;
+using OperationResult;
 
 namespace DomainModelPersistence.Repositories.Common;
 

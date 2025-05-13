@@ -1,5 +1,5 @@
 using Domain.Common;
-using Domain.Common.OperationResult;
+using OperationResult;
 
 namespace Application.AppEntry.Decorators;
 

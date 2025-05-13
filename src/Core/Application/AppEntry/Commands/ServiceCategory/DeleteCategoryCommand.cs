@@ -1,7 +1,7 @@
 ﻿using Application.AppEntry.Commands.Schedule;
 using Domain.Aggregates.ServiceCategory.Values;
 using Domain.Common;
-using Domain.Common.OperationResult;
+using OperationResult;
 
 namespace Application.AppEntry.Commands.ServiceCategory;
 

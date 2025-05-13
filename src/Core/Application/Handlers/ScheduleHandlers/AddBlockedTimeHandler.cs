@@ -2,7 +2,7 @@ using Application.AppEntry;
 using Application.AppEntry.Commands.Schedule;
 using Domain.Aggregates.Schedule;
 using Domain.Common.Contracts;
-using Domain.Common.OperationResult;
+using OperationResult;
 
 namespace Application.Handlers.ScheduleHandlers;
 

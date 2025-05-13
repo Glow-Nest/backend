@@ -1,5 +1,5 @@
 using Domain.Aggregates.ServiceCategory.Values;
-using Domain.Common.OperationResult;
+using OperationResult;
 
 namespace Domain.Aggregates.ServiceCategory.Entities;
 

@@ -1,11 +1,11 @@
 using Application.Common;
 using Application.Interfaces;
 using Domain.Aggregates.Client;
-using Domain.Common.OperationResult;
 using MailKit.Net.Smtp;
 using MailKit.Security;
 using Microsoft.Extensions.Options;
 using MimeKit;
+using OperationResult;
 
 namespace Services.Email;
 

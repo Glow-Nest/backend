@@ -1,4 +1,4 @@
-﻿using Domain.Common.OperationResult;
+﻿using OperationResult;
 
 namespace Domain.Common;
 
@@ -10,6 +10,7 @@ public class GenericErrorMessage
     public static Error ErrorInSaving()=> new Error("Error in saving changes", "An error occurred while saving changes to the database.");
     
     public static Error ErrorParsingTime() => new Error("Error in parsing time", "An error occurred while parsing the time.");
+    public static Error ErrorParsingPrice() => new Error("Error in parsing price", "An error occurred while parsing the price.");
     public static Error ErrorParsingDate() => new Error("Error in parsing date", "An error occurred while parsing the date.");
     public static Error ErrorParsingGuid() => new Error("Error in parsing guid", "An error occurred while parsing the guid.");
     

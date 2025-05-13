@@ -1,9 +1,9 @@
 ﻿using Domain.Aggregates.Client;
 using Domain.Aggregates.SalonOwner;
-using Domain.Common.OperationResult;
 using DomainModelPersistence.EfcConfigs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using OperationResult;
 using QueryContracts.Contracts;
 using QueryContracts.Queries;
 using Services.Authentication;

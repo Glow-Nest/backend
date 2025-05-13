@@ -1,7 +1,7 @@
 ﻿using Domain.Aggregates.Client.Values;
 using Domain.Aggregates.SalonOwner.Values;
 using Domain.Common.BaseClasses;
-using Domain.Common.OperationResult;
+using OperationResult;
 
 namespace Domain.Aggregates.SalonOwner;
 

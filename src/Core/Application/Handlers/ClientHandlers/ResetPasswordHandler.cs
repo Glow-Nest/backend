@@ -3,7 +3,7 @@ using Application.AppEntry.Commands.Client;
 using Domain.Aggregates.Client;
 using Domain.Aggregates.Client.Contracts;
 using Domain.Common.Contracts;
-using Domain.Common.OperationResult;
+using OperationResult;
 
 namespace Application.Handlers.ClientHandlers;
 

@@ -7,7 +7,7 @@ using Domain.Aggregates.Schedule;
 using Domain.Aggregates.Schedule.Contracts;
 using Domain.Aggregates.Schedule.Entities;
 using Domain.Common.Contracts;
-using Domain.Common.OperationResult;
+using OperationResult;
 
 namespace Application.Handlers.ScheduleHandlers;
 

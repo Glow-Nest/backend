@@ -1,6 +1,6 @@
 using Domain.Aggregates.Client.Values;
-using Domain.Common.OperationResult;
 using Domain.Common.Repositories;
+using OperationResult;
 
 namespace Domain.Aggregates.Client;
 

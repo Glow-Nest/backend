@@ -1,7 +1,7 @@
 using Domain.Aggregates.Client.Contracts;
 using Domain.Aggregates.Client.Values;
 using Domain.Common.Contracts;
-using Domain.Common.OperationResult;
+using OperationResult;
 
 namespace Domain.Aggregates.Client.Entities;
 

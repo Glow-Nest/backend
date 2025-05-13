@@ -2,9 +2,9 @@
 using System.Security.Claims;
 using System.Text;
 using Domain.Common;
-using Domain.Common.OperationResult;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using OperationResult;
 
 namespace Services.Authentication;
 

@@ -1,7 +1,7 @@
 ﻿using Application.AppEntry;
 using Application.AppEntry.Commands.Product;
 using Domain.Aggregates.Product;
-using Domain.Common.OperationResult;
+using OperationResult;
 
 namespace Application.Handlers.ProductHandlers;
 

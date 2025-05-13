@@ -1,4 +1,4 @@
-﻿namespace Domain.Common.OperationResult;
+﻿namespace OperationResult;
 
 public class Result<T>
 {

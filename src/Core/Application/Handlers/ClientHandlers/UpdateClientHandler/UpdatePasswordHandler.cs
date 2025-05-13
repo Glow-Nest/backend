@@ -1,7 +1,7 @@
 ﻿using Application.AppEntry;
 using Application.AppEntry.Commands.Client.UpdateClient;
 using Domain.Aggregates.Client;
-using Domain.Common.OperationResult;
+using OperationResult;
 
 namespace Application.Handlers.ClientHandlers.UpdateClientHandler;
 

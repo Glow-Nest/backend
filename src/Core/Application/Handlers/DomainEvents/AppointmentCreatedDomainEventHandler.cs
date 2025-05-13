@@ -3,7 +3,7 @@ using Application.Common;
 using Application.Interfaces;
 using Domain.Aggregates.Client;
 using Domain.Aggregates.Schedule.DomainEvents;
-using Domain.Common.OperationResult;
+using OperationResult;
 
 namespace Application.Handlers.DomainEvents;
 

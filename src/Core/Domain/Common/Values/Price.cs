@@ -1,7 +1,8 @@
-﻿using Domain.Common.BaseClasses;
-using Domain.Common.OperationResult;
+﻿using Domain.Aggregates.Product;
+using Domain.Common.BaseClasses;
+using OperationResult;
 
-namespace Domain.Aggregates.Product.Values;
+namespace Domain.Common.Values;
 
 public class Price : ValueObject
 {
@@ -16,7 +17,7 @@ public class Price : ValueObject
     {
         if (price <= 0)
         {
-            return Result<Price>.Fail(ProductErrorMessage.InvalidProductPrice());
+            return Result<Price>.Fail(ProductErrorMessage.InvalidPrice());
         }
         
         return Result<Price>.Success(new Price(price));

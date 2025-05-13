@@ -1,5 +1,4 @@
-﻿using Domain.Common.OperationResult;
-using DomainModelPersistence.EfcConfigs;
+﻿using DomainModelPersistence.EfcConfigs;
 using EfcQueries.Queries;
 using EfcQueries.Queries.Category;
 using EfcQueries.Queries.Product;
@@ -7,6 +6,7 @@ using EfcQueries.Queries.Schedules;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using OperationResult;
 using QueryContracts.Contracts;
 using QueryContracts.Queries;
 using QueryContracts.Queries.Product;

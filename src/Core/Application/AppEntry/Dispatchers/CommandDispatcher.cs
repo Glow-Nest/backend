@@ -1,5 +1,5 @@
-using Domain.Common.OperationResult;
 using Microsoft.Extensions.DependencyInjection;
+using OperationResult;
 
 namespace Application.AppEntry.Dispatchers;
 

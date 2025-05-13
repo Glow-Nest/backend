@@ -1,7 +1,7 @@
 ﻿using Application.AppEntry;
 using Application.AppEntry.Commands.ServiceCategory;
 using Domain.Aggregates.ServiceCategory;
-using Domain.Common.OperationResult;
+using OperationResult;
 
 namespace Application.Handlers.ServiceCategoryHandlers;
 

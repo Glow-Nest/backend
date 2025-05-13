@@ -1,9 +1,9 @@
 using Domain.Aggregates.Schedule;
 using Domain.Aggregates.Schedule.Values;
-using Domain.Common.OperationResult;
 using DomainModelPersistence.EfcConfigs;
 using DomainModelPersistence.Repositories.Common;
 using Microsoft.EntityFrameworkCore;
+using OperationResult;
 
 namespace DomainModelPersistence.Repositories;
 

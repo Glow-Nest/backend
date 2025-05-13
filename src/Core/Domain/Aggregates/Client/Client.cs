@@ -5,7 +5,7 @@ using Domain.Aggregates.Client.Values;
 using Domain.Common;
 using Domain.Common.BaseClasses;
 using Domain.Common.Contracts;
-using Domain.Common.OperationResult;
+using OperationResult;
 
 namespace Domain.Aggregates.Client;
 

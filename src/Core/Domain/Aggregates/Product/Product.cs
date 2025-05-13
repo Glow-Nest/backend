@@ -1,6 +1,7 @@
 ﻿using Domain.Aggregates.Product.Values;
 using Domain.Common.BaseClasses;
-using Domain.Common.OperationResult;
+using Domain.Common.Values;
+using OperationResult;
 
 namespace Domain.Aggregates.Product;
 

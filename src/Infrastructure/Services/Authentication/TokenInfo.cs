@@ -1,6 +1,6 @@
 ﻿using Domain.Aggregates.Client;
 using Domain.Common.BaseClasses;
-using Domain.Common.OperationResult;
+using OperationResult;
 
 namespace Services.Authentication;
 

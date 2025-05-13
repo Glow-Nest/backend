@@ -1,5 +1,6 @@
 ﻿using Domain.Aggregates.Product.Values;
-using Domain.Common.OperationResult;
+using Domain.Common.Values;
+using OperationResult;
 
 namespace Application.AppEntry.Commands.Product;
 

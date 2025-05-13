@@ -1,11 +1,11 @@
 ﻿using Domain.Aggregates.Client;
 using Domain.Aggregates.Client.Values;
 using Domain.Aggregates.SalonOwner;
-using Domain.Common.OperationResult;
 using EfcQueries.Queries;
 using IntegrationTests.Helpers;
 using Microsoft.Extensions.Configuration;
 using Moq;
+using OperationResult;
 using QueryContracts.Queries;
 using Services.Authentication;
 using UnitTest.Features.Helpers;
