@@ -13,7 +13,7 @@ public record UpdateProductMediaUrlRequest(
 
 public class UpdateProductMediaUrlEndpoint(ICommandDispatcher commandDispatcher): ProtectedOwnerWithRequest<UpdateProductMediaUrlRequest>
 {
-    [HttpPost("product/update/mediaUurl")]
+    [HttpPost("product/update/mediaUrl")]
     public override async Task<ActionResult> HandleAsync(UpdateProductMediaUrlRequest request)
     {
         var commandResult = UpdateProductImageUrlCommand.Create(request.Id, request.ImageUrl);
