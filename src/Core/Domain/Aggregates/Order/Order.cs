@@ -22,6 +22,11 @@ public class Order : AggregateRoot
     internal OrderStatus OrderStatus { get; }
     internal PaymentStatus PaymentStatus { get; }
 
+    // For EFC
+    public Order()
+    {
+    }
+
     protected Order(OrderId orderId, ClientId clientId, DateOnly pickupDate, DateOnly orderDate, List<OrderItem> orderItems, Price totalPrice)
     {
         OrderId = orderId;
