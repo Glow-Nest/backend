@@ -34,7 +34,6 @@ public class CreateOrderHandler(
         // 2. Create Order using validated client ID, pickup date, and order items
         var orderResult = await Order.Create(
             command.ClientId,
-            command.PickupDate,
             command.OrderItems,
             _dateTimeProvider,
             _productChecker);

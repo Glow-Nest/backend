@@ -23,7 +23,6 @@ public class OrderTests
     {
         // Arrange
         var clientId = ClientId.Create();
-        var pickupDate = new DateOnly(2025, 05, 15);
         var productId = ProductId.Create();
         
         // mock product checker
@@ -38,13 +37,12 @@ public class OrderTests
         var dateTimeProvider = new FakeDateTimeProvider();
 
         // Act
-        var result = await Order.Create(clientId, pickupDate, orderItems, dateTimeProvider, productChecker.Object);
+        var result = await Order.Create(clientId, orderItems, dateTimeProvider, productChecker.Object);
 
         // Assert
         Assert.True(result.IsSuccess);
         var order = result.Data;
         Assert.Equal(clientId, order.ClientId);
-        Assert.Equal(pickupDate, order.PickupDate);
         Assert.Equal(new DateOnly(2025, 05, 10), order.OrderDate);
         Assert.Single(order.OrderItems);
         Assert.Equal(200, order.TotalPrice.Value);
@@ -57,7 +55,6 @@ public class OrderTests
     {
         // Arrange
         var clientId = ClientId.Create();
-        var pickupDate = new DateOnly(2025, 05, 05);
         var productId = ProductId.Create();
         
         // mock product checker
@@ -72,7 +69,7 @@ public class OrderTests
         var dateTimeProvider = new FakeDateTimeProvider();
 
         // Act
-        var result = await Order.Create(clientId, pickupDate, orderItems, dateTimeProvider, productChecker.Object);
+        var result = await Order.Create(clientId, orderItems, dateTimeProvider, productChecker.Object);
 
         // Assert
         Assert.False(result.IsSuccess);
@@ -84,7 +81,6 @@ public class OrderTests
     {
         // Arrange
         var clientId = ClientId.Create();
-        var pickupDate = new DateOnly(2025, 05, 15);
         var productId = ProductId.Create();
     
         var productChecker = new Mock<IProductChecker>();
@@ -98,7 +94,7 @@ public class OrderTests
         var dateTimeProvider = new FakeDateTimeProvider();
 
         // Act
-        var result = await Order.Create(clientId, pickupDate, orderItems, dateTimeProvider, productChecker.Object);
+        var result = await Order.Create(clientId, orderItems, dateTimeProvider, productChecker.Object);
 
         // Assert
         Assert.False(result.IsSuccess);
@@ -110,7 +106,6 @@ public class OrderTests
     {
         // Arrange
         var clientId = ClientId.Create();
-        var pickupDate = new DateOnly(2025, 05, 15);
     
         var productChecker = new Mock<IProductChecker>();
 
@@ -119,7 +114,7 @@ public class OrderTests
         var dateTimeProvider = new FakeDateTimeProvider();
 
         // Act
-        var result = await Order.Create(clientId, pickupDate, orderItems, dateTimeProvider, productChecker.Object);
+        var result = await Order.Create(clientId, orderItems, dateTimeProvider, productChecker.Object);
 
         // Assert
         Assert.False(result.IsSuccess);
