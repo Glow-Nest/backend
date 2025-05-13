@@ -1,13 +1,13 @@
 ﻿using Application.AppEntry;
 using Application.AppEntry.Commands.Product;
 using Microsoft.AspNetCore.Mvc;
+using OperationResult;
 using WebAPI.Endpoints.Common.Command;
 
 namespace WebAPI.Endpoints.Product;
 
-public record CreateProductRequest(string Name, string Description, double Price, string ImageUrl, int InventoryCount);
 
-public class CreateProductEndpoint(ICommandDispatcher commandDispatcher) : ProtectedOwnerWithRequest<CreateProductRequest>
+public class CreateProductEndpoint(ICommandDispatcher commandDispatcher) : ProtectedOwnerWithRequest<CreateProductEndpoint.CreateProductRequest>
 {
     [HttpPost("product/create")]
     public override async Task<ActionResult> HandleAsync(CreateProductRequest request)
@@ -20,7 +20,11 @@ public class CreateProductEndpoint(ICommandDispatcher commandDispatcher) : Prote
             return BadRequest(commandResult.Errors);
         }
 
-        var dispatchResult = await commandDispatcher.DispatchAsync(commandResult.Data);
+        var dispatchResult = await commandDispatcher.DispatchAsync<CreateProductCommand, None>(commandResult.Data);
         return dispatchResult.IsSuccess ? Ok() : BadRequest(dispatchResult.Errors);
     }
+    
+    public record CreateProductRequest(string Name, string Description, double Price, string ImageUrl, int InventoryCount);
+
+    
 }

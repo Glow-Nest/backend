@@ -1,6 +1,7 @@
 ﻿using Application.AppEntry;
 using Application.AppEntry.Commands.Client.UpdateClient;
 using Microsoft.AspNetCore.Mvc;
+using OperationResult;
 using WebAPI.Endpoints.Common.Command;
 
 namespace WebAPI.Endpoints.Client.UpdateClient;
@@ -19,7 +20,7 @@ public class UpdateFullNameEndpoint(ICommandDispatcher commandDispatcher) : Publ
             return await Task.FromResult<ActionResult>(BadRequest(commandResult.Errors));
         }
 
-        var dispatchResult = await commandDispatcher.DispatchAsync(commandResult.Data);
+        var dispatchResult = await commandDispatcher.DispatchAsync<UpdateFullNameCommand, None>(commandResult.Data);
         return dispatchResult.IsSuccess ? Ok() : BadRequest(dispatchResult.Errors);
     }
 }

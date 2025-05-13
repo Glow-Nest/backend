@@ -5,7 +5,7 @@ using OperationResult;
 
 namespace Application.Handlers.ServiceCategoryHandlers;
 
-public class DeleteServiceHandler : ICommandHandler<DeleteServiceCommand>
+public class DeleteServiceHandler : ICommandHandler<DeleteServiceCommand, None>
 {
     private readonly ICategoryRepository _categoryRepository;
     
@@ -14,21 +14,21 @@ public class DeleteServiceHandler : ICommandHandler<DeleteServiceCommand>
         _categoryRepository = categoryRepository;
     }
     
-    public async Task<Result> HandleAsync(DeleteServiceCommand command)
+    public async Task<Result<None>> HandleAsync(DeleteServiceCommand command)
     {
         var categoryResult= await _categoryRepository.GetAsync(command.CategoryId);
         if (!categoryResult.IsSuccess)
         {
-            return categoryResult.ToNonGeneric();
+            return categoryResult.ToNonGeneric().ToNone();
         }
         var category = categoryResult.Data;
         var service = category.Services.FirstOrDefault(x => x.ServiceId == command.ServiceId);
         
         if (service == null)
         {
-            return Result.Fail(ServiceCategoryErrorMessage.ServiceNotFound());
+            return Result<None>.Fail(ServiceCategoryErrorMessage.ServiceNotFound());
         }
         await _categoryRepository.DeleteServiceAsync(command.CategoryId, command.ServiceId);
-        return Result.Success();
+        return Result<None>.Success(None.Value);
     }
 }

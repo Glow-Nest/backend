@@ -10,7 +10,7 @@ using OperationResult;
 
 namespace Application.Handlers.ClientHandlers;
 
-internal class CreateOtpHandler : ICommandHandler<CreateOtpCommand>
+internal class CreateOtpHandler : ICommandHandler<CreateOtpCommand, None>
 {
     private readonly IClientRepository _clientRepository;
     private readonly IDateTimeProvider _dateTimeProvider;
@@ -23,13 +23,13 @@ internal class CreateOtpHandler : ICommandHandler<CreateOtpCommand>
         _emailSender = emailSender;
     }
 
-    public async Task<Result> HandleAsync(CreateOtpCommand command)
+    public async Task<Result<None>> HandleAsync(CreateOtpCommand command)
     {
         var clientResult = await _clientRepository.GetAsync(command.Email);
 
         if (!clientResult.IsSuccess)
         {
-            return clientResult.ToNonGeneric();
+            return clientResult.ToNonGeneric().ToNone();
         }
 
         var client = clientResult.Data;
@@ -37,9 +37,9 @@ internal class CreateOtpHandler : ICommandHandler<CreateOtpCommand>
 
         if (!result.IsSuccess)
         {
-            return result.ToNonGeneric();
+            return result.ToNonGeneric().ToNone();
         }
 
-        return Result.Success();
+        return Result<None>.Success(None.Value);
     }
 }

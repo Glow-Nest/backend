@@ -24,8 +24,8 @@ public class CommandDispatcherTest
         
         var command = CreateClientCommand.Create(firstNameStr, lastNameStr, emailStr, passwordStr, phoneNumberStr).Data;
         
-        var mockHandler = new Mock<ICommandHandler<CreateClientCommand>>();
-        mockHandler.Setup(h => h.HandleAsync(It.IsAny<CreateClientCommand>())).ReturnsAsync(Result.Success());
+        var mockHandler = new Mock<ICommandHandler<CreateClientCommand, None>>();
+        mockHandler.Setup(h => h.HandleAsync(It.IsAny<CreateClientCommand>())).ReturnsAsync(Result<None>.Success(None.Value));
         
         var mockEmailChecker = new Mock<IEmailUniqueChecker>();
         var mockClientRepository = new Mock<IClientRepository>();
@@ -41,7 +41,7 @@ public class CommandDispatcherTest
         var dispatcher = new CommandDispatcher(serviceProvider);
         
         // Act
-        var result = await dispatcher.DispatchAsync(command);
+        var result = await dispatcher.DispatchAsync<CreateClientCommand, None>(command);
         
         // Assert
         Assert.True(result.IsSuccess);

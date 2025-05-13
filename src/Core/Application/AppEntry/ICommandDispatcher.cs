@@ -5,5 +5,5 @@ namespace Application.AppEntry;
 
 public interface ICommandDispatcher
 {
-    Task<Result> DispatchAsync<TCommand>(TCommand command);
+    Task<Result<TResponse>> DispatchAsync<TCommand, TResponse>(TCommand command);
 }

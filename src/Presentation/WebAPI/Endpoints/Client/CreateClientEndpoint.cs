@@ -1,6 +1,7 @@
 using Application.AppEntry;
 using Application.AppEntry.Commands.Client;
 using Microsoft.AspNetCore.Mvc;
+using OperationResult;
 using WebAPI.Endpoints.Common;
 using WebAPI.Endpoints.Common.Command;
 
@@ -21,7 +22,7 @@ public class CreateClientEndpoint(ICommandDispatcher commandDispatcher) : Public
             return BadRequest(commandResult.Errors);
         }
 
-        var dispatchResult = await commandDispatcher.DispatchAsync(commandResult.Data);
+        var dispatchResult = await commandDispatcher.DispatchAsync<CreateClientCommand, None>(commandResult.Data);
         
         return dispatchResult.IsSuccess ? Ok() : BadRequest(dispatchResult.Errors);
     }

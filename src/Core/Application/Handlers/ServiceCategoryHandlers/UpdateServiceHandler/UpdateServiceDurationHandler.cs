@@ -5,7 +5,7 @@ using OperationResult;
 
 namespace Application.Handlers.ServiceCategoryHandlers.UpdateServiceHandler;
 
-public class UpdateServiceDurationHandler : ICommandHandler<UpdateServiceDurationCommand>
+public class UpdateServiceDurationHandler : ICommandHandler<UpdateServiceDurationCommand, None>
 {
     private readonly ICategoryRepository _categoryRepository;
     
@@ -14,13 +14,13 @@ public class UpdateServiceDurationHandler : ICommandHandler<UpdateServiceDuratio
         _categoryRepository = categoryRepository;
     }
     
-    public async Task<Result> HandleAsync(UpdateServiceDurationCommand command)
+    public async Task<Result<None>> HandleAsync(UpdateServiceDurationCommand command)
     {
         var findCategoryResult = await _categoryRepository.GetAsync(command.Id);
         
         if (!findCategoryResult.IsSuccess)
         {
-            return findCategoryResult.ToNonGeneric();
+            return findCategoryResult.ToNonGeneric().ToNone();
         }
 
         var category = findCategoryResult.Data;
@@ -28,9 +28,9 @@ public class UpdateServiceDurationHandler : ICommandHandler<UpdateServiceDuratio
         
         if (!updateResult.IsSuccess)
         {
-            return updateResult;
+            return updateResult.ToNone();
         }
         
-        return Result.Success();
+        return Result<None>.Success(None.Value);
     }
 }

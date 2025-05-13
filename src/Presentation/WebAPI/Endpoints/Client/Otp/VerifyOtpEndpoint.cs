@@ -1,10 +1,10 @@
 using Application.AppEntry;
 using Application.AppEntry.Commands.Client;
 using Microsoft.AspNetCore.Mvc;
-using WebAPI.Endpoints.Common;
+using OperationResult;
 using WebAPI.Endpoints.Common.Command;
 
-namespace WebAPI.Endpoints.Otp;
+namespace WebAPI.Endpoints.Client.Otp;
 
 public record VerifyOtpRequest(string Email, string OtpCode);
 
@@ -21,7 +21,7 @@ public class VerifyOtpEndpoint(ICommandDispatcher commandDispatcher) : PublicWit
             return BadRequest(commandResult.Errors);
         }
 
-        var dispatchResult = await commandDispatcher.DispatchAsync(commandResult.Data);
+        var dispatchResult = await commandDispatcher.DispatchAsync<VerifyOtpCommand, None>(commandResult.Data);
 
         return dispatchResult.IsSuccess ? Ok() : BadRequest(dispatchResult.Errors);
     }

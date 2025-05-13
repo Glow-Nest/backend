@@ -1,6 +1,7 @@
 using Application.AppEntry;
 using Application.AppEntry.Commands.Schedule;
 using Microsoft.AspNetCore.Mvc;
+using OperationResult;
 using WebAPI.Endpoints.Common.Command;
 
 namespace WebAPI.Endpoints.Schedule.Appointments;
@@ -27,7 +28,7 @@ public class CreateAppointmentEndpoint(ICommandDispatcher commandDispatcher) : P
             return await Task.FromResult<ActionResult>(BadRequest(commandResult.Errors));
         }
 
-        var dispatchResult = await commandDispatcher.DispatchAsync(commandResult.Data);
+        var dispatchResult = await commandDispatcher.DispatchAsync<CreateAppointmentCommand, None>(commandResult.Data);
 
         return dispatchResult.IsSuccess ? Ok() : BadRequest(dispatchResult.Errors);
     }

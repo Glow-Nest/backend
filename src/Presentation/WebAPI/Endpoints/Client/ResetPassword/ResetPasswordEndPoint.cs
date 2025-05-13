@@ -1,10 +1,10 @@
 ﻿using Application.AppEntry;
 using Application.AppEntry.Commands.Client;
 using Microsoft.AspNetCore.Mvc;
-using WebAPI.Endpoints.Common;
+using OperationResult;
 using WebAPI.Endpoints.Common.Command;
 
-namespace WebAPI.Endpoints.ResetPassword;
+namespace WebAPI.Endpoints.Client.ResetPassword;
 
 public record CompletePasswordResetRequest(string Email, string NewPassword, string ConfirmPassword);
 
@@ -20,7 +20,7 @@ public class ResetPasswordEndPoint(ICommandDispatcher commandDispatcher) : Publi
             return BadRequest(result.Errors);
         }
 
-        var dispatchResult = await commandDispatcher.DispatchAsync(result.Data);
+        var dispatchResult = await commandDispatcher.DispatchAsync<ResetPasswordCommand, None>(result.Data);
         return dispatchResult.IsSuccess ? Ok() : BadRequest(dispatchResult.Errors);
     }
 }

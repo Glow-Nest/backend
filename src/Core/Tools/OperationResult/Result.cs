@@ -81,5 +81,14 @@ public static class ResultExtensions
 
         return Result.Fail(result.Errors);
     }
+    
+    public static Result<None> ToNone(this Result result)
+    {
+        if (result.IsSuccess)
+            return Result<None>.Success(None.Value);
+
+        return Result<None>.Fail(result.Errors);
+    }
+
 }
 

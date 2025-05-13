@@ -2,6 +2,7 @@
 using Application.AppEntry.Commands.ServiceCategory;
 using Application.AppEntry.Commands.ServiceCategory.UpdateCategoryCommand;
 using Microsoft.AspNetCore.Mvc;
+using OperationResult;
 using WebAPI.Endpoints.Common.Command;
 
 namespace WebAPI.Endpoints.Category.UpdateCategory;
@@ -22,7 +23,7 @@ public class UpdateMediaUrlEndpoint(ICommandDispatcher commandDispatcher) : Prot
             return await Task.FromResult<ActionResult>(BadRequest(commandResult.Errors));
         }
 
-        var dispatchResult = await commandDispatcher.DispatchAsync(commandResult.Data);
+        var dispatchResult = await commandDispatcher.DispatchAsync<UpdateMediaUrlCommand, None>(commandResult.Data);
         return dispatchResult.IsSuccess ? Ok() : BadRequest(dispatchResult.Errors);
     }
 }

@@ -2,7 +2,7 @@ using OperationResult;
 
 namespace Application.AppEntry;
 
-public interface ICommandHandler<T>
+public interface ICommandHandler<TCommand, TResponse>
 {
-    Task<Result> HandleAsync(T command);
+    Task<Result<TResponse>> HandleAsync(TCommand command);
 }

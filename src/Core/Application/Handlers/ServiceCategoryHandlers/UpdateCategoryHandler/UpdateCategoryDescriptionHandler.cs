@@ -5,7 +5,7 @@ using OperationResult;
 
 namespace Application.Handlers.ServiceCategoryHandlers.UpdateCategoryHandler;
 
-public class UpdateCategoryDescriptionHandler : ICommandHandler<UpdateCategoryDescriptionCommand>
+public class UpdateCategoryDescriptionHandler : ICommandHandler<UpdateCategoryDescriptionCommand, None>
 {
     
     private readonly ICategoryRepository _categoryRepository;
@@ -15,13 +15,13 @@ public class UpdateCategoryDescriptionHandler : ICommandHandler<UpdateCategoryDe
         _categoryRepository = categoryRepository;
     }
     
-    public async Task<Result> HandleAsync(UpdateCategoryDescriptionCommand command)
+    public async Task<Result<None>> HandleAsync(UpdateCategoryDescriptionCommand command)
     {
         var findCategoryResult = await _categoryRepository.GetAsync(command.Id);
         
         if (!findCategoryResult.IsSuccess)
         {
-            return findCategoryResult.ToNonGeneric();
+            return findCategoryResult.ToNonGeneric().ToNone();
         }
 
         var category = findCategoryResult.Data;
@@ -29,9 +29,9 @@ public class UpdateCategoryDescriptionHandler : ICommandHandler<UpdateCategoryDe
         
         if (!updateResult.IsSuccess)
         {
-            return updateResult;
+            return updateResult.ToNone();
         }
         
-        return Result.Success();
+        return Result<None>.Success(None.Value);
     }
 }

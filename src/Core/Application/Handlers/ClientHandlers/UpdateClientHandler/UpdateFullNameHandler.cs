@@ -5,7 +5,7 @@ using OperationResult;
 
 namespace Application.Handlers.ClientHandlers.UpdateClientHandler;
 
-public class UpdateFullNameHandler : ICommandHandler<UpdateFullNameCommand>
+public class UpdateFullNameHandler : ICommandHandler<UpdateFullNameCommand, None>
 {
     private readonly IClientRepository _clientRepository;
     
@@ -13,13 +13,13 @@ public class UpdateFullNameHandler : ICommandHandler<UpdateFullNameCommand>
     {
         _clientRepository = clientRepository;
     }
-    public async Task<Result> HandleAsync(UpdateFullNameCommand command)
+    public async Task<Result<None>> HandleAsync(UpdateFullNameCommand command)
     {
         var findClientResult = await _clientRepository.GetAsync(command.Id);
         
         if (!findClientResult.IsSuccess)
         {
-            return findClientResult.ToNonGeneric();
+            return findClientResult.ToNonGeneric().ToNone();
         }
 
         var client = findClientResult.Data;
@@ -27,9 +27,9 @@ public class UpdateFullNameHandler : ICommandHandler<UpdateFullNameCommand>
         
         if (!updateResult.IsSuccess)
         {
-            return updateResult;
+            return updateResult.ToNone();
         }
         
-        return Result.Success();
+        return Result<None>.Success(None.Value);
     }
 }

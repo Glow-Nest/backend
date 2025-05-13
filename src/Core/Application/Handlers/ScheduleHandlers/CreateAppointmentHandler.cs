@@ -11,14 +11,14 @@ using OperationResult;
 
 namespace Application.Handlers.ScheduleHandlers;
 
-public class CreateAppointmentHandler(IServiceChecker serviceChecker, IClientChecker clientChecker, IDateTimeProvider dateTimeProvider, IScheduleRepository scheduleRepository, IClientRepository clientRepository) : ICommandHandler<CreateAppointmentCommand>
+public class CreateAppointmentHandler(IServiceChecker serviceChecker, IClientChecker clientChecker, IDateTimeProvider dateTimeProvider, IScheduleRepository scheduleRepository, IClientRepository clientRepository) : ICommandHandler<CreateAppointmentCommand, None>
 {
-    public async Task<Result> HandleAsync(CreateAppointmentCommand command)
+    public async Task<Result<None>> HandleAsync(CreateAppointmentCommand command)
     {
         var emailResult = await clientRepository.GetAsync(command.email);
         if (!emailResult.IsSuccess)
         {
-            return emailResult.ToNonGeneric();
+            return emailResult.ToNonGeneric().ToNone();
         }
         
         var client = emailResult.Data;
@@ -28,7 +28,7 @@ public class CreateAppointmentHandler(IServiceChecker serviceChecker, IClientChe
         var scheduleResult = await scheduleRepository.GetScheduleByDateAsync(command.appointmentDate);
         if (!scheduleResult.IsSuccess)
         {
-            return scheduleResult.ToNonGeneric();
+            return scheduleResult.ToNonGeneric().ToNone();
         }
 
         var schedule = scheduleResult.Data;
@@ -36,10 +36,10 @@ public class CreateAppointmentHandler(IServiceChecker serviceChecker, IClientChe
         var addResult = await schedule.AddAppointment(dto, serviceChecker, clientChecker, dateTimeProvider);
         if (!addResult.IsSuccess)
         {
-            return addResult.ToNonGeneric();
+            return addResult.ToNonGeneric().ToNone();
         }
 
-        return Result.Success();
+        return Result<None>.Success(None.Value);
     }
 
     private static CreateAppointmentDto ToDto(CreateAppointmentCommand command, ClientId clientId)

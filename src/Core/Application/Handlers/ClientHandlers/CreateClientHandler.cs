@@ -7,7 +7,7 @@ using OperationResult;
 
 namespace Application.Handlers.ClientHandlers;
 
-internal class CreateClientHandler : ICommandHandler<CreateClientCommand>
+internal class CreateClientHandler : ICommandHandler<CreateClientCommand, None>
 {
     private readonly IEmailUniqueChecker _emailUniqueChecker;
     private readonly IClientRepository _clientRepository;
@@ -18,22 +18,22 @@ internal class CreateClientHandler : ICommandHandler<CreateClientCommand>
         _clientRepository = clientRepository;
     }
 
-    public async Task<Result> HandleAsync(CreateClientCommand command)
+    public async Task<Result<None>> HandleAsync(CreateClientCommand command)
     {
         var result = await Client.Create(command.fullName, command.email, command.password, command.phoneNumber, _emailUniqueChecker);
 
         if (!result.IsSuccess)
         {
-            return result.ToNonGeneric();
+            return result.ToNonGeneric().ToNone();
         }
 
         var clientAddResult = await _clientRepository.AddAsync(result.Data);
         
         if (!clientAddResult.IsSuccess)
         {
-            return clientAddResult;
+            return clientAddResult.ToNone();
         }
 
-        return Result.Success();
+        return Result<None>.Success(None.Value);
     }
 }

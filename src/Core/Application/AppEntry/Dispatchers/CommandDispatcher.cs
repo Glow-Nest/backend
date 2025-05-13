@@ -5,9 +5,9 @@ namespace Application.AppEntry.Dispatchers;
 
 internal class CommandDispatcher(IServiceProvider serviceProvider) : ICommandDispatcher
 {
-    public Task<Result> DispatchAsync<TCommand>(TCommand command)
+    public Task<Result<TResponse>> DispatchAsync<TCommand, TResponse>(TCommand command)
     {
-        var handler = serviceProvider.GetRequiredService<ICommandHandler<TCommand>>();
+        var handler = serviceProvider.GetRequiredService<ICommandHandler<TCommand, TResponse>>();
         return handler.HandleAsync(command);
     }
 }

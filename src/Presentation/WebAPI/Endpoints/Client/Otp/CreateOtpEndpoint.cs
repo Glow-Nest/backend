@@ -1,10 +1,10 @@
 using Application.AppEntry;
 using Application.AppEntry.Commands.Client;
 using Microsoft.AspNetCore.Mvc;
-using WebAPI.Endpoints.Common;
+using OperationResult;
 using WebAPI.Endpoints.Common.Command;
 
-namespace WebAPI.Endpoints.Otp;
+namespace WebAPI.Endpoints.Client.Otp;
 
 public record CreateOtpRequest(string Email, string Purpose);
 
@@ -20,7 +20,7 @@ public class CreateOtpEndpoint(ICommandDispatcher commandDispatcher) : PublicWit
             return BadRequest(result.Errors);
         }
 
-        var dispatchResult = await commandDispatcher.DispatchAsync(result.Data);
+        var dispatchResult = await commandDispatcher.DispatchAsync<CreateOtpCommand, None>(result.Data);
         return dispatchResult.IsSuccess ? Ok() : BadRequest(dispatchResult.Errors);
     }
 }
