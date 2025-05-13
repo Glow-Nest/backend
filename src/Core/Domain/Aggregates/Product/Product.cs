@@ -34,4 +34,34 @@ public class Product : AggregateRoot
         var product = new Product(productId, name, price, description, inventoryCount,imageUrl);
         return Result<Product>.Success(product);
     }
+
+    public Result UpdateProductName(Name productName)
+    {
+        ProductName = productName;
+        return Result.Success();
+    }
+
+    public Result UpdatePrice(Price price)
+    {
+        Price = price;
+        return Result.Success();
+    }
+    
+    public Result UpdateDescription(Description description)
+    {
+        Description = description;
+        return Result.Success();
+    }
+    
+    public Result UpdateInventoryCount(InventoryCount inventoryCount)
+    {
+        InventoryCount = inventoryCount;
+        return Result.Success();
+    }
+    
+    public Result UpdateImageUrl(ImageUrl imageUrl)
+    {
+        ImageUrl = imageUrl;
+        return Result.Success();
+    }
 }
