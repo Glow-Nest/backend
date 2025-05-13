@@ -14,4 +14,7 @@ public class OrderErrorMessage
     
     // Order
     public static Error PickupDateInThePast() => new Error("Order.PickupDateInThePast", "Pickup date cannot be in the past.");
+    public static Error PriceCanNotBeNegative() => new Error("Order.PriceCanNotBeNegative", "Price cannot be negative or 0.");
+    public static Error ProductDoesNotExist() => new Error("Order.ProductDoesNotExist", "Product does not exist.");
+    public static Error NoOrderItems() => new Error("Order.NoOrderItems", "Order must have at least one order item.");
 }

@@ -25,6 +25,4 @@ public class CreateProductEndpoint(ICommandDispatcher commandDispatcher) : Prote
     }
     
     public record CreateProductRequest(string Name, string Description, double Price, string ImageUrl, int InventoryCount);
-
-    
 }

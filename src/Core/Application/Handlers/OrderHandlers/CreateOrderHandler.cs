@@ -2,6 +2,7 @@ using Application.AppEntry;
 using Application.AppEntry.Commands.Order;
 using Domain.Aggregates.Client;
 using Domain.Aggregates.Order;
+using Domain.Aggregates.Order.Contracts;
 using Domain.Aggregates.Order.Values;
 using Domain.Aggregates.Product;
 using Domain.Common.Contracts;
@@ -12,14 +13,14 @@ namespace Application.Handlers.OrderHandlers;
 public class CreateOrderHandler(
     IOrderRepository orderRepository,
     IClientRepository clientRepository,
-    IProductRepository productRepository,
-    IDateTimeProvider dateTimeProvider)
+    IDateTimeProvider dateTimeProvider,
+    IProductChecker productChecker)
     : ICommandHandler<CreateOrderCommand, OrderId>
 {
     private readonly IOrderRepository _orderRepository = orderRepository;
     private readonly IDateTimeProvider _dateTimeProvider = dateTimeProvider;
     private readonly IClientRepository _clientRepository = clientRepository;
-    private readonly IProductRepository _productRepository = productRepository;
+    private readonly IProductChecker _productChecker = productChecker ;
 
     public async Task<Result<OrderId>> HandleAsync(CreateOrderCommand command)
     {
@@ -30,29 +31,20 @@ public class CreateOrderHandler(
             return Result<OrderId>.Fail(clientResult.Errors);
         }
 
-        // 2. Validate existence of all products referenced in order items
-        foreach (var orderItem in command.OrderItems)
-        {
-            var productResult = await _productRepository.GetAsync(orderItem.ProductId);
-            if (!productResult.IsSuccess)
-            {
-                return Result<OrderId>.Fail(productResult.Errors);
-            }
-        }
-
-        // 3. Create Order using validated client ID, pickup date, and order items
-        var orderResult = Order.Create(
+        // 2. Create Order using validated client ID, pickup date, and order items
+        var orderResult = await Order.Create(
             command.ClientId,
             command.PickupDate,
             command.OrderItems,
-            _dateTimeProvider);
+            _dateTimeProvider,
+            _productChecker);
 
         if (!orderResult.IsSuccess)
         {
             return Result<OrderId>.Fail(orderResult.Errors);
         }
 
-        // 4. Save the order now or in a unit of work pattern
+        // 3. Save the order now
         var addResult = await _orderRepository.AddAsync(orderResult.Data);
         if (!addResult.IsSuccess)
         {

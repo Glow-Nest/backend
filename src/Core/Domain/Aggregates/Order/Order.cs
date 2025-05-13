@@ -1,6 +1,8 @@
 using Domain.Aggregates.Client.Values;
+using Domain.Aggregates.Order.Contracts;
 using Domain.Aggregates.Order.Entities;
 using Domain.Aggregates.Order.Values;
+using Domain.Aggregates.Product;
 using Domain.Aggregates.Product.Values;
 using Domain.Common.BaseClasses;
 using Domain.Common.Contracts;
@@ -20,7 +22,7 @@ public class Order : AggregateRoot
     internal OrderStatus OrderStatus { get; }
     internal PaymentStatus PaymentStatus { get; }
 
-    private Order(OrderId orderId, ClientId clientId, DateOnly pickupDate, DateOnly orderDate, List<OrderItem> orderItems, Price totalPrice)
+    protected Order(OrderId orderId, ClientId clientId, DateOnly pickupDate, DateOnly orderDate, List<OrderItem> orderItems, Price totalPrice)
     {
         OrderId = orderId;
         ClientId = clientId;
@@ -33,14 +35,38 @@ public class Order : AggregateRoot
         PaymentStatus = PaymentStatus.Pending;
     }
 
-    public static Result<Order> Create(ClientId clientId, DateOnly pickupDate, List<OrderItem> orderItems, IDateTimeProvider dateTimeProvider)
+    public static async Task<Result<Order>> Create(ClientId clientId, DateOnly pickupDate, List<OrderItem> orderItems, IDateTimeProvider dateTimeProvider, IProductChecker productChecker)
     {
+        // create order id
         var orderIdResult = OrderId.Create();
         if (!orderIdResult.IsSuccess)
         {
             return Result<Order>.Fail(orderIdResult.Errors);
         }
+        
+        // check if order items are empty
+        if (orderItems.Count == 0)
+        {
+            return Result<Order>.Fail(OrderErrorMessage.NoOrderItems());
+        }
+        
+        // check if product exists
+        foreach (var orderItem in orderItems)
+        {
+            var productResult = await productChecker.DoesProductExist(orderItem.ProductId);
+            if (!productResult)
+            {
+                return Result<Order>.Fail(ProductErrorMessage.ProductNotFound());
+            }
+        }
+        
+        // validate price in order items
+        if (orderItems.Any(orderItem => orderItem.PriceWhenOrdering.Value < 0))
+        {
+            return Result<Order>.Fail(OrderErrorMessage.PriceCanNotBeNegative());
+        }
 
+        // validate pickup and order date
         var orderDate = DateOnly.FromDateTime(dateTimeProvider.GetNow());
         if (pickupDate < orderDate)
         {

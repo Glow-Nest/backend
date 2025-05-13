@@ -6,11 +6,11 @@ namespace Application.AppEntry.Commands.Product;
 
 public class CreateProductCommand (Name name, Price price, Description description, ImageUrl imageUrl, InventoryCount inventoryCount)
 {
-    internal Name name = name;
-    internal Price price = price;
-    internal Description description = description;
-    internal ImageUrl imageUrl = imageUrl;
-    internal InventoryCount inventoryCount = inventoryCount;
+    internal readonly Name name = name;
+    internal readonly Price price = price;
+    internal readonly Description description = description;
+    internal readonly ImageUrl imageUrl = imageUrl;
+    internal readonly InventoryCount inventoryCount = inventoryCount;
 
     public static Result<CreateProductCommand> Create(string name, double price, string description, string imageUrl,
         int inventoryCount)
