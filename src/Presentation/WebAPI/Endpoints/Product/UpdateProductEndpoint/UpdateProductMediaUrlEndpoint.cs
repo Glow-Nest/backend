@@ -8,7 +8,7 @@ namespace WebAPI.Endpoints.Product.UpdateProductEndpoint;
 
 public record UpdateProductMediaUrlRequest(
     string Id,
-    string MediaUrl
+    string ImageUrl
 );
 
 public class UpdateProductMediaUrlEndpoint(ICommandDispatcher commandDispatcher): ProtectedOwnerWithRequest<UpdateProductMediaUrlRequest>
@@ -16,7 +16,7 @@ public class UpdateProductMediaUrlEndpoint(ICommandDispatcher commandDispatcher)
     [HttpPost("product/update/mediaUurl")]
     public override async Task<ActionResult> HandleAsync(UpdateProductMediaUrlRequest request)
     {
-        var commandResult = UpdateProductImageUrlCommand.Create(request.Id, request.MediaUrl);
+        var commandResult = UpdateProductImageUrlCommand.Create(request.Id, request.ImageUrl);
         if (!commandResult.IsSuccess)
         {
             return await Task.FromResult<ActionResult>(BadRequest(commandResult.Errors));
