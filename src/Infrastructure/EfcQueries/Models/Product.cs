@@ -16,4 +16,8 @@ public partial class Product
     public double Price { get; set; }
 
     public string Name { get; set; } = null!;
+
+    public virtual ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
+
+    public virtual ICollection<ProductReview> ProductReviews { get; set; } = new List<ProductReview>();
 }

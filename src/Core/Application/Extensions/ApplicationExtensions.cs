@@ -4,10 +4,12 @@ using Application.AppEntry.Commands.Client.UpdateClient;
 using Application.AppEntry.Commands.Order;
 using Application.AppEntry.Commands.Product;
 using Application.AppEntry.Commands.Product.UpdateProduct;
+using Application.AppEntry.Commands.ProductReview;
 using Application.AppEntry.Commands.Schedule;
 using Application.AppEntry.Commands.ServiceCategory;
 using Application.AppEntry.Commands.ServiceCategory.UpdateCategoryCommand;
 using Application.AppEntry.Commands.ServiceCategory.UpdateServiceCommand;
+using Application.AppEntry.Commands.ServiceReview;
 using Application.AppEntry.Decorators;
 using Application.AppEntry.Dispatchers;
 using Application.Handlers.ClientHandlers;
@@ -16,10 +18,12 @@ using Application.Handlers.DomainEvents;
 using Application.Handlers.OrderHandlers;
 using Application.Handlers.ProductHandlers;
 using Application.Handlers.ProductHandlers.UpdateProductHandler;
+using Application.Handlers.ProductReviewHandlers;
 using Application.Handlers.ScheduleHandlers;
 using Application.Handlers.ServiceCategoryHandlers;
 using Application.Handlers.ServiceCategoryHandlers.UpdateCategoryHandler;
 using Application.Handlers.ServiceCategoryHandlers.UpdateServiceHandler;
+using Application.Handlers.ServiceReviewHandler;
 using Domain.Aggregates.Client.DomainEvents;
 using Domain.Aggregates.Order.Values;
 using Domain.Aggregates.Schedule.DomainEvents;
@@ -78,6 +82,12 @@ public static class ApplicationExtensions
         
         // order
         serviceCollection.AddScoped<ICommandHandler<CreateOrderCommand, OrderId>, CreateOrderHandler>();
+        
+        //service review
+        serviceCollection.AddScoped<ICommandHandler<CreateServiceReviewCommand, None>, CreateServiceReviewHandler>();
+        
+        // product review
+        serviceCollection.AddScoped<ICommandHandler<CreateProductReviewCommand, None>, CreateProductReviewHandler>();
         
         // domain events
         serviceCollection.AddScoped<IDomainEventHandler<OtpCreatedDomainEvent>, OtpCreatedDomainEventHandler>();

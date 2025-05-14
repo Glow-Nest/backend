@@ -198,6 +198,45 @@ namespace DomainModelPersistence.Migrations
                     b.ToTable("Product");
                 });
 
+            modelBuilder.Entity("Domain.Aggregates.ProductReview.ProductReview", b =>
+                {
+                    b.Property<Guid>("ProductReviewId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ClientId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uuid");
+
+                    b.ComplexProperty<Dictionary<string, object>>("Rating", "Domain.Aggregates.ProductReview.ProductReview.Rating#Rating", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<int>("Value")
+                                .HasColumnType("integer")
+                                .HasColumnName("Rating");
+                        });
+
+                    b.ComplexProperty<Dictionary<string, object>>("ReviewMessage", "Domain.Aggregates.ProductReview.ProductReview.ReviewMessage#ReviewMessage", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasColumnType("text")
+                                .HasColumnName("ReviewMessage");
+                        });
+
+                    b.HasKey("ProductReviewId");
+
+                    b.HasIndex("ClientId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("ProductReview");
+                });
+
             modelBuilder.Entity("Domain.Aggregates.SalonOwner.SalonOwner", b =>
                 {
                     b.Property<Guid>("SalonOwnerId")
@@ -401,6 +440,45 @@ namespace DomainModelPersistence.Migrations
                     b.ToTable("Service");
                 });
 
+            modelBuilder.Entity("Domain.Aggregates.ServiceReview.ServiceReview", b =>
+                {
+                    b.Property<Guid>("ServiceReviewId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ClientId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ServiceId")
+                        .HasColumnType("uuid");
+
+                    b.ComplexProperty<Dictionary<string, object>>("Rating", "Domain.Aggregates.ServiceReview.ServiceReview.Rating#Rating", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<int>("Value")
+                                .HasColumnType("integer")
+                                .HasColumnName("Rating");
+                        });
+
+                    b.ComplexProperty<Dictionary<string, object>>("ReviewMessage", "Domain.Aggregates.ServiceReview.ServiceReview.ReviewMessage#ReviewMessage", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasColumnType("text")
+                                .HasColumnName("ReviewMessage");
+                        });
+
+                    b.HasKey("ServiceReviewId");
+
+                    b.HasIndex("ClientId");
+
+                    b.HasIndex("ServiceId");
+
+                    b.ToTable("ServiceReview");
+                });
+
             modelBuilder.Entity("Domain.Aggregates.Client.Client", b =>
                 {
                     b.OwnsOne("Domain.Aggregates.Client.Entities.OtpSession", "OtpSession", b1 =>
@@ -462,6 +540,21 @@ namespace DomainModelPersistence.Migrations
                     b.HasOne("Domain.Aggregates.Client.Client", null)
                         .WithMany()
                         .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Aggregates.ProductReview.ProductReview", b =>
+                {
+                    b.HasOne("Domain.Aggregates.Client.Client", null)
+                        .WithMany()
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Aggregates.Product.Product", null)
+                        .WithMany()
+                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -549,6 +642,21 @@ namespace DomainModelPersistence.Migrations
                         .WithMany("Services")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Domain.Aggregates.ServiceReview.ServiceReview", b =>
+                {
+                    b.HasOne("Domain.Aggregates.Client.Client", null)
+                        .WithMany()
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Aggregates.ServiceCategory.Entities.Service", null)
+                        .WithMany()
+                        .HasForeignKey("ServiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Domain.Aggregates.Order.Order", b =>

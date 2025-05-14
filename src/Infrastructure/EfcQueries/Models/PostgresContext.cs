@@ -45,9 +45,15 @@ public partial class PostgresContext : DbContext
 
     public virtual DbSet<MediaUrl> MediaUrls { get; set; }
 
+    public virtual DbSet<Order> Orders { get; set; }
+
+    public virtual DbSet<OrderItem> OrderItems { get; set; }
+
     public virtual DbSet<OtpSession> OtpSessions { get; set; }
 
     public virtual DbSet<Product> Products { get; set; }
+
+    public virtual DbSet<ProductReview> ProductReviews { get; set; }
 
     public virtual DbSet<SalonOwner> SalonOwners { get; set; }
 
@@ -60,6 +66,8 @@ public partial class PostgresContext : DbContext
     public virtual DbSet<Server> Servers { get; set; }
 
     public virtual DbSet<Service> Services { get; set; }
+
+    public virtual DbSet<ServiceReview> ServiceReviews { get; set; }
 
     public virtual DbSet<Set> Sets { get; set; }
 
@@ -79,7 +87,6 @@ public partial class PostgresContext : DbContext
             optionsBuilder.UseNpgsql(connectionString);
         }
     }
-    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasPostgresExtension("pg_stat_statements");
@@ -316,6 +323,34 @@ public partial class PostgresContext : DbContext
             entity.HasOne(d => d.Category).WithMany(p => p.MediaUrls).HasForeignKey(d => d.CategoryId);
         });
 
+        modelBuilder.Entity<Order>(entity =>
+        {
+            entity.ToTable("Order");
+
+            entity.HasIndex(e => e.ClientId, "IX_Order_ClientId");
+
+            entity.Property(e => e.OrderId).ValueGeneratedNever();
+
+            entity.HasOne(d => d.Client).WithMany(p => p.Orders).HasForeignKey(d => d.ClientId);
+        });
+
+        modelBuilder.Entity<OrderItem>(entity =>
+        {
+            entity.HasKey(e => new { e.Id, e.ProductId });
+
+            entity.ToTable("OrderItem");
+
+            entity.HasIndex(e => e.OrderId, "IX_OrderItem_OrderId");
+
+            entity.HasIndex(e => e.ProductId, "IX_OrderItem_ProductId");
+
+            entity.HasOne(d => d.Order).WithMany(p => p.OrderItems)
+                .HasForeignKey(d => d.OrderId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(d => d.Product).WithMany(p => p.OrderItems).HasForeignKey(d => d.ProductId);
+        });
+
         modelBuilder.Entity<OtpSession>(entity =>
         {
             entity.HasKey(e => new { e.ClientId, e.Email });
@@ -330,6 +365,21 @@ public partial class PostgresContext : DbContext
             entity.ToTable("Product");
 
             entity.Property(e => e.ProductId).ValueGeneratedNever();
+        });
+
+        modelBuilder.Entity<ProductReview>(entity =>
+        {
+            entity.ToTable("ProductReview");
+
+            entity.HasIndex(e => e.ClientId, "IX_ProductReview_ClientId");
+
+            entity.HasIndex(e => e.ProductId, "IX_ProductReview_ProductId");
+
+            entity.Property(e => e.ProductReviewId).ValueGeneratedNever();
+
+            entity.HasOne(d => d.Client).WithMany(p => p.ProductReviews).HasForeignKey(d => d.ClientId);
+
+            entity.HasOne(d => d.Product).WithMany(p => p.ProductReviews).HasForeignKey(d => d.ProductId);
         });
 
         modelBuilder.Entity<SalonOwner>(entity =>
@@ -396,6 +446,21 @@ public partial class PostgresContext : DbContext
             entity.HasOne(d => d.Category).WithMany(p => p.Services)
                 .HasForeignKey(d => d.CategoryId)
                 .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<ServiceReview>(entity =>
+        {
+            entity.ToTable("ServiceReview");
+
+            entity.HasIndex(e => e.ClientId, "IX_ServiceReview_ClientId");
+
+            entity.HasIndex(e => e.ServiceId, "IX_ServiceReview_ServiceId");
+
+            entity.Property(e => e.ServiceReviewId).ValueGeneratedNever();
+
+            entity.HasOne(d => d.Client).WithMany(p => p.ServiceReviews).HasForeignKey(d => d.ClientId);
+
+            entity.HasOne(d => d.Service).WithMany(p => p.ServiceReviews).HasForeignKey(d => d.ServiceId);
         });
 
         modelBuilder.Entity<Set>(entity =>

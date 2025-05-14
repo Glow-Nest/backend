@@ -21,5 +21,11 @@ public partial class Client
 
     public virtual ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
 
+    public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
+
     public virtual OtpSession? OtpSession { get; set; }
+
+    public virtual ICollection<ProductReview> ProductReviews { get; set; } = new List<ProductReview>();
+
+    public virtual ICollection<ServiceReview> ServiceReviews { get; set; } = new List<ServiceReview>();
 }
