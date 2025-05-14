@@ -1,7 +1,6 @@
 ﻿using Domain.Aggregates.Product.Values;
-using Domain.Aggregates.ServiceCategory.Values;
-using Domain.Common.OperationResult;
 using Domain.Common.Repositories;
+using OperationResult;
 
 namespace Domain.Aggregates.Product;
 

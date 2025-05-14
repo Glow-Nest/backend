@@ -1,6 +1,7 @@
 ﻿using Application.AppEntry;
 using Application.AppEntry.Commands.Product.UpdateProduct;
 using Microsoft.AspNetCore.Mvc;
+using OperationResult;
 using WebAPI.Endpoints.Common.Command;
 
 namespace WebAPI.Endpoints.Product.UpdateProductEndpoint;
@@ -18,7 +19,7 @@ public class UpdateProductPriceEndpoint(ICommandDispatcher commandDispatcher) : 
             return await Task.FromResult<ActionResult>(BadRequest(commandResult.Errors));
         }
 
-        var dispatchResult = await commandDispatcher.DispatchAsync(commandResult.Data);
+        var dispatchResult = await  commandDispatcher.DispatchAsync<UpdateProductPriceCommand, None>(commandResult.Data);
         return dispatchResult.IsSuccess ? Ok() : BadRequest(dispatchResult.Errors);
     }
 }

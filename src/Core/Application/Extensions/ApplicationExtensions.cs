@@ -69,12 +69,12 @@ public static class ApplicationExtensions
         
         // product
         serviceCollection.AddScoped<ICommandHandler<CreateProductCommand, None>, CreateProductHandler>();
-        serviceCollection.AddScoped<ICommandHandler<UpdateProductNameCommand>, UpdateProductNameHandler>();
-        serviceCollection.AddScoped<ICommandHandler<UpdateProductPriceCommand>, UpdateProductPriceHandler>();
-        serviceCollection.AddScoped<ICommandHandler<UpdateProductImageUrlCommand>, UpdateProductImageUrlHandler>();
-        serviceCollection.AddScoped<ICommandHandler<UpdateProductInventoryCountCommand>, UpdateProductInventoryCountHandler>();
-        serviceCollection.AddScoped<ICommandHandler<UpdateProductDescriptionCommand>, UpdateProductDescriptionHandler>();
-        serviceCollection.AddScoped<ICommandHandler<DeleteProductCommand>, DeleteProductHandler>();
+        serviceCollection.AddScoped<ICommandHandler<UpdateProductNameCommand, None>, UpdateProductNameHandler>();
+        serviceCollection.AddScoped<ICommandHandler<UpdateProductPriceCommand, None>, UpdateProductPriceHandler>();
+        serviceCollection.AddScoped<ICommandHandler<UpdateProductImageUrlCommand, None>, UpdateProductImageUrlHandler>();
+        serviceCollection.AddScoped<ICommandHandler<UpdateProductInventoryCountCommand, None>, UpdateProductInventoryCountHandler>();
+        serviceCollection.AddScoped<ICommandHandler<UpdateProductDescriptionCommand, None>, UpdateProductDescriptionHandler>();
+        serviceCollection.AddScoped<ICommandHandler<DeleteProductCommand, None>, DeleteProductHandler>();
         
         // order
         serviceCollection.AddScoped<ICommandHandler<CreateOrderCommand, OrderId>, CreateOrderHandler>();
