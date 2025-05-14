@@ -6,13 +6,13 @@ using WebAPI.Endpoints.Common.Command;
 
 namespace WebAPI.Endpoints.ServiceReview;
 
-public record CreateServiceReviewRequest(string ReviewById, int Rating, string ServiceId, string Comment);
+public record CreateServiceReviewRequest(string ReviewById, int Rating, string ServiceId, string ReviewMessage);
 public class CreateServiceReviewEndpoint(ICommandDispatcher commandDispatcher) : PublicWithRequest<CreateServiceReviewRequest>
 {
     [HttpPost("serviceReview/create")]
     public override async Task<ActionResult> HandleAsync(CreateServiceReviewRequest request)
     {
-        var commandResult = CreateServiceReviewCommand.Create(request.ReviewById, request.Rating,request.Comment, request.ServiceId);
+        var commandResult = CreateServiceReviewCommand.Create(request.ReviewById, request.Rating,request.ReviewMessage, request.ServiceId);
         if (!commandResult.IsSuccess)
         {
             return await Task.FromResult<ActionResult>(BadRequest(commandResult.Errors));
