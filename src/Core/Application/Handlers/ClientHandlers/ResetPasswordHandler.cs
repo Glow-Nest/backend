@@ -3,11 +3,11 @@ using Application.AppEntry.Commands.Client;
 using Domain.Aggregates.Client;
 using Domain.Aggregates.Client.Contracts;
 using Domain.Common.Contracts;
-using Domain.Common.OperationResult;
+using OperationResult;
 
 namespace Application.Handlers.ClientHandlers;
 
-public class ResetPasswordHandler : ICommandHandler<ResetPasswordCommand>
+public class ResetPasswordHandler : ICommandHandler<ResetPasswordCommand, None>
 {
     
     private readonly IClientRepository _clientRepository;
@@ -17,13 +17,13 @@ public class ResetPasswordHandler : ICommandHandler<ResetPasswordCommand>
         _clientRepository = clientRepository;
     }
     
-    public async Task<Result> HandleAsync(ResetPasswordCommand command)
+    public async Task<Result<None>> HandleAsync(ResetPasswordCommand command)
     {
         var clientResult = await _clientRepository.GetAsync(command.Email);
         
         if (!clientResult.IsSuccess)
         {
-            return clientResult.ToNonGeneric();
+            return clientResult.ToNonGeneric().ToNone();
         }
         
         var client = clientResult.Data;
@@ -31,9 +31,9 @@ public class ResetPasswordHandler : ICommandHandler<ResetPasswordCommand>
         var resetResult = client.ResetPassword(command.NewPassword);
         if (!resetResult.IsSuccess)
         {
-            return resetResult;
+            return resetResult.ToNone();
         }
 
-        return Result.Success();
+        return Result<None>.Success(None.Value);
     }
 }

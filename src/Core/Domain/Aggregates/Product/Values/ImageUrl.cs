@@ -1,5 +1,5 @@
 ﻿using Domain.Common.BaseClasses;
-using Domain.Common.OperationResult;
+using OperationResult;
 
 namespace Domain.Aggregates.Product.Values;
 

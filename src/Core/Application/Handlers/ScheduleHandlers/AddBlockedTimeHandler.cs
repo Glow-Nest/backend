@@ -2,31 +2,31 @@ using Application.AppEntry;
 using Application.AppEntry.Commands.Schedule;
 using Domain.Aggregates.Schedule;
 using Domain.Common.Contracts;
-using Domain.Common.OperationResult;
+using OperationResult;
 
 namespace Application.Handlers.ScheduleHandlers;
 
-public class AddBlockedTimeHandler(IScheduleRepository scheduleRepository, IDateTimeProvider dateTimeProvider) : ICommandHandler<AddBlockedTimeCommand>
+public class AddBlockedTimeHandler(IScheduleRepository scheduleRepository, IDateTimeProvider dateTimeProvider) : ICommandHandler<AddBlockedTimeCommand, None>
 {
     private readonly IScheduleRepository _scheduleRepository = scheduleRepository;
     private readonly IDateTimeProvider _dateTimeProvider = dateTimeProvider;
 
-    public async Task<Result> HandleAsync(AddBlockedTimeCommand command)
+    public async Task<Result<None>> HandleAsync(AddBlockedTimeCommand command)
     {
         var scheduleResult = await GetOrCreateScheduleAsync(command.scheduleDate);
         if (!scheduleResult.IsSuccess)
         {
-            return Result.Fail(scheduleResult.Errors);
+            return Result<None>.Fail(scheduleResult.Errors);
         }
         
         var schedule = scheduleResult.Data;
         var result = await schedule.AddBlockedTime(command.timeSlot, command.reason, _dateTimeProvider);
         if (!result.IsSuccess)
         {
-            return Result.Fail(result.Errors);
+            return Result<None>.Fail(result.Errors);
         }
 
-        return Result.Success();
+        return Result<None>.Success(None.Value);
     }
     
     private async Task<Result<Schedule>> GetOrCreateScheduleAsync(DateOnly date)

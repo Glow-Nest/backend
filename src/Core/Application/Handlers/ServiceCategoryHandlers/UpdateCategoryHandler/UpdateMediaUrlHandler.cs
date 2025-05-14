@@ -1,11 +1,11 @@
 ﻿using Application.AppEntry;
 using Application.AppEntry.Commands.ServiceCategory.UpdateCategoryCommand;
 using Domain.Aggregates.ServiceCategory;
-using Domain.Common.OperationResult;
+using OperationResult;
 
 namespace Application.Handlers.ServiceCategoryHandlers.UpdateCategoryHandler;
 
-public class UpdateMediaUrlHandler : ICommandHandler<UpdateMediaUrlCommand>
+public class UpdateMediaUrlHandler : ICommandHandler<UpdateMediaUrlCommand, None>
 {
     
     private readonly ICategoryRepository _categoryRepository;
@@ -15,13 +15,13 @@ public class UpdateMediaUrlHandler : ICommandHandler<UpdateMediaUrlCommand>
         _categoryRepository = categoryRepository;
     }
     
-    public async Task<Result> HandleAsync(UpdateMediaUrlCommand command)
+    public async Task<Result<None>> HandleAsync(UpdateMediaUrlCommand command)
     {
         var findCategoryResult = await _categoryRepository.GetAsync(command.Id);
         
         if (!findCategoryResult.IsSuccess)
         {
-            return findCategoryResult.ToNonGeneric();
+            return findCategoryResult.ToNonGeneric().ToNone();
         }
 
         var category = findCategoryResult.Data;
@@ -29,9 +29,9 @@ public class UpdateMediaUrlHandler : ICommandHandler<UpdateMediaUrlCommand>
         
         if (!updateResult.IsSuccess)
         {
-            return updateResult;
+            return updateResult.ToNone();
         }
         
-        return Result.Success();
+        return Result<None>.Success(None.Value);
     }
 }

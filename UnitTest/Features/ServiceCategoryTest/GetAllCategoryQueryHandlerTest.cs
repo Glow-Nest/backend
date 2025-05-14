@@ -1,9 +1,9 @@
 ﻿using Domain.Aggregates.ServiceCategory;
 using Domain.Aggregates.ServiceCategory.Values;
-using Domain.Common.OperationResult;
 using EfcQueries.Queries;
 using EfcQueries.Queries.Category;
 using Moq;
+using OperationResult;
 using QueryContracts.Queries.Service;
 
 namespace UnitTest.Features.ServiceCategoryTest;

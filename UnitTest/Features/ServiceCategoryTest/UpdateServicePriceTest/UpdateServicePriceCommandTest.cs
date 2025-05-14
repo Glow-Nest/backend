@@ -1,6 +1,7 @@
 ﻿using Application.AppEntry.Commands.ServiceCategory;
 using Application.AppEntry.Commands.ServiceCategory.UpdateServiceCommand;
 using Domain.Aggregates.ServiceCategory.Values;
+using Domain.Common.Values;
 
 namespace UnitTest.Features.ServiceCategoryTest.UpdateServicePriceTest;
 

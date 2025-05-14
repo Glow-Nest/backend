@@ -1,6 +1,6 @@
 using Application.Common;
 using Domain.Aggregates.Client;
-using Domain.Common.OperationResult;
+using OperationResult;
 
 namespace Application.Interfaces;
 

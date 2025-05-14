@@ -1,11 +1,11 @@
 ﻿using Application.AppEntry;
 using Application.AppEntry.Commands.Client.UpdateClient;
 using Domain.Aggregates.Client;
-using Domain.Common.OperationResult;
+using OperationResult;
 
 namespace Application.Handlers.ClientHandlers.UpdateClientHandler;
 
-public class UpdatePasswordHandler : ICommandHandler<UpdatePasswordCommand>
+public class UpdatePasswordHandler : ICommandHandler<UpdatePasswordCommand, None>
 {
     private readonly IClientRepository _clientRepository;
     
@@ -14,13 +14,13 @@ public class UpdatePasswordHandler : ICommandHandler<UpdatePasswordCommand>
         _clientRepository = clientRepository;
     }
     
-    public async Task<Result> HandleAsync(UpdatePasswordCommand command)
+    public async Task<Result<None>> HandleAsync(UpdatePasswordCommand command)
     {
         var findClientResult = await _clientRepository.GetAsync(command.Id);
         
         if (!findClientResult.IsSuccess)
         {
-            return findClientResult.ToNonGeneric();
+            return findClientResult.ToNonGeneric().ToNone();
         }
 
         var client = findClientResult.Data;
@@ -28,9 +28,9 @@ public class UpdatePasswordHandler : ICommandHandler<UpdatePasswordCommand>
         
         if (!updateResult.IsSuccess)
         {
-            return updateResult;
+            return updateResult.ToNone();
         }
         
-        return Result.Success();
+        return Result<None>.Success(None.Value);
     }
 }

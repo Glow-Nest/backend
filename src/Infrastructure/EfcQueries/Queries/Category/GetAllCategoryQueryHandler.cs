@@ -1,5 +1,5 @@
 ﻿using Domain.Aggregates.ServiceCategory;
-using Domain.Common.OperationResult;
+using OperationResult;
 using QueryContracts.Contracts;
 using QueryContracts.Queries.Service;
 

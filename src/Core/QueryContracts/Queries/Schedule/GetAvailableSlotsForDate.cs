@@ -1,5 +1,5 @@
 using Domain.Aggregates.Schedule.Values;
-using Domain.Common.OperationResult;
+using OperationResult;
 using QueryContracts.Contracts;
 
 namespace QueryContracts.Queries.Schedule;

@@ -1,5 +1,5 @@
 using Domain.Common;
-using Domain.Common.OperationResult;
+using OperationResult;
 
 namespace Application.AppEntry.Decorators;
 
@@ -16,9 +16,9 @@ public class TransactionDecorator : ICommandDispatcher
         _changesSaved = false;
     }
 
-    public async Task<Result> DispatchAsync<TCommand>(TCommand command)
+    public async Task<Result<TResponse>> DispatchAsync<TCommand, TResponse>(TCommand command)
     {
-        var dispatchResult = await _inner.DispatchAsync(command);
+        var dispatchResult = await _inner.DispatchAsync<TCommand, TResponse>(command);
         
         if (dispatchResult.IsSuccess && !_changesSaved)
         {

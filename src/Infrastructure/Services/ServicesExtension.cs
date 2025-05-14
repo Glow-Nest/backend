@@ -2,6 +2,7 @@ using Application.Interfaces;
 using Domain.Aggregates.Appointment.Contracts;
 using Domain.Aggregates.Client.Contracts;
 using Domain.Aggregates.Client.Values;
+using Domain.Aggregates.Order.Contracts;
 using Domain.Aggregates.Schedule.Contracts;
 using Domain.Common.Contracts;
 using Microsoft.Extensions.Configuration;
@@ -12,6 +13,7 @@ using Services.Authentication;
 using Services.Contracts.Appointment;
 using Services.Contracts.Client;
 using Services.Contracts.Common;
+using Services.Contracts.Order;
 using Services.Contracts.Schedule;
 using Services.Email;
 using Services.Jobs;
@@ -33,6 +35,9 @@ public static class ServicesExtension
         serviceCollection.AddScoped<IClientChecker, ClientChecker>();
         serviceCollection.AddScoped<IServiceChecker, ServiceChecker>();
         serviceCollection.AddScoped<IBlockedTimeChecker, BlockedTimeChecker>();
+
+        // order
+        serviceCollection.AddScoped<IProductChecker, ProductChecker>();
     }
 
     private static void RegisterApplicationServices(this IServiceCollection serviceCollection)

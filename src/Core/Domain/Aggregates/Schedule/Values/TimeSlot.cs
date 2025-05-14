@@ -1,7 +1,7 @@
 using Domain.Aggregates.Appointment;
 using Domain.Common;
 using Domain.Common.BaseClasses;
-using Domain.Common.OperationResult;
+using OperationResult;
 
 namespace Domain.Aggregates.Schedule.Values;
 

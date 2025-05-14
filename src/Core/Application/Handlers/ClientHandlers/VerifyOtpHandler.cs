@@ -4,11 +4,11 @@ using Domain.Aggregates.Client;
 using Domain.Aggregates.Client.Contracts;
 using Domain.Common;
 using Domain.Common.Contracts;
-using Domain.Common.OperationResult;
+using OperationResult;
 
 namespace Application.Handlers.ClientHandlers;
 
-public class VerifyOtpHandler : ICommandHandler<VerifyOtpCommand>
+public class VerifyOtpHandler : ICommandHandler<VerifyOtpCommand, None>
 {
     private readonly IClientRepository _clientRepository;
     private readonly IDateTimeProvider _dateTimeProvider;
@@ -19,13 +19,13 @@ public class VerifyOtpHandler : ICommandHandler<VerifyOtpCommand>
         _dateTimeProvider = dateTimeProvider;
     }
 
-    public async Task<Result> HandleAsync(VerifyOtpCommand command)
+    public async Task<Result<None>> HandleAsync(VerifyOtpCommand command)
     {
         var clientResult = await _clientRepository.GetAsync(command.email);
         
         if (!clientResult.IsSuccess)
         {
-            return clientResult.ToNonGeneric();
+            return clientResult.ToNonGeneric().ToNone();
         }
         
         var client = clientResult.Data;
@@ -33,9 +33,9 @@ public class VerifyOtpHandler : ICommandHandler<VerifyOtpCommand>
         
         if (!result.IsSuccess)
         {
-            return result;
+            return result.ToNone();
         }
 
-        return result;
+        return Result<None>.Success(None.Value);
     }
 }

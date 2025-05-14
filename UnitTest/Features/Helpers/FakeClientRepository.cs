@@ -1,7 +1,7 @@
 using Domain.Aggregates.Client;
 using Domain.Aggregates.Client.Values;
-using Domain.Common.OperationResult;
 using Domain.Common.Repositories;
+using OperationResult;
 
 namespace UnitTest.Features.Helpers;
 

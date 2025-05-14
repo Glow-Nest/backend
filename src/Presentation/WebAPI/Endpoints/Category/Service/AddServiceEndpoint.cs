@@ -1,9 +1,10 @@
 ﻿using Application.AppEntry;
 using Application.AppEntry.Commands.ServiceCategory;
 using Microsoft.AspNetCore.Mvc;
+using OperationResult;
 using WebAPI.Endpoints.Common.Command;
 
-namespace WebAPI.Endpoints.Service;
+namespace WebAPI.Endpoints.Category.Service;
 
 public record AddServiceRequest(
     string Name,
@@ -23,7 +24,7 @@ public class AddServiceEndpoint(ICommandDispatcher commandDispatcher) : Protecte
             return await Task.FromResult<ActionResult>(BadRequest(commandResult.Errors));
         }
         
-        var dispatchResult = await commandDispatcher.DispatchAsync(commandResult.Data);
+        var dispatchResult = await commandDispatcher.DispatchAsync<AddServiceInCategoryCommand, None>(commandResult.Data);
         return dispatchResult.IsSuccess ? Ok() : BadRequest(dispatchResult.Errors);
     }
 }

@@ -1,7 +1,8 @@
 ﻿using Domain.Aggregates.ServiceCategory.Entities;
 using Domain.Aggregates.ServiceCategory.Values;
 using Domain.Common.BaseClasses;
-using Domain.Common.OperationResult;
+using Domain.Common.Values;
+using OperationResult;
 
 namespace Domain.Aggregates.ServiceCategory;
 

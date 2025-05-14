@@ -1,6 +1,7 @@
 ﻿using Application.AppEntry;
 using Application.AppEntry.Commands.ServiceCategory;
 using Microsoft.AspNetCore.Mvc;
+using OperationResult;
 using WebAPI.Endpoints.Common.Command;
 
 namespace WebAPI.Endpoints.Category.Service;
@@ -21,7 +22,7 @@ public class DeleteServiceEndpoint(ICommandDispatcher commandDispatcher) : Prote
             return await Task.FromResult<ActionResult>(BadRequest(commandResult.Errors));
         }
 
-        var dispatchResult = await commandDispatcher.DispatchAsync(commandResult.Data);
+        var dispatchResult = await commandDispatcher.DispatchAsync<DeleteServiceCommand, None>(commandResult.Data);
         return dispatchResult.IsSuccess ? Ok() : BadRequest(dispatchResult.Errors);
     }
 }

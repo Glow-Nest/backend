@@ -1,11 +1,11 @@
 ﻿using Application.AppEntry;
 using Application.AppEntry.Commands.ServiceCategory;
 using Domain.Aggregates.ServiceCategory;
-using Domain.Common.OperationResult;
+using OperationResult;
 
 namespace Application.Handlers.ServiceCategoryHandlers;
 
-public class AddServiceInCategoryHandler : ICommandHandler<AddServiceInCategoryCommand>
+public class AddServiceInCategoryHandler : ICommandHandler<AddServiceInCategoryCommand, None>
 {
     private readonly ICategoryRepository _categoryRepository;
     
@@ -14,13 +14,13 @@ public class AddServiceInCategoryHandler : ICommandHandler<AddServiceInCategoryC
         _categoryRepository = categoryRepository;
     }
     
-    public async Task<Result> HandleAsync(AddServiceInCategoryCommand command)
+    public async Task<Result<None>> HandleAsync(AddServiceInCategoryCommand command)
     {
         var categoryResult =  await _categoryRepository.GetAsync(command.categoryId);
         
         if (!categoryResult.IsSuccess)
         {
-            return Result.Fail(categoryResult.Errors);
+            return Result<None>.Fail(categoryResult.Errors);
         }
         
         var category = categoryResult.Data;
@@ -28,15 +28,14 @@ public class AddServiceInCategoryHandler : ICommandHandler<AddServiceInCategoryC
         
         if (!serviceResult.Result.IsSuccess)
         {
-            return Result.Fail(serviceResult.Result.Errors);
+            return Result<None>.Fail(serviceResult.Result.Errors);
         }
 
         if (!serviceResult.Result.IsSuccess)
         {
-            return await Task.FromResult(Result.Fail(serviceResult.Result.Errors));
+            return Result<None>.Fail(serviceResult.Result.Errors);
         }
 
-        return await Task.FromResult(Result.Success());
-        
+        return Result<None>.Success(None.Value);
     }
 }

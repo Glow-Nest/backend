@@ -1,6 +1,6 @@
-using Domain.Common.OperationResult;
 using EfcQueries.Models;
 using Microsoft.EntityFrameworkCore;
+using OperationResult;
 using QueryContracts.Contracts;
 using QueryContracts.Queries.Product;
 

@@ -1,8 +1,8 @@
 ﻿using Application.AppEntry.Commands.Product;
 using Application.Handlers.ProductHandlers;
 using Domain.Aggregates.Product;
-using Domain.Common.OperationResult;
 using Moq;
+using OperationResult;
 
 namespace UnitTest.Features.ProductTest;
 

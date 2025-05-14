@@ -1,5 +1,5 @@
 using System.Runtime.InteropServices.JavaScript;
-using Domain.Common.OperationResult;
+using OperationResult;
 
 namespace Domain.Aggregates.Client;
 

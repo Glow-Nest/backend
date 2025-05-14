@@ -1,5 +1,5 @@
 ﻿using Domain.Aggregates.Client.Values;
-using Domain.Common.OperationResult;
+using OperationResult;
 
 namespace Application.AppEntry.Commands.Client.UpdateClient;
 

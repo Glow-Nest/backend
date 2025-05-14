@@ -1,11 +1,11 @@
 ﻿using Application.AppEntry;
 using Application.AppEntry.Commands.Product;
 using Domain.Aggregates.Product;
-using Domain.Common.OperationResult;
+using OperationResult;
 
 namespace Application.Handlers.ProductHandlers;
 
-public class CreateProductHandler : ICommandHandler<CreateProductCommand>
+public class CreateProductHandler : ICommandHandler<CreateProductCommand, None>
 {
     private readonly IProductRepository _productRepository;
     
@@ -14,21 +14,21 @@ public class CreateProductHandler : ICommandHandler<CreateProductCommand>
         _productRepository = productRepository;
     }
     
-    public async Task<Result> HandleAsync(CreateProductCommand command)
+    public async Task<Result<None>> HandleAsync(CreateProductCommand command)
     {
         var result = await Product.Create(command.name, command.price, command.imageUrl,command.description ,command.inventoryCount);
         if (!result.IsSuccess)
         {
-            return result.ToNonGeneric();
+            return result.ToNonGeneric().ToNone();
         }
 
         var productAddResult = await _productRepository.AddAsync(result.Data);
         
         if (!productAddResult.IsSuccess)
         {
-            return productAddResult;
+            return productAddResult.ToNone();
         }
         
-        return Result.Success();
+        return Result<None>.Success(None.Value);
     }
 }

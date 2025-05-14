@@ -3,8 +3,8 @@ using Application.Handlers.ClientHandlers;
 using Domain.Aggregates.Client;
 using Domain.Aggregates.Client.Values;
 using Domain.Common.Contracts;
-using Domain.Common.OperationResult;
 using Moq;
+using OperationResult;
 using UnitTest.Features.Helpers.Builders;
 
 namespace UnitTest.Features.ClientTest.PasswordTest.InitiateResetPassword;

@@ -8,8 +8,8 @@ using Domain.Aggregates.Schedule.Values;
 using Domain.Aggregates.Schedule.Values.AppointmentValues;
 using Domain.Aggregates.ServiceCategory.Values;
 using Domain.Common.Contracts;
-using Domain.Common.OperationResult;
 using Moq;
+using OperationResult;
 using UnitTest.Features.Helpers.Builders;
 
 namespace UnitTest.Features.ScheduleTest.CreateAppointment;

@@ -1,15 +1,16 @@
 ﻿using Domain.Aggregates.ServiceCategory.Values;
 using Domain.Common;
-using Domain.Common.OperationResult;
+using Domain.Common.Values;
+using OperationResult;
 
 namespace Application.AppEntry.Commands.ServiceCategory;
 
 public class AddServiceInCategoryCommand(ServiceName name, Price price, TimeSpan duration,CategoryId categoryId)
 {
-    internal ServiceName name = name;
-    internal Price price = price;
+    internal readonly ServiceName name = name;
+    internal readonly Price price = price;
     internal TimeSpan duration = duration;
-    internal CategoryId categoryId = categoryId;
+    internal readonly CategoryId categoryId = categoryId;
     
     public static Result<AddServiceInCategoryCommand> Create(string namestr, double pricestr, string durationstr,string categoryIdstr)
     {

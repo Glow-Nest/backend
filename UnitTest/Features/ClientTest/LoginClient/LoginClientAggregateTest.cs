@@ -1,7 +1,7 @@
 ﻿using Domain.Aggregates.Client;
 using Domain.Aggregates.Client.Values;
-using Domain.Common.OperationResult;
 using Moq;
+using OperationResult;
 using Services.Authentication;
 using UnitTest.Features.Helpers;
 

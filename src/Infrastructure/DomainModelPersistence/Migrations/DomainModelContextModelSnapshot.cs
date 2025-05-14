@@ -81,6 +81,65 @@ namespace DomainModelPersistence.Migrations
                     b.ToTable("Client");
                 });
 
+            modelBuilder.Entity("Domain.Aggregates.Order.Entities.OrderItem", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("OrderId")
+                        .HasColumnType("uuid");
+
+                    b.Property<double>("PriceWhenOrdering")
+                        .HasColumnType("double precision");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id", "ProductId");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("OrderItem");
+                });
+
+            modelBuilder.Entity("Domain.Aggregates.Order.Order", b =>
+                {
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ClientId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("OrderDate")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("OrderStatus")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("PaymentStatus")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("PickupDate")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<double>("TotalPrice")
+                        .HasColumnType("double precision");
+
+                    b.HasKey("OrderId");
+
+                    b.HasIndex("ClientId");
+
+                    b.ToTable("Order");
+                });
+
             modelBuilder.Entity("Domain.Aggregates.Product.Product", b =>
                 {
                     b.Property<Guid>("ProductId")
@@ -384,6 +443,29 @@ namespace DomainModelPersistence.Migrations
                     b.Navigation("OtpSession");
                 });
 
+            modelBuilder.Entity("Domain.Aggregates.Order.Entities.OrderItem", b =>
+                {
+                    b.HasOne("Domain.Aggregates.Order.Order", null)
+                        .WithMany("OrderItems")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Domain.Aggregates.Product.Product", null)
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Aggregates.Order.Order", b =>
+                {
+                    b.HasOne("Domain.Aggregates.Client.Client", null)
+                        .WithMany()
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Domain.Aggregates.Schedule.Entities.Appointment", b =>
                 {
                     b.HasOne("Domain.Aggregates.Client.Client", null)
@@ -467,6 +549,11 @@ namespace DomainModelPersistence.Migrations
                         .WithMany("Services")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Domain.Aggregates.Order.Order", b =>
+                {
+                    b.Navigation("OrderItems");
                 });
 
             modelBuilder.Entity("Domain.Aggregates.Schedule.Schedule", b =>

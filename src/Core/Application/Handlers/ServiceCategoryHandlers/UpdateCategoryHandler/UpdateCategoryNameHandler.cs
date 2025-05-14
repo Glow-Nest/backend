@@ -1,11 +1,11 @@
 ﻿using Application.AppEntry;
 using Application.AppEntry.Commands.ServiceCategory.UpdateCategoryCommand;
 using Domain.Aggregates.ServiceCategory;
-using Domain.Common.OperationResult;
+using OperationResult;
 
 namespace Application.Handlers.ServiceCategoryHandlers.UpdateCategoryHandler;
 
-public class UpdateCategoryNameHandler : ICommandHandler<UpdateCategoryNameCommand>
+public class UpdateCategoryNameHandler : ICommandHandler<UpdateCategoryNameCommand, None>
 {
     
     private readonly ICategoryRepository _categoryRepository;
@@ -15,13 +15,13 @@ public class UpdateCategoryNameHandler : ICommandHandler<UpdateCategoryNameComma
         _categoryRepository = categoryRepository;
     }
     
-    public async Task<Result> HandleAsync(UpdateCategoryNameCommand command)
+    public async Task<Result<None>> HandleAsync(UpdateCategoryNameCommand command)
     {
         var findCategoryResult = await _categoryRepository.GetAsync(command.Id);
         
         if (!findCategoryResult.IsSuccess)
         {
-            return findCategoryResult.ToNonGeneric();
+            return findCategoryResult.ToNonGeneric().ToNone();
         }
 
         var category = findCategoryResult.Data;
@@ -29,9 +29,9 @@ public class UpdateCategoryNameHandler : ICommandHandler<UpdateCategoryNameComma
         
         if (!updateResult.IsSuccess)
         {
-            return updateResult;
+            return updateResult.ToNone();
         }
         
-        return Result.Success();
+        return Result<None>.Success(None.Value);
     }
 }

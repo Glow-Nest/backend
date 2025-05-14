@@ -1,11 +1,11 @@
 ﻿using Application.AppEntry;
 using Application.AppEntry.Commands.Client.UpdateClient;
 using Domain.Aggregates.Client;
-using Domain.Common.OperationResult;
+using OperationResult;
 
 namespace Application.Handlers.ClientHandlers.UpdateClientHandler;
 
-public class UpdatePhoneNumberHandler : ICommandHandler<UpdatePhoneNumberCommand>
+public class UpdatePhoneNumberHandler : ICommandHandler<UpdatePhoneNumberCommand, None>
 {
     private readonly IClientRepository _clientRepository;
     
@@ -13,13 +13,13 @@ public class UpdatePhoneNumberHandler : ICommandHandler<UpdatePhoneNumberCommand
     {
         _clientRepository = clientRepository;
     }
-    public async Task<Result> HandleAsync(UpdatePhoneNumberCommand command)
+    public async Task<Result<None>> HandleAsync(UpdatePhoneNumberCommand command)
     {
         var findClientResult = await _clientRepository.GetAsync(command.Id);
         
         if (!findClientResult.IsSuccess)
         {
-            return findClientResult.ToNonGeneric();
+            return findClientResult.ToNonGeneric().ToNone();
         }
 
         var client = findClientResult.Data;
@@ -27,9 +27,9 @@ public class UpdatePhoneNumberHandler : ICommandHandler<UpdatePhoneNumberCommand
         
         if (!updateResult.IsSuccess)
         {
-            return updateResult;
+            return updateResult.ToNone();
         }
         
-        return Result.Success();
+        return Result<None>.Success(None.Value);
     }
 }

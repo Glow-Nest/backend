@@ -1,4 +1,4 @@
-﻿using Domain.Common.OperationResult;
+﻿using OperationResult;
 
 namespace Domain.Aggregates.SalonOwner;
 

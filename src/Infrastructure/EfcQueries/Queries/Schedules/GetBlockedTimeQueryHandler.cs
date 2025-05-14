@@ -1,7 +1,7 @@
 using Domain.Aggregates.Schedule.Entities;
-using Domain.Common.OperationResult;
 using DomainModelPersistence.EfcConfigs;
 using Microsoft.EntityFrameworkCore;
+using OperationResult;
 using QueryContracts.Contracts;
 using QueryContracts.Queries.Schedule;
 

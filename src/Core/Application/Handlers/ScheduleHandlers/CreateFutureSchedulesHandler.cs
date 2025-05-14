@@ -1,18 +1,17 @@
 using Application.AppEntry;
 using Application.AppEntry.Commands.Schedule;
 using Domain.Aggregates.Schedule;
-using Domain.Common.OperationResult;
+using OperationResult;
 
 namespace Application.Handlers.ScheduleHandlers;
 
-public class CreateFutureSchedulesHandler(IScheduleRepository scheduleRepository) : ICommandHandler<CreateFutureSchedulesCommand>
+public class CreateFutureSchedulesHandler(IScheduleRepository scheduleRepository) : ICommandHandler<CreateFutureSchedulesCommand, None>
 {
     private readonly IScheduleRepository _scheduleRepository = scheduleRepository;
     
-    public async Task<Result> HandleAsync(CreateFutureSchedulesCommand command)
+    public async Task<Result<None>> HandleAsync(CreateFutureSchedulesCommand command)
     {
         var now = DateTime.Now;
-        var tasks = new List<Task>();
         
         var schedulesToAdd = new List<Schedule>();
 
@@ -31,6 +30,6 @@ public class CreateFutureSchedulesHandler(IScheduleRepository scheduleRepository
             await _scheduleRepository.AddRangeAsync(schedulesToAdd);
         }
         
-        return Result.Success();
+        return Result<None>.Success(None.Value);
     }
 }

@@ -1,6 +1,7 @@
 using Application.AppEntry;
 using Application.AppEntry.Commands.Client;
 using Application.AppEntry.Commands.Client.UpdateClient;
+using Application.AppEntry.Commands.Order;
 using Application.AppEntry.Commands.Product;
 using Application.AppEntry.Commands.Product.UpdateProduct;
 using Application.AppEntry.Commands.Schedule;
@@ -12,6 +13,7 @@ using Application.AppEntry.Dispatchers;
 using Application.Handlers.ClientHandlers;
 using Application.Handlers.ClientHandlers.UpdateClientHandler;
 using Application.Handlers.DomainEvents;
+using Application.Handlers.OrderHandlers;
 using Application.Handlers.ProductHandlers;
 using Application.Handlers.ProductHandlers.UpdateProductHandler;
 using Application.Handlers.ScheduleHandlers;
@@ -19,9 +21,11 @@ using Application.Handlers.ServiceCategoryHandlers;
 using Application.Handlers.ServiceCategoryHandlers.UpdateCategoryHandler;
 using Application.Handlers.ServiceCategoryHandlers.UpdateServiceHandler;
 using Domain.Aggregates.Client.DomainEvents;
+using Domain.Aggregates.Order.Values;
 using Domain.Aggregates.Schedule.DomainEvents;
 using Domain.Common;
 using Microsoft.Extensions.DependencyInjection;
+using OperationResult;
 using QueryContracts.QueryDispatching;
 
 namespace Application.Extensions;
@@ -37,34 +41,34 @@ public static class ApplicationExtensions
     private static void RegisterHandlers(this IServiceCollection serviceCollection)
     {
         // client
-        serviceCollection.AddScoped<ICommandHandler<CreateClientCommand>, CreateClientHandler>();
-        serviceCollection.AddScoped<ICommandHandler<CreateOtpCommand>, CreateOtpHandler>();
-        serviceCollection.AddScoped<ICommandHandler<VerifyOtpCommand>, VerifyOtpHandler>();
-        serviceCollection.AddScoped<ICommandHandler<ResetPasswordCommand>, ResetPasswordHandler>();
-        serviceCollection.AddScoped<ICommandHandler<InitiateResetPasswordCommand>, InitiateResetPasswordHandler>();
-        serviceCollection.AddScoped<ICommandHandler<UpdateFullNameCommand>, UpdateFullNameHandler>();
-        serviceCollection.AddScoped<ICommandHandler<UpdatePhoneNumberCommand>, UpdatePhoneNumberHandler>();
-        serviceCollection.AddScoped<ICommandHandler<UpdatePasswordCommand>, UpdatePasswordHandler>();
+        serviceCollection.AddScoped<ICommandHandler<CreateClientCommand, None>, CreateClientHandler>();
+        serviceCollection.AddScoped<ICommandHandler<CreateOtpCommand, None>, CreateOtpHandler>();
+        serviceCollection.AddScoped<ICommandHandler<VerifyOtpCommand, None>, VerifyOtpHandler>();
+        serviceCollection.AddScoped<ICommandHandler<ResetPasswordCommand, None>, ResetPasswordHandler>();
+        serviceCollection.AddScoped<ICommandHandler<InitiateResetPasswordCommand, None>, InitiateResetPasswordHandler>();
+        serviceCollection.AddScoped<ICommandHandler<UpdateFullNameCommand, None>, UpdateFullNameHandler>();
+        serviceCollection.AddScoped<ICommandHandler<UpdatePhoneNumberCommand, None>, UpdatePhoneNumberHandler>();
+        serviceCollection.AddScoped<ICommandHandler<UpdatePasswordCommand, None>, UpdatePasswordHandler>();
 
         // schedule
-        serviceCollection.AddScoped<ICommandHandler<CreateAppointmentCommand>, CreateAppointmentHandler>();
-        serviceCollection.AddScoped<ICommandHandler<AddBlockedTimeCommand>, AddBlockedTimeHandler>();
-        serviceCollection.AddScoped<ICommandHandler<CreateFutureSchedulesCommand>, CreateFutureSchedulesHandler>();
+        serviceCollection.AddScoped<ICommandHandler<CreateAppointmentCommand, None>, CreateAppointmentHandler>();
+        serviceCollection.AddScoped<ICommandHandler<AddBlockedTimeCommand, None>, AddBlockedTimeHandler>();
+        serviceCollection.AddScoped<ICommandHandler<CreateFutureSchedulesCommand, None>, CreateFutureSchedulesHandler>();
 
         // category and service
-        serviceCollection.AddScoped<ICommandHandler<CreateCategoryCommand>, CreateCategoryHandler>();
-        serviceCollection.AddScoped<ICommandHandler<AddServiceInCategoryCommand>, AddServiceInCategoryHandler>();
-        serviceCollection.AddScoped<ICommandHandler<UpdateCategoryNameCommand>, UpdateCategoryNameHandler>();
-        serviceCollection.AddScoped<ICommandHandler<UpdateCategoryDescriptionCommand>, UpdateCategoryDescriptionHandler>();
-        serviceCollection.AddScoped<ICommandHandler<UpdateMediaUrlCommand>, UpdateMediaUrlHandler>();
-        serviceCollection.AddScoped<ICommandHandler<UpdateServiceNameCommand>, UpdateServiceNameHandler>();
-        serviceCollection.AddScoped<ICommandHandler<UpdateServiceDurationCommand>, UpdateServiceDurationHandler>();
-        serviceCollection.AddScoped<ICommandHandler<UpdateServicePriceCommand>, UpdateServicePriceHandler>();
-        serviceCollection.AddScoped<ICommandHandler<DeleteCategoryCommand>, DeleteCategoryHandler>();
-        serviceCollection.AddScoped<ICommandHandler<DeleteServiceCommand>, DeleteServiceHandler>();
+        serviceCollection.AddScoped<ICommandHandler<CreateCategoryCommand, None>, CreateCategoryHandler>();
+        serviceCollection.AddScoped<ICommandHandler<AddServiceInCategoryCommand, None>, AddServiceInCategoryHandler>();
+        serviceCollection.AddScoped<ICommandHandler<UpdateCategoryNameCommand, None>, UpdateCategoryNameHandler>();
+        serviceCollection.AddScoped<ICommandHandler<UpdateCategoryDescriptionCommand, None>, UpdateCategoryDescriptionHandler>();
+        serviceCollection.AddScoped<ICommandHandler<UpdateMediaUrlCommand, None>, UpdateMediaUrlHandler>();
+        serviceCollection.AddScoped<ICommandHandler<UpdateServiceNameCommand, None>, UpdateServiceNameHandler>();
+        serviceCollection.AddScoped<ICommandHandler<UpdateServiceDurationCommand, None>, UpdateServiceDurationHandler>();
+        serviceCollection.AddScoped<ICommandHandler<UpdateServicePriceCommand, None>, UpdateServicePriceHandler>();
+        serviceCollection.AddScoped<ICommandHandler<DeleteCategoryCommand, None>, DeleteCategoryHandler>();
+        serviceCollection.AddScoped<ICommandHandler<DeleteServiceCommand, None>, DeleteServiceHandler>();
         
         // product
-        serviceCollection.AddScoped<ICommandHandler<CreateProductCommand>, CreateProductHandler>();
+        serviceCollection.AddScoped<ICommandHandler<CreateProductCommand, None>, CreateProductHandler>();
         serviceCollection.AddScoped<ICommandHandler<UpdateProductNameCommand>, UpdateProductNameHandler>();
         serviceCollection.AddScoped<ICommandHandler<UpdateProductPriceCommand>, UpdateProductPriceHandler>();
         serviceCollection.AddScoped<ICommandHandler<UpdateProductImageUrlCommand>, UpdateProductImageUrlHandler>();
@@ -72,6 +76,10 @@ public static class ApplicationExtensions
         serviceCollection.AddScoped<ICommandHandler<UpdateProductDescriptionCommand>, UpdateProductDescriptionHandler>();
         serviceCollection.AddScoped<ICommandHandler<DeleteProductCommand>, DeleteProductHandler>();
         
+        // order
+        serviceCollection.AddScoped<ICommandHandler<CreateOrderCommand, OrderId>, CreateOrderHandler>();
+        
+        // domain events
         serviceCollection.AddScoped<IDomainEventHandler<OtpCreatedDomainEvent>, OtpCreatedDomainEventHandler>();
         serviceCollection.AddScoped<IDomainEventHandler<AppointmentCreatedDomainEvent>, AppointmentCreatedDomainEventHandler>();
     }

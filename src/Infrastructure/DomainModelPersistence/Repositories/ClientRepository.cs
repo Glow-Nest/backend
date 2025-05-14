@@ -1,10 +1,10 @@
 using Domain.Aggregates.Client;
 using Domain.Aggregates.Client.Values;
 using Domain.Common;
-using Domain.Common.OperationResult;
 using DomainModelPersistence.EfcConfigs;
 using DomainModelPersistence.Repositories.Common;
 using Microsoft.EntityFrameworkCore;
+using OperationResult;
 
 namespace DomainModelPersistence.ClientPersistence;
 

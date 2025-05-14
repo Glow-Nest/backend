@@ -3,7 +3,7 @@ using Domain.Aggregates.Schedule.Values;
 using Domain.Aggregates.Schedule.Values.AppointmentValues;
 using Domain.Aggregates.ServiceCategory.Values;
 using Domain.Common;
-using Domain.Common.OperationResult;
+using OperationResult;
 
 namespace Application.AppEntry.Commands.Schedule;
 

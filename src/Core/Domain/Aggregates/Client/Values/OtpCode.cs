@@ -1,6 +1,6 @@
 using System.Security.Cryptography;
 using Domain.Common.BaseClasses;
-using Domain.Common.OperationResult;
+using OperationResult;
 
 namespace Domain.Aggregates.Client.Values;
 

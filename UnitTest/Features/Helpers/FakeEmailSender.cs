@@ -1,7 +1,7 @@
 using Application.Common;
 using Application.Interfaces;
 using Domain.Aggregates.Client;
-using Domain.Common.OperationResult;
+using OperationResult;
 
 namespace UnitTest.Features.Helpers;
 

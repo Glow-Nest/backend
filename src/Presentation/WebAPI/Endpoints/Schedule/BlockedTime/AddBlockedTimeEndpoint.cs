@@ -1,10 +1,10 @@
 using Application.AppEntry;
 using Application.AppEntry.Commands.Schedule;
 using Microsoft.AspNetCore.Mvc;
-using QueryContracts.QueryDispatching;
+using OperationResult;
 using WebAPI.Endpoints.Common.Command;
 
-namespace WebAPI.Endpoints.Schedule;
+namespace WebAPI.Endpoints.Schedule.BlockedTime;
 
 public record AddBlockedTimeRequest(string StartTime, string EndTime, string ScheduleDate, string BlockReason);
 
@@ -25,7 +25,7 @@ public class AddBlockedTimeEndpoint(ICommandDispatcher commandDispatcher) : Prot
             return BadRequest(commandResult.Errors);
         }
 
-        var dispatchResult = await commandDispatcher.DispatchAsync(commandResult.Data);
+        var dispatchResult = await commandDispatcher.DispatchAsync<AddBlockedTimeCommand, None>(commandResult.Data);
         return dispatchResult.IsSuccess ? Ok() : BadRequest(dispatchResult.Errors);
     }
 }

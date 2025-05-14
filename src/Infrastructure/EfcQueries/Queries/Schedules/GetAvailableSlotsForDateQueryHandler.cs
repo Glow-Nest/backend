@@ -3,9 +3,9 @@
 using Domain.Aggregates.Schedule;
 using Domain.Aggregates.Schedule.Values;
 using Domain.Common;
-using Domain.Common.OperationResult;
 using EfcQueries.Models;
 using Microsoft.EntityFrameworkCore;
+using OperationResult;
 using QueryContracts.Contracts;
 using QueryContracts.Queries.Schedule;
 using Schedule = EfcQueries.Models.Schedule;
