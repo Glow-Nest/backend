@@ -3,6 +3,7 @@ using Application.AppEntry.Commands.Client;
 using Application.AppEntry.Commands.Client.UpdateClient;
 using Application.AppEntry.Commands.Order;
 using Application.AppEntry.Commands.Product;
+using Application.AppEntry.Commands.Product.UpdateProduct;
 using Application.AppEntry.Commands.Schedule;
 using Application.AppEntry.Commands.ServiceCategory;
 using Application.AppEntry.Commands.ServiceCategory.UpdateCategoryCommand;
@@ -14,6 +15,7 @@ using Application.Handlers.ClientHandlers.UpdateClientHandler;
 using Application.Handlers.DomainEvents;
 using Application.Handlers.OrderHandlers;
 using Application.Handlers.ProductHandlers;
+using Application.Handlers.ProductHandlers.UpdateProductHandler;
 using Application.Handlers.ScheduleHandlers;
 using Application.Handlers.ServiceCategoryHandlers;
 using Application.Handlers.ServiceCategoryHandlers.UpdateCategoryHandler;
@@ -67,6 +69,12 @@ public static class ApplicationExtensions
         
         // product
         serviceCollection.AddScoped<ICommandHandler<CreateProductCommand, None>, CreateProductHandler>();
+        serviceCollection.AddScoped<ICommandHandler<UpdateProductNameCommand>, UpdateProductNameHandler>();
+        serviceCollection.AddScoped<ICommandHandler<UpdateProductPriceCommand>, UpdateProductPriceHandler>();
+        serviceCollection.AddScoped<ICommandHandler<UpdateProductImageUrlCommand>, UpdateProductImageUrlHandler>();
+        serviceCollection.AddScoped<ICommandHandler<UpdateProductInventoryCountCommand>, UpdateProductInventoryCountHandler>();
+        serviceCollection.AddScoped<ICommandHandler<UpdateProductDescriptionCommand>, UpdateProductDescriptionHandler>();
+        serviceCollection.AddScoped<ICommandHandler<DeleteProductCommand>, DeleteProductHandler>();
         
         // order
         serviceCollection.AddScoped<ICommandHandler<CreateOrderCommand, OrderId>, CreateOrderHandler>();
