@@ -8,13 +8,13 @@ namespace WebAPI.Endpoints.Order;
 
 public class CreateOrderEndpoint(ICommandDispatcher commandDispatcher) : ProtectedSharedWithRequestAndResponse<CreateOrderEndpoint.CreateOrderRequest, CreateOrderEndpoint.CreateOrderResponse>
 {
-    public record CreateOrderRequest(string ClientId, double TotalPrice, List<OrderItemDto> OrderItems);
+    public record CreateOrderRequest(string ClientId, double TotalPrice, List<OrderItemDto> OrderItems, string PickupDate);
     public record CreateOrderResponse(string OrderId);
     
     [HttpPost("order/create")]
     public override async Task<ActionResult<CreateOrderResponse>> HandleAsync([FromBody] CreateOrderRequest request)
     {
-        var commandResult = CreateOrderCommand.Create(request.ClientId, request.TotalPrice, request.OrderItems);
+        var commandResult = CreateOrderCommand.Create(request.ClientId, request.TotalPrice, request.PickupDate, request.OrderItems);
         if (!commandResult.IsSuccess)
         {
             return BadRequest(commandResult.Errors);

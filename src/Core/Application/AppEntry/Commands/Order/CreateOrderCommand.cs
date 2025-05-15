@@ -11,13 +11,14 @@ namespace Application.AppEntry.Commands.Order;
 
 public record OrderItemDto(string ProductId, int Quantity, double PriceWhenOrdering);
 
-public class CreateOrderCommand(Price totalPrice,  ClientId clientId, List<OrderItem> orderItems)
+public class CreateOrderCommand(Price totalPrice,  ClientId clientId, List<OrderItem> orderItems, DateOnly pickupDate)
 {
     internal ClientId ClientId { get; } = clientId;
     internal Price TotalPrice { get; } = totalPrice;
     internal List<OrderItem> OrderItems { get; } = orderItems;
+    internal DateOnly PickupDate { get; } = pickupDate;
 
-    public static Result<CreateOrderCommand> Create(string clientIdStr, double totalPriceStr, List<OrderItemDto> orderItemDtos)
+    public static Result<CreateOrderCommand> Create(string clientIdStr, double totalPriceStr, string pickupDateStr, List<OrderItemDto> orderItemDtos)
     {
         var listOfErrors = new List<Error>();
         
@@ -41,6 +42,13 @@ public class CreateOrderCommand(Price totalPrice,  ClientId clientId, List<Order
         if (!totalPriceResult.IsSuccess)
         {
             listOfErrors.AddRange(totalPriceResult.Errors);
+        }
+        
+        // pickup date
+        var pickupDateParse = DateOnly.TryParse(pickupDateStr, out var pickupDate);
+        if (!pickupDateParse)
+        {
+            listOfErrors.Add(GenericErrorMessage.ErrorParsingDate());
         }
 
         // order items
@@ -82,7 +90,7 @@ public class CreateOrderCommand(Price totalPrice,  ClientId clientId, List<Order
             return Result<CreateOrderCommand>.Fail(listOfErrors);
         }
         
-        var command = new CreateOrderCommand(totalPriceResult.Data, clientId, orderItems);
+        var command = new CreateOrderCommand(totalPriceResult.Data, clientId, orderItems, pickupDate);
         return Result<CreateOrderCommand>.Success(command);
     }
 }

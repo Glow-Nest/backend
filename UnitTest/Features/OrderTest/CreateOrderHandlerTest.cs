@@ -23,6 +23,7 @@ public class CreateOrderHandlerTests
     private readonly Mock<IProductChecker> _productCheckerMock = new();
 
     private readonly ClientId _clientId = ClientId.Create();
+    private readonly DateOnly _pickupDate = DateOnly.FromDateTime(DateTime.Today.AddDays(2));
     private readonly ProductId _productId = ProductId.Create();
     private readonly Price _price = Price.Create(100).Data;
     private readonly Quantity _quantity = Quantity.Create(2).Data;
@@ -32,7 +33,7 @@ public class CreateOrderHandlerTests
         var orderItem = OrderItem.Create(_productId, _quantity, _price).Data;
         var totalPrice = Price.Create(_price.Value * _quantity.Value).Data;
 
-        return new CreateOrderCommand(totalPrice, _clientId, [orderItem]);
+        return new CreateOrderCommand(totalPrice, _clientId, [orderItem], _pickupDate);
     }
 
     [Fact]
@@ -46,7 +47,7 @@ public class CreateOrderHandlerTests
         _productCheckerMock.Setup(p => p.DoesProductExist(_productId))
             .ReturnsAsync(true);
         
-        var orderResult = Order.Create(_clientId, command.OrderItems, _dateTimeMock.Object, _productCheckerMock.Object).Result;
+        var orderResult = Order.Create(_clientId, command.OrderItems, _pickupDate, _dateTimeMock.Object, _productCheckerMock.Object).Result;
         var order = orderResult.Data;
         
 

@@ -40,7 +40,7 @@ public class Order : AggregateRoot
         PaymentStatus = PaymentStatus.Pending;
     }
 
-    public static async Task<Result<Order>> Create(ClientId clientId, List<OrderItem> orderItems, IDateTimeProvider dateTimeProvider, IProductChecker productChecker)
+    public static async Task<Result<Order>> Create(ClientId clientId, List<OrderItem> orderItems,DateOnly pickupDate, IDateTimeProvider dateTimeProvider, IProductChecker productChecker)
     {
         // create order id
         var orderIdResult = OrderId.Create();
@@ -73,10 +73,10 @@ public class Order : AggregateRoot
 
         // validate pickup and order date
         var today = DateOnly.FromDateTime(dateTimeProvider.GetNow());
-        /*if (pickupDate < today)
+        if (pickupDate < today)
         {
             return Result<Order>.Fail(OrderErrorMessage.PickupDateInThePast());
-        }*/
+        }
 
         var totalPrice = orderItems.Sum(item => item.PriceWhenOrdering.Value * item.Quantity.Value);
         var priceResult = Price.Create(totalPrice);
