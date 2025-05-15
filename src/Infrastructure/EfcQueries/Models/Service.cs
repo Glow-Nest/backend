@@ -17,5 +17,7 @@ public partial class Service
 
     public virtual Category? Category { get; set; }
 
+    public virtual ICollection<ServiceReview> ServiceReviews { get; set; } = new List<ServiceReview>();
+
     public virtual ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
 }

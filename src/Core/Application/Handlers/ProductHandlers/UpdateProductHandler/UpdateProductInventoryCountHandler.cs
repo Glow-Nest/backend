@@ -1,11 +1,11 @@
 ﻿using Application.AppEntry;
 using Application.AppEntry.Commands.Product.UpdateProduct;
 using Domain.Aggregates.Product;
-using Domain.Common.OperationResult;
+using OperationResult;
 
 namespace Application.Handlers.ProductHandlers.UpdateProductHandler;
 
-public class UpdateProductInventoryCountHandler : ICommandHandler<UpdateProductInventoryCountCommand>
+public class UpdateProductInventoryCountHandler : ICommandHandler<UpdateProductInventoryCountCommand, None>
 {
     private readonly IProductRepository _productRepository;
     
@@ -14,13 +14,13 @@ public class UpdateProductInventoryCountHandler : ICommandHandler<UpdateProductI
         _productRepository = productRepository;
     }
 
-    public async Task<Result> HandleAsync(UpdateProductInventoryCountCommand command)
+    public async Task<Result<None>> HandleAsync(UpdateProductInventoryCountCommand command)
     {
         var findProductResult = await _productRepository.GetAsync(command.Id);
         
         if (!findProductResult.IsSuccess)
         {
-            return findProductResult.ToNonGeneric();
+            return findProductResult.ToNonGeneric().ToNone();
         }
 
         var product = findProductResult.Data;
@@ -28,9 +28,9 @@ public class UpdateProductInventoryCountHandler : ICommandHandler<UpdateProductI
         
         if (!updateResult.IsSuccess)
         {
-            return updateResult;
+            return updateResult.ToNone();
         }
         
-        return Result.Success();
+        return Result<None>.Success(None.Value);
     }
 }

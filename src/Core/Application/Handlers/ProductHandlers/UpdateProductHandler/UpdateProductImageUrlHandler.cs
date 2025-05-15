@@ -1,11 +1,11 @@
 ﻿using Application.AppEntry;
 using Application.AppEntry.Commands.Product.UpdateProduct;
 using Domain.Aggregates.Product;
-using Domain.Common.OperationResult;
+using OperationResult;
 
 namespace Application.Handlers.ProductHandlers.UpdateProductHandler;
 
-public class UpdateProductImageUrlHandler : ICommandHandler<UpdateProductImageUrlCommand>
+public class UpdateProductImageUrlHandler : ICommandHandler<UpdateProductImageUrlCommand, None>
 {
     
     private readonly IProductRepository _productRepository;
@@ -15,13 +15,13 @@ public class UpdateProductImageUrlHandler : ICommandHandler<UpdateProductImageUr
         _productRepository = productRepository;
     }
     
-    public async Task<Result> HandleAsync(UpdateProductImageUrlCommand command)
+    public async Task<Result<None>> HandleAsync(UpdateProductImageUrlCommand command)
     {
         var findProductResult = await _productRepository.GetAsync(command.Id);
         
         if (!findProductResult.IsSuccess)
         {
-            return findProductResult.ToNonGeneric();
+            return findProductResult.ToNonGeneric().ToNone();
         }
 
         var product = findProductResult.Data;
@@ -29,9 +29,9 @@ public class UpdateProductImageUrlHandler : ICommandHandler<UpdateProductImageUr
         
         if (!updateResult.IsSuccess)
         {
-            return updateResult;
+            return updateResult.ToNone();
         }
         
-        return Result.Success();
+        return Result<None>.Success(None.Value);
     }
 }

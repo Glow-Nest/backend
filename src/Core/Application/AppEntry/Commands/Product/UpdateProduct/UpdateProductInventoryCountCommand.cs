@@ -1,7 +1,6 @@
 ﻿using Application.AppEntry.Commands.ServiceCategory.UpdateCategoryCommand;
 using Domain.Aggregates.Product.Values;
-using Domain.Aggregates.ServiceCategory.Values;
-using Domain.Common.OperationResult;
+using OperationResult;
 
 namespace Application.AppEntry.Commands.Product.UpdateProduct;
 

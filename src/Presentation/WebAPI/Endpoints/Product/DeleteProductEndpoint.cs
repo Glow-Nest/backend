@@ -1,6 +1,7 @@
 ﻿using Application.AppEntry;
 using Application.AppEntry.Commands.Product;
 using Microsoft.AspNetCore.Mvc;
+using OperationResult;
 using WebAPI.Endpoints.Common.Command;
 
 namespace WebAPI.Endpoints.Product;
@@ -20,7 +21,7 @@ public class DeleteProductEndpoint(ICommandDispatcher commandDispatcher) : Prote
             return await Task.FromResult<ActionResult>(BadRequest(commandResult.Errors));
         }
 
-        var dispatchResult = await commandDispatcher.DispatchAsync(commandResult.Data);
+        var dispatchResult = await  commandDispatcher.DispatchAsync<DeleteProductCommand, None>(commandResult.Data);
         return dispatchResult.IsSuccess ? Ok() : BadRequest(dispatchResult.Errors);
     }
 }

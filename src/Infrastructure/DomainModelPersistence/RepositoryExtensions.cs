@@ -1,9 +1,11 @@
 using Domain.Aggregates.Client;
 using Domain.Aggregates.Order;
 using Domain.Aggregates.Product;
+using Domain.Aggregates.ProductReview;
 using Domain.Aggregates.SalonOwner;
 using Domain.Aggregates.Schedule;
 using Domain.Aggregates.ServiceCategory;
+using Domain.Aggregates.ServiceReview;
 using Domain.Common;
 using DomainModelPersistence.ClientPersistence;
 using DomainModelPersistence.EfcConfigs;
@@ -30,6 +32,8 @@ public static class RepositoryExtensions
         serviceCollection.AddScoped<ICategoryRepository, CategoryRepository>();
         serviceCollection.AddScoped<IProductRepository, ProductRepository>();
         serviceCollection.AddScoped<IOrderRepository, OrderRepository>();
+        serviceCollection.AddScoped<IServiceReviewRepository, ServiceReviewRepository>();
+        serviceCollection.AddScoped<IProductReviewRepository, ProductReviewRepository>();
     }
     
     private static void RegisterUnitOfWork(this IServiceCollection serviceCollection)

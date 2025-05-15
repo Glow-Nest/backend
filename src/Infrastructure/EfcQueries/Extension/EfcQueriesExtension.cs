@@ -3,6 +3,7 @@ using EfcQueries.Queries;
 using EfcQueries.Queries.Category;
 using EfcQueries.Queries.Product;
 using EfcQueries.Queries.Schedules;
+using EfcQueries.Queries.ServiceReview;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,6 +13,7 @@ using QueryContracts.Queries;
 using QueryContracts.Queries.Product;
 using QueryContracts.Queries.Schedule;
 using QueryContracts.Queries.Service;
+using QueryContracts.Queries.ServiceReview;
 
 namespace EfcQueries.Extension;
 
@@ -36,6 +38,9 @@ public static class EfcQueriesExtension
         services.AddScoped<IQueryHandler<GetAllProductsQuery.Query, Result<GetAllProductsQuery.Answer>>, GetAllProductsQueryHandler>();
         services.AddScoped<IQueryHandler<GetProductByIdQuery.Query, Result<GetProductByIdQuery.Answer>>, GetProductByIdQueryHandler>();
         services.AddScoped<IQueryHandler<GetProductByNameQuery.Query, Result<List<GetProductByNameQuery.Answer>>>, GetProductByNameQueryHandler>();
+        
+        // service review
+        services.AddScoped<IQueryHandler<GetAllServiceReview.Query, Result<GetAllServiceReview.Answer>>, GetAllServiceReviewQueryHandler>();
     }
 
     public static void RegisterDatabase(this IServiceCollection serviceCollection, IConfiguration configuration)

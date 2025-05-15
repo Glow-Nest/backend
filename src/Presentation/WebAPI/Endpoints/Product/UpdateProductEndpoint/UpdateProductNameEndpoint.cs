@@ -1,6 +1,7 @@
 ﻿using Application.AppEntry;
 using Application.AppEntry.Commands.Product.UpdateProduct;
 using Microsoft.AspNetCore.Mvc;
+using OperationResult;
 using WebAPI.Endpoints.Common.Query;
 
 namespace WebAPI.Endpoints.Product.UpdateProductEndpoint;
@@ -21,7 +22,7 @@ public class UpdateProductNameEndpoint(ICommandDispatcher commandDispatcher) : P
             return await Task.FromResult<ActionResult>(BadRequest(commandResult.Errors));
         }
 
-        var dispatchResult = await commandDispatcher.DispatchAsync(commandResult.Data);
+        var dispatchResult = await  commandDispatcher.DispatchAsync<UpdateProductNameCommand, None>(commandResult.Data);
         return dispatchResult.IsSuccess ? Ok() : BadRequest(dispatchResult.Errors);
     }
 }
