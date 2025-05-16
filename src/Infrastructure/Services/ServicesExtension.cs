@@ -17,6 +17,7 @@ using Services.Contracts.Order;
 using Services.Contracts.Schedule;
 using Services.Email;
 using Services.Jobs;
+using Services.Stripe;
 
 namespace Services;
 
@@ -44,6 +45,7 @@ public static class ServicesExtension
     {
         serviceCollection.AddScoped<IEmailSender, EmailSender>();
         serviceCollection.AddScoped<ITokenService, TokenService>();
+        serviceCollection.AddScoped<IStripePaymentGatewayService, StripePaymentGateway>();
         // serviceCollection.AddScoped<ICloudinaryService, CloudinaryService>();
 
         serviceCollection.AddScoped<ScheduleSeederJob>();
