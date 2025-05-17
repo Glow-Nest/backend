@@ -4,6 +4,7 @@ using EfcQueries.Queries.Category;
 using EfcQueries.Queries.Product;
 using EfcQueries.Queries.Schedules;
 using EfcQueries.Queries.ServiceReview;
+using EfcQueries.Queries.User;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,6 +15,7 @@ using QueryContracts.Queries.Product;
 using QueryContracts.Queries.Schedule;
 using QueryContracts.Queries.Service;
 using QueryContracts.Queries.ServiceReview;
+using QueryContracts.Queries.User;
 
 namespace EfcQueries.Extension;
 
@@ -23,6 +25,7 @@ public static class EfcQueriesExtension
     {
         // client
         services.AddScoped<IQueryHandler<LoginUserQuery, Result<LoginUserResponse>>, LoginUserQueryHandler>();
+        services.AddScoped<IQueryHandler<GetFullNameByUserId.Query, Result<GetFullNameByUserId.Answer>>, GetFullNameByUserIdQueryHandler>();
         
         // schedule
         services.AddScoped<IQueryHandler<GetBlockedTime.Query, Result<GetBlockedTime.Answer>>, GetBlockedTimeQueryHandler>();
@@ -40,7 +43,7 @@ public static class EfcQueriesExtension
         services.AddScoped<IQueryHandler<GetProductByNameQuery.Query, Result<List<GetProductByNameQuery.Answer>>>, GetProductByNameQueryHandler>();
         
         // service review
-        services.AddScoped<IQueryHandler<GetAllServiceReview.Query, Result<GetAllServiceReview.Answer>>, GetAllServiceReviewQueryHandler>();
+        services.AddScoped<IQueryHandler<GetServiceReviewByServiceId.Query, Result<GetServiceReviewByServiceId.Answer>>, GetServiceReviewByServiceIdQueryHandler>();
     }
 
     public static void RegisterDatabase(this IServiceCollection serviceCollection, IConfiguration configuration)

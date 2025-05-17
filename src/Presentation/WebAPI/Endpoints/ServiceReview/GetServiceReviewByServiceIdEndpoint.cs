@@ -6,10 +6,10 @@ using WebAPI.Endpoints.Product;
 
 namespace WebAPI.Endpoints.ServiceReview;
 
-public class GetAllServiceReviewEndpoint(IQueryDispatcher queryDispatcher) : PublicQueryWithRequestAndResponse<GetAllServiceReview.Query,GetAllServiceReview.Answer>
+public class GetServiceReviewByServiceIdEndpoint(IQueryDispatcher queryDispatcher) : PublicQueryWithRequestAndResponse<GetServiceReviewByServiceId.Query,GetServiceReviewByServiceId.Answer>
 {
-    [HttpPost("serviceReview/all")]
-    public override async Task<ActionResult<GetAllServiceReview.Answer>> HandleAsync(GetAllServiceReview.Query request)
+    [HttpPost("serviceReview/{ServiceId}")]
+    public override async Task<ActionResult<GetServiceReviewByServiceId.Answer>> HandleAsync([FromRoute] GetServiceReviewByServiceId.Query request)
     {
         var dispatchResult = await queryDispatcher.DispatchAsync(request);
         if (!dispatchResult.IsSuccess)
