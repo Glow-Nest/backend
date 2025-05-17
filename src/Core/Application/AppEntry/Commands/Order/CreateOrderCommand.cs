@@ -12,11 +12,11 @@ namespace Application.AppEntry.Commands.Order;
 
 public record OrderItemDto(string ProductId, int Quantity, double PriceWhenOrdering);
 
-public class CreateOrderCommand(Price totalPrice,  ClientId clientId, List<CreateOrderItemDto> orderItems, DateOnly pickupDate)
+public class CreateOrderCommand(Price totalPrice,  ClientId clientId, List<Domain.Aggregates.Order.OrderItemDto> orderItems, DateOnly pickupDate)
 {
     internal ClientId ClientId { get; } = clientId;
     internal Price TotalPrice { get; } = totalPrice;
-    internal List<CreateOrderItemDto> OrderItems { get; } = orderItems;
+    internal List<Domain.Aggregates.Order.OrderItemDto> OrderItems { get; } = orderItems;
     internal DateOnly PickupDate { get; } = pickupDate;
 
     public static Result<CreateOrderCommand> Create(string clientIdStr, double totalPriceStr, string pickupDateStr, List<OrderItemDto> orderItemDtos)
@@ -53,7 +53,7 @@ public class CreateOrderCommand(Price totalPrice,  ClientId clientId, List<Creat
         }
 
         // order items
-        var orderItems = new List<CreateOrderItemDto>();
+        var orderItems = new List<Domain.Aggregates.Order.OrderItemDto>();
         foreach (var orderItemDto in orderItemDtos)
         {
             // product id
@@ -79,7 +79,7 @@ public class CreateOrderCommand(Price totalPrice,  ClientId clientId, List<Creat
             
             // create order item
             var productIdResult = ProductId.FromGuid(productIdGuid);
-            var itemDto = new CreateOrderItemDto(productIdResult, quantityResult.Data, priceWhenOrderingResult.Data); 
+            var itemDto = new Domain.Aggregates.Order.OrderItemDto(productIdResult, quantityResult.Data, priceWhenOrderingResult.Data); 
             orderItems.Add(itemDto);
         }
 

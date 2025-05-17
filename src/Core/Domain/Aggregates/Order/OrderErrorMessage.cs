@@ -13,6 +13,7 @@ public class OrderErrorMessage
     
     
     // Order
+    public static Error InvalidOrderId() => new Error("Order.InvalidOrderId", "Order id is not valid.");
     public static Error OrderNotFound() => new Error("Order.OrderNotFound", "Order not found.");
     public static Error OrderNotCreatedState() => new Error("Order.NotCreatedState", "Order can only be marked as paid from the created state.");
     public static Error OrderNotPaidState() => new Error("Order.NotPaidState", "Order must be paid before it can be marked as ready for pickup.");
@@ -23,6 +24,8 @@ public class OrderErrorMessage
     public static Error PriceCanNotBeNegative() => new Error("Order.PriceCanNotBeNegative", "Price cannot be negative or 0.");
     public static Error ProductDoesNotExist() => new Error("Order.ProductDoesNotExist", "Product does not exist.");
     public static Error NoOrderItems() => new Error("Order.NoOrderItems", "Order must have at least one order item.");
+    public static Error OrderCannotChangePickupDate() => new Error("Order.OrderCannotChangePickupDate", "Order cannot change pickup date.");
+    public static Error OrderCannotChangeOrderItems() => new Error("Order.OrderCannotChangeOrderItems", "Order cannot change order items.");
     
     // Stripe
     public static Error StripePaymentIntentNotFound() => new Error("Order.StripePaymentIntentNotFound", "Stripe payment intent not found.");

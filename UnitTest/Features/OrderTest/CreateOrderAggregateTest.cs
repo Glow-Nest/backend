@@ -27,7 +27,7 @@ public class OrderTests
         var productChecker = new Mock<IProductChecker>();
         productChecker.Setup(x => x.DoesProductExist(productId)).ReturnsAsync(true);
         
-        var orderItemDto = new CreateOrderItemDto(productId, Quantity.Create(4).Data, Price.Create(50).Data);
+        var orderItemDto = new OrderItemDto(productId, Quantity.Create(4).Data, Price.Create(50).Data);
 
         dateTimeProviderMock.Setup(d => d.GetNow()).Returns(DateTime.Now.AddDays(2));
 
@@ -57,7 +57,7 @@ public class OrderTests
         var productChecker = new Mock<IProductChecker>();
         productChecker.Setup(x => x.DoesProductExist(productId)).ReturnsAsync(true);
 
-        var orderItemDto = new CreateOrderItemDto(productId, Quantity.Create(1).Data, Price.Create(50).Data);
+        var orderItemDto = new OrderItemDto(productId, Quantity.Create(1).Data, Price.Create(50).Data);
 
         dateTimeProviderMock.Setup(d => d.GetNow()).Returns(DateTime.Now.AddDays(2));
 
@@ -80,7 +80,7 @@ public class OrderTests
         var productChecker = new Mock<IProductChecker>();
         productChecker.Setup(x => x.DoesProductExist(productId)).ReturnsAsync(false);
 
-        var orderItemDto = new CreateOrderItemDto(productId, Quantity.Create(1).Data, Price.Create(50).Data);
+        var orderItemDto = new OrderItemDto(productId, Quantity.Create(1).Data, Price.Create(50).Data);
 
         dateTimeProviderMock.Setup(d => d.GetNow()).Returns(DateTime.Now.AddDays(2));
 
@@ -100,7 +100,7 @@ public class OrderTests
         var pickupDate = DateOnly.FromDateTime(DateTime.Now).AddDays(1);
     
         var productChecker = new Mock<IProductChecker>();
-        var orderItems = new List<CreateOrderItemDto>();
+        var orderItems = new List<OrderItemDto>();
         
         dateTimeProviderMock.Setup(d => d.GetNow()).Returns(DateTime.Now.AddDays(2));
 

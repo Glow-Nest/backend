@@ -12,6 +12,7 @@ using Domain.Common.Values;
 using Moq;
 using OperationResult;
 using UnitTest.Features.Helpers.Builders;
+using OrderItemDto = Domain.Aggregates.Order.OrderItemDto;
 
 namespace UnitTest.Features.OrderTest;
 
@@ -30,7 +31,7 @@ public class CreateOrderHandlerTests
 
     private CreateOrderCommand CreateValidCommand()
     {
-        var orderItemDto = new CreateOrderItemDto(_productId, _quantity, _price);
+        var orderItemDto = new OrderItemDto(_productId, _quantity, _price);
         var totalPrice = Price.Create(_price.Value * _quantity.Value).Data;
 
         return new CreateOrderCommand(totalPrice, _clientId, [orderItemDto], _pickupDate);

@@ -2,7 +2,6 @@ using Domain.Aggregates.Client.Values;
 using Domain.Aggregates.Order.Contracts;
 using Domain.Aggregates.Order.Entities;
 using Domain.Aggregates.Order.Values;
-using Domain.Aggregates.Product;
 using Domain.Aggregates.Product.Values;
 using Domain.Common.BaseClasses;
 using Domain.Common.Contracts;
@@ -11,15 +10,15 @@ using OperationResult;
 
 namespace Domain.Aggregates.Order;
 
-public record CreateOrderItemDto(ProductId ProductId, Quantity Quantity, Price PriceWhenOrdering);
+public record OrderItemDto(ProductId ProductId, Quantity Quantity, Price PriceWhenOrdering);
 
 public class Order : AggregateRoot
 {
     internal OrderId OrderId { get; }
     internal ClientId ClientId { get; }
-    internal DateOnly PickupDate { get; }
+    internal DateOnly PickupDate { get; private set; }
     internal DateOnly OrderDate { get; }
-    internal List<OrderItem> OrderItems { get; }
+    internal List<OrderItem> OrderItems { get; private set; }
     internal Price TotalPrice { get; }
     internal OrderStatus OrderStatus { get; private set; }
     internal PaymentStatus PaymentStatus { get; }
@@ -42,7 +41,7 @@ public class Order : AggregateRoot
         PaymentStatus = PaymentStatus.Pending;
     }
 
-    public static async Task<Result<Order>> Create(ClientId clientId, List<CreateOrderItemDto> orderItemsDto,DateOnly pickupDate, IDateTimeProvider dateTimeProvider, IProductChecker productChecker)
+    public static async Task<Result<Order>> Create(ClientId clientId, List<OrderItemDto> orderItemsDto,DateOnly pickupDate, IDateTimeProvider dateTimeProvider, IProductChecker productChecker)
     {
         // create order id
         var orderIdResult = OrderId.Create();
@@ -98,15 +97,64 @@ public class Order : AggregateRoot
         return Result<Order>.Success(order);
     }
 
-    /*public Result<Order> UpdatePickupDate(DateOnly newPickupDate, IDateTimeProvider dateTimeProvider)
+    public Result<Order> UpdatePickupDate(DateOnly newPickupDate, IDateTimeProvider dateTimeProvider)
     {
+        // validate pickup date
+        var now = dateTimeProvider.GetNow();
+        var today = DateOnly.FromDateTime(dateTimeProvider.GetNow());
         
+        if (newPickupDate < today)
+        {
+            return Result<Order>.Fail(OrderErrorMessage.PickupDateInThePast());
+        }
+        
+        if (newPickupDate == today && now.TimeOfDay > new TimeSpan(15, 0, 0))
+        {
+            return Result<Order>.Fail(OrderErrorMessage.PickupDateTooLateForToday());
+        }
+        
+        // check if order is in a state that allows pickup date change
+        if (OrderStatus is OrderStatus.Paid or OrderStatus.ReadyForPickup or OrderStatus.Completed)
+        {
+            return Result<Order>.Fail(OrderErrorMessage.OrderCannotChangePickupDate());
+        }
+        
+        // update pickup date
+        PickupDate = newPickupDate;
+        return Result<Order>.Success(this);
     }
 
-    public Result<Order> UpdateOrderItems()
+    public async Task<Result<Order>> UpdateOrderItems(List<OrderItemDto> orderItemDtos, IProductChecker productChecker)
     {
+        // check if order items are empty
+        if (orderItemDtos.Count == 0)
+        {
+            return Result<Order>.Fail(OrderErrorMessage.NoOrderItems());
+        }
+
+        // check if order is in a state that allows order item change
+        if (OrderStatus is OrderStatus.Paid or OrderStatus.ReadyForPickup or OrderStatus.Completed)
+        {
+            return Result<Order>.Fail(OrderErrorMessage.OrderCannotChangeOrderItems());
+        }
         
-    }*/
+        // update order items
+        var orderItems = new List<OrderItem>();
+        
+        foreach (var (productId, quantity, priceWhenOrdering) in orderItemDtos)
+        {
+            var orderItemResult = await OrderItem.Create(productId, quantity, priceWhenOrdering, productChecker);
+            if (!orderItemResult.IsSuccess)
+            {
+                return Result<Order>.Fail(orderItemResult.Errors);
+            }
+            
+            orderItems.Add(orderItemResult.Data);
+        }
+
+        OrderItems = orderItems;
+        return Result<Order>.Success(this);
+    }
 
     public Result MarkOrderAsPaid()
     {
