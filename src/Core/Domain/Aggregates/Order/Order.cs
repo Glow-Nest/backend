@@ -11,6 +11,8 @@ using OperationResult;
 
 namespace Domain.Aggregates.Order;
 
+public record CreateOrderItemDto(ProductId ProductId, Quantity Quantity, Price PriceWhenOrdering);
+
 public class Order : AggregateRoot
 {
     internal OrderId OrderId { get; }
@@ -40,7 +42,7 @@ public class Order : AggregateRoot
         PaymentStatus = PaymentStatus.Pending;
     }
 
-    public static async Task<Result<Order>> Create(ClientId clientId, List<OrderItem> orderItems,DateOnly pickupDate, IDateTimeProvider dateTimeProvider, IProductChecker productChecker)
+    public static async Task<Result<Order>> Create(ClientId clientId, List<CreateOrderItemDto> orderItemsDto,DateOnly pickupDate, IDateTimeProvider dateTimeProvider, IProductChecker productChecker)
     {
         // create order id
         var orderIdResult = OrderId.Create();
@@ -50,25 +52,9 @@ public class Order : AggregateRoot
         }
         
         // check if order items are empty
-        if (orderItems.Count == 0)
+        if (orderItemsDto.Count == 0)
         {
             return Result<Order>.Fail(OrderErrorMessage.NoOrderItems());
-        }
-        
-        // check if product exists
-        foreach (var orderItem in orderItems)
-        {
-            var productResult = await productChecker.DoesProductExist(orderItem.ProductId);
-            if (!productResult)
-            {
-                return Result<Order>.Fail(ProductErrorMessage.ProductNotFound());
-            }
-        }
-        
-        // validate price in order items
-        if (orderItems.Any(orderItem => orderItem.PriceWhenOrdering.Value < 0))
-        {
-            return Result<Order>.Fail(OrderErrorMessage.PriceCanNotBeNegative());
         }
 
         // validate pickup and order date
@@ -85,17 +71,42 @@ public class Order : AggregateRoot
             return Result<Order>.Fail(OrderErrorMessage.PickupDateTooLateForToday());
         }
 
-        var totalPrice = orderItems.Sum(item => item.PriceWhenOrdering.Value * item.Quantity.Value);
+        // create total price
+        var totalPrice = orderItemsDto.Sum(item => item.PriceWhenOrdering.Value * item.Quantity.Value);
         var priceResult = Price.Create(totalPrice);
 
         if (!priceResult.IsSuccess)
         {
             return Result<Order>.Fail(priceResult.Errors);
         }
+        
+        // create orderItem
+        var orderItems = new List<OrderItem>();
+        
+        foreach (var (productId, quantity, priceWhenOrdering) in orderItemsDto)
+        {
+            var orderItemResult = await OrderItem.Create(productId, quantity, priceWhenOrdering, productChecker);
+            if (!orderItemResult.IsSuccess)
+            {
+                return Result<Order>.Fail(orderItemResult.Errors);
+            }
+            
+            orderItems.Add(orderItemResult.Data);
+        }
 
         var order = new Order(orderIdResult.Data, clientId, pickupDate, today, orderItems, priceResult.Data);
         return Result<Order>.Success(order);
     }
+
+    /*public Result<Order> UpdatePickupDate(DateOnly newPickupDate, IDateTimeProvider dateTimeProvider)
+    {
+        
+    }
+
+    public Result<Order> UpdateOrderItems()
+    {
+        
+    }*/
 
     public Result MarkOrderAsPaid()
     {

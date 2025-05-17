@@ -1,5 +1,6 @@
 using System.Globalization;
 using Domain.Aggregates.Client.Values;
+using Domain.Aggregates.Order;
 using Domain.Aggregates.Order.Entities;
 using Domain.Aggregates.Order.Values;
 using Domain.Aggregates.Product.Values;
@@ -11,11 +12,11 @@ namespace Application.AppEntry.Commands.Order;
 
 public record OrderItemDto(string ProductId, int Quantity, double PriceWhenOrdering);
 
-public class CreateOrderCommand(Price totalPrice,  ClientId clientId, List<OrderItem> orderItems, DateOnly pickupDate)
+public class CreateOrderCommand(Price totalPrice,  ClientId clientId, List<CreateOrderItemDto> orderItems, DateOnly pickupDate)
 {
     internal ClientId ClientId { get; } = clientId;
     internal Price TotalPrice { get; } = totalPrice;
-    internal List<OrderItem> OrderItems { get; } = orderItems;
+    internal List<CreateOrderItemDto> OrderItems { get; } = orderItems;
     internal DateOnly PickupDate { get; } = pickupDate;
 
     public static Result<CreateOrderCommand> Create(string clientIdStr, double totalPriceStr, string pickupDateStr, List<OrderItemDto> orderItemDtos)
@@ -52,7 +53,7 @@ public class CreateOrderCommand(Price totalPrice,  ClientId clientId, List<Order
         }
 
         // order items
-        var orderItems = new List<OrderItem>();
+        var orderItems = new List<CreateOrderItemDto>();
         foreach (var orderItemDto in orderItemDtos)
         {
             // product id
@@ -77,12 +78,9 @@ public class CreateOrderCommand(Price totalPrice,  ClientId clientId, List<Order
             }
             
             // create order item
-            var orderItemResult = OrderItem.Create(
-                ProductId.FromGuid(productIdGuid),
-                quantityResult.Data,
-                priceWhenOrderingResult.Data
-            );
-            orderItems.Add(orderItemResult.Data);
+            var productIdResult = ProductId.FromGuid(productIdGuid);
+            var itemDto = new CreateOrderItemDto(productIdResult, quantityResult.Data, priceWhenOrderingResult.Data); 
+            orderItems.Add(itemDto);
         }
 
         if (listOfErrors.Any())

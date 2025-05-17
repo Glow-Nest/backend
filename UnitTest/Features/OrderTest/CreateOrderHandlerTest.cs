@@ -30,10 +30,10 @@ public class CreateOrderHandlerTests
 
     private CreateOrderCommand CreateValidCommand()
     {
-        var orderItem = OrderItem.Create(_productId, _quantity, _price).Data;
+        var orderItemDto = new CreateOrderItemDto(_productId, _quantity, _price);
         var totalPrice = Price.Create(_price.Value * _quantity.Value).Data;
 
-        return new CreateOrderCommand(totalPrice, _clientId, [orderItem], _pickupDate);
+        return new CreateOrderCommand(totalPrice, _clientId, [orderItemDto], _pickupDate);
     }
 
     [Fact]
