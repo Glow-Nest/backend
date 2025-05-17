@@ -21,7 +21,7 @@ public class StripePaymentGateway : IStripePaymentGatewayService
     public async Task<Result<string>> CreateCheckoutSessionAsync(OrderCheckoutSessionDto order)
     {
         // TODO: for testing only. Need to change success url and cancel url too
-        var domain = "http://localhost:3000";
+        var domain = "https://frontend-241704571237.europe-north2.run.app/";
             
         var lineItems = order.OrderItemDtos.Select(item => new SessionLineItemOptions
         {
