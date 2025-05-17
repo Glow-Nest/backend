@@ -20,13 +20,13 @@ public class OrderConfiguration : IEntityTypeConfiguration<Domain.Aggregates.Ord
         entityBuilder.Property(order => order.OrderDate)
             .IsRequired()
             .HasConversion(
-                date => date.ToString("yy-MM-dd"),
+                date => date.ToString("yyyy-MM-dd"),
                 dbValue => DateOnly.Parse(dbValue));
 
         entityBuilder.Property(order => order.PickupDate)
             .IsRequired()
             .HasConversion(
-                date => date.ToString("yy-MM-dd"),
+                date => date.ToString("yyyy-MM-dd"),
                 dbValue => DateOnly.Parse(dbValue));
 
         entityBuilder.Property(order => order.PaymentStatus)

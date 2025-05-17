@@ -82,6 +82,12 @@ public static class ApplicationExtensions
         
         // order
         serviceCollection.AddScoped<ICommandHandler<CreateOrderCommand, OrderId>, CreateOrderHandler>();
+        serviceCollection.AddScoped<ICommandHandler<UpdateOrderItemsCommand, OrderId>, UpdateOrderItemCommandHandler>();
+        serviceCollection.AddScoped<ICommandHandler<UpdatePickupDateCommand, OrderId>, UpdatePickupDateCommandHandler>();
+        
+        // payment
+        serviceCollection.AddScoped<ICommandHandler<CreateCheckoutSessionCommand, string>, CreateCheckoutSessionCommandHandler>();
+        serviceCollection.AddScoped<ICommandHandler<MarkOrderAsPaidCommand, None>, MarkOrderAsPaidCommandHandler>();
         
         //service review
         serviceCollection.AddScoped<ICommandHandler<CreateServiceReviewCommand, None>, CreateServiceReviewHandler>();

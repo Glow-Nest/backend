@@ -35,6 +35,7 @@ public class CreateOrderHandler(
         var orderResult = await Order.Create(
             command.ClientId,
             command.OrderItems,
+            command.PickupDate,
             _dateTimeProvider,
             _productChecker);
 
