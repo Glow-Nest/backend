@@ -86,6 +86,7 @@ public static class ApplicationExtensions
         serviceCollection.AddScoped<ICommandHandler<UpdatePickupDateCommand, OrderId>, UpdatePickupDateCommandHandler>();
         serviceCollection.AddScoped<ICommandHandler<MarkOrderAsCompletedCommand, None>, MarkOrderAsCompletedCommandHandler>();
         serviceCollection.AddScoped<ICommandHandler<MarkOrderAsReadyForPickupCommand, None>, MarkOrderAsReadyForPickupCommandHandler>();
+        serviceCollection.AddScoped<ICommandHandler<MarkOrderAsCancelledCommand, None>, MarkOrderAsCancelledCommandHandler>();
         
         // payment
         serviceCollection.AddScoped<ICommandHandler<CreateCheckoutSessionCommand, string>, CreateCheckoutSessionCommandHandler>();
