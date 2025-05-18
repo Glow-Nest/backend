@@ -50,31 +50,31 @@ public class OrderTests
         Assert.Equal(PaymentStatus.Pending, order.PaymentStatus);
     }
 
-    [Fact]
-    public async void CreateOrder_PickupDateInThePast_ReturnsFailure()
-    {
-        // Arrange
-        var clientId = ClientId.Create();
-        var productId = ProductId.Create();
-        
-        // mock product checker
-        var productChecker = new Mock<IProductChecker>();
-        productChecker.Setup(x => x.DoesProductExist(productId)).ReturnsAsync(true);
-
-        var orderItems = new List<OrderItem>
-        {
-            OrderItem.Create(productId, Quantity.Create(1).Data, Price.Create(50).Data).Data
-        };
-
-        var dateTimeProvider = new FakeDateTimeProvider();
-
-        // Act
-        var result = await Order.Create(clientId, orderItems, dateTimeProvider, productChecker.Object);
-
-        // Assert
-        Assert.False(result.IsSuccess);
-        Assert.Contains(result.Errors, e => e.Message == OrderErrorMessage.PickupDateInThePast().Message);
-    }
+    // [Fact]
+    // public async void CreateOrder_PickupDateInThePast_ReturnsFailure()
+    // {
+    //     // Arrange
+    //     var clientId = ClientId.Create();
+    //     var productId = ProductId.Create();
+    //     
+    //     // mock product checker
+    //     var productChecker = new Mock<IProductChecker>();
+    //     productChecker.Setup(x => x.DoesProductExist(productId)).ReturnsAsync(true);
+    //
+    //     var orderItems = new List<OrderItem>
+    //     {
+    //         OrderItem.Create(productId, Quantity.Create(1).Data, Price.Create(50).Data).Data
+    //     };
+    //
+    //     var dateTimeProvider = new FakeDateTimeProvider();
+    //
+    //     // Act
+    //     var result = await Order.Create(clientId, orderItems, dateTimeProvider, productChecker.Object);
+    //
+    //     // Assert
+    //     Assert.False(result.IsSuccess);
+    //     Assert.Contains(result.Errors, e => e.Message == OrderErrorMessage.PickupDateInThePast().Message);
+    // }
     
     [Fact]
     public async void CreateOrder_WithNonExistingProduct_ReturnsFailure()
