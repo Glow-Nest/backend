@@ -5,17 +5,25 @@ using WebAPI.Endpoints.Common.Query;
 
 namespace WebAPI.Endpoints.Client;
 
-public class GetFullNameByClientIdEndpoint(IQueryDispatcher queryDispatcher) : PublicQueryWithRequestAndResponse<GetFullNameByUserId.Query, GetFullNameByUserId.Answer>
+public class GetFullNameByClientIdEndpoint(IQueryDispatcher queryDispatcher) : PublicQueryWithRequestAndResponse<GetFullNameByClientIdEndpoint.Request, GetFullNameByClientIdEndpoint.Response>
 {
+    public new record Request(string ClientId);
+    public new record Response(string ClientId,string FirstName, string LastName);
+    
     [HttpPost("clients/{ClientId}")]
-    public override async Task<ActionResult<GetFullNameByUserId.Answer>> HandleAsync([FromRoute] GetFullNameByUserId.Query request)
+    public override async Task<ActionResult<Response>> HandleAsync([FromRoute] Request request)
     {
-        var dispatchResult = await queryDispatcher.DispatchAsync(request);
+        var queryResult = new GetFullNameByUserId.Query(request.ClientId);
+
+        var dispatchResult = await queryDispatcher.DispatchAsync(queryResult);
         if (!dispatchResult.IsSuccess)
         {
             return BadRequest(dispatchResult.Errors);
         }
 
-        return Ok(dispatchResult.Data);
+        var client = dispatchResult.Data;
+        var response = new Response(client.ClientId, client.FirstName, client.LastName);
+        
+        return Ok(response);
     }
 }
