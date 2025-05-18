@@ -8,8 +8,8 @@ namespace WebAPI.Endpoints.Order;
 public class GetAllOrdersEndpoint(IQueryDispatcher queryDispatcher)
     : ProtectedQueryWithRequestAndResponse<GetAllOrdersEndpoint.Request, GetAllOrdersEndpoint.Response>
 {
-    public new record Request(string Status);
-    public new record Response(List<OrderResponseDto> OrderResponseDtos);
+    public new record Request(string Status, int Page, int PageSize);
+    public new record Response(List<OrderResponseDto> OrderResponseDtos, int totalCount);
 
     public record OrderResponseDto(
         string OrderId,
@@ -29,7 +29,7 @@ public class GetAllOrdersEndpoint(IQueryDispatcher queryDispatcher)
     [HttpPost("orders")]
     public override async Task<ActionResult<Response>> HandleAsync([FromBody] Request request)
     {
-        var query = new GetAllOrdersQuery.Query(request.Status);
+        var query = new GetAllOrdersQuery.Query(request.Status, request.Page, request.PageSize);
         var result = await queryDispatcher.DispatchAsync(query);
 
         if (!result.IsSuccess)
@@ -52,6 +52,6 @@ public class GetAllOrdersEndpoint(IQueryDispatcher queryDispatcher)
             )).ToList()
         )).ToList();
 
-        return Ok(new Response(orders));
+        return Ok(new Response(orders, result.Data.TotalCount));
     }
 }

@@ -13,11 +13,21 @@ public class GetAllOrdersQueryHandler(PostgresContext context)
 
     public async Task<Result<GetAllOrdersQuery.Answer>> HandleAsync(GetAllOrdersQuery.Query query)
     {
-        var orders = await _context.Orders
+        var filteredOrders = _context.Orders
             .Include(o => o.Client)
             .Include(o => o.OrderItems)
             .ThenInclude(oi => oi.Product)
-            .Where(o => string.IsNullOrEmpty(query.Status) || query.Status == "All" || o.OrderStatus == query.Status)            .Select(o => new GetAllOrdersQuery.OrderResponseDto(
+            .Where(o => string.IsNullOrEmpty(query.Status) || query.Status == "All" || o.OrderStatus == query.Status);
+
+
+        var totalCount = await filteredOrders.CountAsync();
+
+        // Apply pagination
+        var orders = await filteredOrders
+            .OrderByDescending(o => o.OrderDate)
+            .Skip((query.Page - 1) * query.PageSize)
+            .Take(query.PageSize)
+            .Select(o => new GetAllOrdersQuery.OrderResponseDto(
                 o.OrderId.ToString(),
                 o.OrderDate,
                 o.PickupDate,
@@ -30,8 +40,10 @@ public class GetAllOrdersQueryHandler(PostgresContext context)
                     oi.Quantity.ToString(),
                     oi.PriceWhenOrdering.ToString()
                 )).ToList()
-            )).ToListAsync();
-        
-        return Result<GetAllOrdersQuery.Answer>.Success(new GetAllOrdersQuery.Answer(orders));
+            ))
+            .ToListAsync();
+
+
+        return Result<GetAllOrdersQuery.Answer>.Success(new GetAllOrdersQuery.Answer(orders, totalCount));
     }
 }
