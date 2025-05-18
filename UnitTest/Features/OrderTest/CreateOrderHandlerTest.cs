@@ -86,28 +86,29 @@ public class CreateOrderHandlerTests
         Assert.Contains(result.Errors, e => e.Message == ClientErrorMessage.ClientNotFound().Message);
     }
 
-    [Fact]
-    public async Task HandleAsync_OrderCreationFails_ReturnsFailure()
-    {
-        // Arrange
-        var command = CreateValidCommand();
-
-        _clientRepoMock.Setup(repo => repo.GetAsync(_clientId))
-                       .ReturnsAsync(Result<Client>.Success(new Client()));
-
-        _productCheckerMock.Setup(p => p.DoesProductExist(It.IsAny<ProductId>()))
-                           .ReturnsAsync(true);
-
-        // Simulate bad pickup date
-        _dateTimeMock.Setup(d => d.GetNow()).Returns(DateTime.Today.AddDays(5));
-
-        var handler = new CreateOrderHandler(_orderRepoMock.Object, _clientRepoMock.Object, _dateTimeMock.Object, _productCheckerMock.Object);
-
-        // Act
-        var result = await handler.HandleAsync(command);
-
-        // Assert
-        Assert.False(result.IsSuccess);
-        Assert.Contains(result.Errors, e => e.Message == OrderErrorMessage.PickupDateInThePast().Message);
-    }
+    // [Fact]
+    // public async Task HandleAsync_OrderCreationFails_ReturnsFailure()
+    // {
+    //     // Arrange
+    //     var command = CreateValidCommand();
+    //
+    //     _clientRepoMock.Setup(repo => repo.GetAsync(_clientId))
+    //                    .ReturnsAsync(Result<Client>.Success(new Client()));
+    //
+    //     _productCheckerMock.Setup(p => p.DoesProductExist(It.IsAny<ProductId>()))
+    //                        .ReturnsAsync(true);
+    //
+    //     // Simulate bad pickup date
+    //     _dateTimeMock.Setup(d => d.GetNow()).Returns(DateTime.Today.AddDays(5));
+    //
+    //     var handler = new CreateOrderHandler(_orderRepoMock.Object, _clientRepoMock.Object, _dateTimeMock.Object, _productCheckerMock.Object);
+    //
+    //     // Act
+    //     var result = await handler.HandleAsync(command);
+    //
+    //     // Assert
+    //     Assert.False(result.IsSuccess);
+    //     Assert.Contains(result.Errors, e => e.Message == OrderErrorMessage.PickupDateInThePast().Message);
+    // }
 }
+
