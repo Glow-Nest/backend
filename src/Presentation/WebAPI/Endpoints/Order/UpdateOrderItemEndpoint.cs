@@ -11,8 +11,8 @@ public class UpdateOrderItemEndpoint(ICommandDispatcher commandDispatcher) : Pub
 {
     public new record Request(string OrderId, List<UpdateOrderDto> OrderItems);
     public new record Response(string OrderId);
-    
 
+    [HttpPost("/order/update-order-items")]
     public override async Task<ActionResult<Response>> HandleAsync(Request request)
     {
         var command = UpdateOrderItemsCommand.Create(

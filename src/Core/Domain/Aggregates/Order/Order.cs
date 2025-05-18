@@ -156,7 +156,7 @@ public class Order : AggregateRoot
         return Result<Order>.Success(this);
     }
 
-    public Result MarkOrderAsPaid()
+    public Result MarkAsPaid()
     {
         if (OrderStatus != OrderStatus.Created)
         {
@@ -167,7 +167,7 @@ public class Order : AggregateRoot
         return Result.Success();
     }
 
-    public Result MarkOrderAsReadyForPickup()
+    public Result MarkAsReadyForPickup()
     {
         if (OrderStatus != OrderStatus.Paid)
         {
@@ -178,7 +178,7 @@ public class Order : AggregateRoot
         return Result.Success();
     }
     
-    public Result MarkOrderAsCompleted()
+    public Result MarkAsCompleted()
     {
         if (OrderStatus != OrderStatus.ReadyForPickup)
         {
@@ -189,7 +189,7 @@ public class Order : AggregateRoot
         return Result.Success();
     }
     
-    public Result MarkOrderAsCancelled()
+    public Result MarkAsCancelled()
     {
         if (OrderStatus is OrderStatus.Completed or OrderStatus.Cancelled)
         {

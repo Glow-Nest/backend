@@ -17,7 +17,7 @@ public class MarkOrderAsPaidCommandHandler(IOrderRepository orderRepository) : I
             return Result<None>.Fail(OrderErrorMessage.OrderNotFound());
         }
 
-        var result = order.Data.MarkOrderAsPaid();
+        var result = order.Data.MarkAsPaid();
         if (!result.IsSuccess)
         {
             return Result<None>.Fail(result.Errors);

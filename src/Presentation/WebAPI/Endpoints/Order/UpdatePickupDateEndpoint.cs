@@ -11,6 +11,7 @@ public class UpdatePickupDateEndpoint(ICommandDispatcher commandDispatcher) : Pu
     public new record Request(string PickUpDate, string OrderId);
     public new record Response(string OrderId);
     
+    [HttpPost("/order/update-pickup-date")]
     public override async Task<ActionResult<Response>> HandleAsync(Request request)
     {
         var command = UpdatePickupDateCommand.Create(request.PickUpDate, request.OrderId);

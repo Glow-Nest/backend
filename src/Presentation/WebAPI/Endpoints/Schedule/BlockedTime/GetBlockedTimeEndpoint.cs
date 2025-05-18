@@ -3,7 +3,7 @@ using QueryContracts.Queries.Schedule;
 using QueryContracts.QueryDispatching;
 using WebAPI.Endpoints.Common.Query;
 
-namespace WebAPI.Endpoints.Schedule;
+namespace WebAPI.Endpoints.Schedule.BlockedTime;
 
 public class GetBlockedTimeEndpoint(IQueryDispatcher queryDispatcher) : ProtectedQueryWithRequestAndResponse<GetBlockedTimeEndpoint.Request, GetBlockedTimeEndpoint.Response>
 {
