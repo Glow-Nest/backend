@@ -1,6 +1,7 @@
 ﻿using DomainModelPersistence.EfcConfigs;
 using EfcQueries.Queries;
 using EfcQueries.Queries.Category;
+using EfcQueries.Queries.Order;
 using EfcQueries.Queries.Product;
 using EfcQueries.Queries.Schedules;
 using EfcQueries.Queries.ServiceReview;
@@ -11,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using OperationResult;
 using QueryContracts.Contracts;
 using QueryContracts.Queries;
+using QueryContracts.Queries.Order;
 using QueryContracts.Queries.Product;
 using QueryContracts.Queries.Schedule;
 using QueryContracts.Queries.Service;
@@ -41,6 +43,9 @@ public static class EfcQueriesExtension
         services.AddScoped<IQueryHandler<GetAllProductsQuery.Query, Result<GetAllProductsQuery.Answer>>, GetAllProductsQueryHandler>();
         services.AddScoped<IQueryHandler<GetProductByIdQuery.Query, Result<GetProductByIdQuery.Answer>>, GetProductByIdQueryHandler>();
         services.AddScoped<IQueryHandler<GetProductByNameQuery.Query, Result<List<GetProductByNameQuery.Answer>>>, GetProductByNameQueryHandler>();
+        
+        // order
+        services.AddScoped<IQueryHandler<GetAllOrdersQuery.Query, Result<GetAllOrdersQuery.Answer>>, GetAllOrdersQueryHandler>();
         
         // service review
         services.AddScoped<IQueryHandler<GetServiceReviewByServiceId.Query, Result<GetServiceReviewByServiceId.Answer>>, GetServiceReviewByServiceIdQueryHandler>();

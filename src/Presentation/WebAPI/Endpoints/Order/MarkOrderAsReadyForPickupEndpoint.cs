@@ -11,6 +11,7 @@ public class MarkOrderAsReadyForPickupEndpoint(ICommandDispatcher commandDispatc
     public new record Request([FromRoute] string OrderId);
     public new record Response();
 
+    [HttpPost("orders/{OrderId}/mark-as-ready")]
     public override async Task<ActionResult<Response>> HandleAsync([FromRoute] Request request)
     {
         var result = MarkOrderAsReadyForPickupCommand.Create(request.OrderId);

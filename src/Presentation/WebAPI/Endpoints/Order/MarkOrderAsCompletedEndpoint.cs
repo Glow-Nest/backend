@@ -11,7 +11,7 @@ public class MarkOrderAsCompletedEndpoint(ICommandDispatcher commandDispatcher) 
 
     public new record Response();
 
-    [HttpPost("order/mark-as-completed/{OrderId}")]
+    [HttpPost("orders/{OrderId}/mark-as-completed")]
     public override async Task<ActionResult<Response>> HandleAsync([FromRoute] Request request)
     {
         var command = MarkOrderAsCompletedCommand.Create(request.OrderId);
