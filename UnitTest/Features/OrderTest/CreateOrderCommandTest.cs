@@ -10,6 +10,7 @@ public class CreateOrderCommandTests
     {
         // Arrange
         var clientId = Guid.NewGuid().ToString();
+        var pickupDate = DateOnly.FromDateTime(DateTime.Today.AddDays(1)).ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
         var totalPrice = 200.0;
 
         var orderItemDtos = new List<OrderItemDto>
@@ -18,7 +19,7 @@ public class CreateOrderCommandTests
         };
 
         // Act
-        var result = CreateOrderCommand.Create(clientId, totalPrice, orderItemDtos);
+        var result = CreateOrderCommand.Create(clientId, totalPrice, pickupDate, orderItemDtos);
 
         // Assert
         Assert.True(result.IsSuccess);
@@ -28,9 +29,10 @@ public class CreateOrderCommandTests
     }
 
     [Theory]
-    [InlineData("invalid-guid", 100.0)] // invalid clientId
-    [InlineData("00000000-0000-0000-0000-000000000000", -100.0)] // invalid price
-    public void Create_InvalidInput_ReturnsFailure(string clientId, double totalPrice)
+    [InlineData("invalid-guid", "2025-05-15", 100.0)] // invalid clientId
+    [InlineData("00000000-0000-0000-0000-000000000000", "invalid-date", 100.0)] // invalid pickup date
+    [InlineData("00000000-0000-0000-0000-000000000000", "2025-05-15", -100.0)] // invalid price
+    public void Create_InvalidInput_ReturnsFailure(string clientId, string pickupDate, double totalPrice)
     {
         // Arrange
         var orderItemDtos = new List<OrderItemDto>
@@ -39,7 +41,7 @@ public class CreateOrderCommandTests
         };
 
         // Act
-        var result = CreateOrderCommand.Create(clientId, totalPrice, orderItemDtos);
+        var result = CreateOrderCommand.Create(clientId, totalPrice, pickupDate, orderItemDtos);
 
         // Assert
         Assert.False(result.IsSuccess);
@@ -51,6 +53,7 @@ public class CreateOrderCommandTests
     {
         // Arrange
         var clientId = Guid.NewGuid().ToString();
+        var pickupDate = DateOnly.FromDateTime(DateTime.Today.AddDays(1)).ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
         var totalPrice = 100.0;
 
         var orderItemDtos = new List<OrderItemDto>
@@ -59,7 +62,7 @@ public class CreateOrderCommandTests
         };
 
         // Act
-        var result = CreateOrderCommand.Create(clientId, totalPrice, orderItemDtos);
+        var result = CreateOrderCommand.Create(clientId, totalPrice, pickupDate, orderItemDtos);
 
         // Assert
         Assert.False(result.IsSuccess);

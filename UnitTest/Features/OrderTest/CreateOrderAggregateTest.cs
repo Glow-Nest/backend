@@ -1,7 +1,6 @@
 using Domain.Aggregates.Client.Values;
 using Domain.Aggregates.Order;
 using Domain.Aggregates.Order.Contracts;
-using Domain.Aggregates.Order.Entities;
 using Domain.Aggregates.Order.Values;
 using Domain.Aggregates.Product;
 using Domain.Aggregates.Product.Values;
@@ -13,10 +12,7 @@ namespace UnitTest.Features.OrderTest;
 
 public class OrderTests
 {
-    private class FakeDateTimeProvider : IDateTimeProvider
-    {
-        public DateTime GetNow() => new DateTime(2025, 05, 10);
-    }
+    private readonly Mock<IDateTimeProvider> dateTimeProviderMock = new();
 
     [Fact]
     public async void CreateOrder_ValidInput_ReturnsSuccess()
@@ -24,26 +20,25 @@ public class OrderTests
         // Arrange
         var clientId = ClientId.Create();
         var productId = ProductId.Create();
+        var pickupDate = DateOnly.FromDateTime(DateTime.Now).AddDays(3);
+        var expectedOrderDate = DateOnly.FromDateTime(DateTime.Now).AddDays(2);
         
         // mock product checker
         var productChecker = new Mock<IProductChecker>();
         productChecker.Setup(x => x.DoesProductExist(productId)).ReturnsAsync(true);
+        
+        var orderItemDto = new OrderItemDto(productId, Quantity.Create(4).Data, Price.Create(50).Data);
 
-        var orderItems = new List<OrderItem>
-        {
-            OrderItem.Create(productId, Quantity.Create(2).Data, Price.Create(100).Data).Data
-        };
-
-        var dateTimeProvider = new FakeDateTimeProvider();
+        dateTimeProviderMock.Setup(d => d.GetNow()).Returns(DateTime.Now.AddDays(2));
 
         // Act
-        var result = await Order.Create(clientId, orderItems, dateTimeProvider, productChecker.Object);
+        var result = await Order.Create(clientId, [orderItemDto], pickupDate, dateTimeProviderMock.Object, productChecker.Object);
 
         // Assert
         Assert.True(result.IsSuccess);
         var order = result.Data;
         Assert.Equal(clientId, order.ClientId);
-        Assert.Equal(new DateOnly(2025, 05, 10), order.OrderDate);
+        Assert.Equal(expectedOrderDate, order.OrderDate);
         Assert.Single(order.OrderItems);
         Assert.Equal(200, order.TotalPrice.Value);
         Assert.Equal(OrderStatus.Created, order.OrderStatus);
@@ -75,6 +70,7 @@ public class OrderTests
     //     Assert.False(result.IsSuccess);
     //     Assert.Contains(result.Errors, e => e.Message == OrderErrorMessage.PickupDateInThePast().Message);
     // }
+
     
     [Fact]
     public async void CreateOrder_WithNonExistingProduct_ReturnsFailure()
@@ -82,19 +78,17 @@ public class OrderTests
         // Arrange
         var clientId = ClientId.Create();
         var productId = ProductId.Create();
+        var pickupDate = DateOnly.FromDateTime(DateTime.Now).AddDays(3);
     
         var productChecker = new Mock<IProductChecker>();
         productChecker.Setup(x => x.DoesProductExist(productId)).ReturnsAsync(false);
 
-        var orderItems = new List<OrderItem>
-        {
-            OrderItem.Create(productId, Quantity.Create(1).Data, Price.Create(50).Data).Data
-        };
+        var orderItemDto = new OrderItemDto(productId, Quantity.Create(1).Data, Price.Create(50).Data);
 
-        var dateTimeProvider = new FakeDateTimeProvider();
+        dateTimeProviderMock.Setup(d => d.GetNow()).Returns(DateTime.Now.AddDays(2));
 
         // Act
-        var result = await Order.Create(clientId, orderItems, dateTimeProvider, productChecker.Object);
+        var result = await Order.Create(clientId, [orderItemDto], pickupDate, dateTimeProviderMock.Object, productChecker.Object);
 
         // Assert
         Assert.False(result.IsSuccess);
@@ -106,15 +100,15 @@ public class OrderTests
     {
         // Arrange
         var clientId = ClientId.Create();
+        var pickupDate = DateOnly.FromDateTime(DateTime.Now).AddDays(1);
     
         var productChecker = new Mock<IProductChecker>();
-
-        var orderItems = new List<OrderItem>();
-
-        var dateTimeProvider = new FakeDateTimeProvider();
+        var orderItems = new List<OrderItemDto>();
+        
+        dateTimeProviderMock.Setup(d => d.GetNow()).Returns(DateTime.Now.AddDays(2));
 
         // Act
-        var result = await Order.Create(clientId, orderItems, dateTimeProvider, productChecker.Object);
+        var result = await Order.Create(clientId, orderItems, pickupDate, dateTimeProviderMock.Object, productChecker.Object);
 
         // Assert
         Assert.False(result.IsSuccess);

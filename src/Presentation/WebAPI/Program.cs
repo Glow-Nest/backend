@@ -14,6 +14,7 @@ using Scalar.AspNetCore;
 using Services;
 using Services.Email;
 using Services.Jobs;
+using Services.Stripe;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -98,6 +99,10 @@ builder.Services.AddHangfire(configuration =>
 
 builder.Services.AddDbContext<PostgresContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddOptions<StripeSettings>()
+    .Bind(builder.Configuration.GetSection("Stripe"))
+    .ValidateDataAnnotations();
 
 builder.Services.AddHangfireServer();
 

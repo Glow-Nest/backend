@@ -1,4 +1,6 @@
+using Domain.Aggregates.Order.Contracts;
 using Domain.Aggregates.Order.Values;
+using Domain.Aggregates.Product;
 using Domain.Aggregates.Product.Values;
 using Domain.Common.BaseClasses;
 using Domain.Common.Values;
@@ -19,12 +21,26 @@ public class OrderItem : Entity<OrderItemId>
         PriceWhenOrdering = priceWhenOrdering;
     }
     
-    public static Result<OrderItem> Create(ProductId productId, Quantity quantity, Price priceWhenOrdering)
+    public static async Task<Result<OrderItem>> Create(ProductId productId, Quantity quantity, Price priceWhenOrdering, IProductChecker productChecker)
     {
         var orderItemIdResult = OrderItemId.Create();
+        
         if (!orderItemIdResult.IsSuccess)
         {
             return Result<OrderItem>.Fail(orderItemIdResult.Errors);
+        }
+        
+        // check if product exists
+        var productResult = await productChecker.DoesProductExist(productId);
+        if (!productResult)
+        {
+            return Result<OrderItem>.Fail(ProductErrorMessage.ProductNotFound());
+        }
+        
+        // validate price
+        if (priceWhenOrdering.Value < 0)
+        {
+            return Result<OrderItem>.Fail(OrderErrorMessage.PriceCanNotBeNegative());
         }
         
         var orderItem = new OrderItem(orderItemIdResult.Data, productId, quantity, priceWhenOrdering);
