@@ -1,0 +1,45 @@
+@startuml
+actor User
+participant System
+
+User -> System : navigates to book appointment page()
+activate System
+System -> System : fetches list of categories and services()
+System --> User : shows categories and services()
+deactivate System
+
+User -> System : user selects services for appointment()
+User -> System : selects date for appointment()
+activate System
+System -> System : fetches available time slot for selected date()
+System --> User : shows list of available time slots()
+deactivate System
+
+loop user selects another date [while no suitable time slot is selected]
+  User -> System : selects new date for appointment()
+  activate System
+  System -> System : fetches available time slot for selected date()
+  System --> User : shows list of available time slots()
+  deactivate System
+end
+
+User -> System : selects preferred time slot for appointment()
+activate System
+System -> System : checks if user is logged in()
+deactivate System
+
+alt user is logged in
+  System --> User : shows user information()
+  User -> System : user confirms information()
+  System -> System : appointment is created()
+end
+
+alt user is not logged in
+  System --> User : prompts user to login()
+  User -> System : user logs in()
+  System --> User : shows user information()
+  User -> System : confirms user information()
+  System -> System : appointment is created()
+end
+
+@enduml

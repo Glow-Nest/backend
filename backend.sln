@@ -32,6 +32,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{F2EBC139
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OperationResult", "src\Core\Tools\OperationResult\OperationResult.csproj", "{9D9092A6-4144-4D93-AF46-5A8C18F08C23}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{05E32898-5653-40C9-8DA7-5B841B45C9F1}"
+	ProjectSection(SolutionItems) = preProject
+		Documentation\CreateAppointment Abstract Sequence Diagram.puml = Documentation\CreateAppointment Abstract Sequence Diagram.puml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

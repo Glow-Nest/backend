@@ -1,0 +1,44 @@
+@startuml
+actor User
+participant "Frontend UI" as UI
+participant "Presentation Layer (Web API)" as API
+participant "Application Layer" as App
+participant "Query Handler (Infrastructure)" as Query
+participant "Domain Layer" as Domain
+participant "Persistence Layer" as DB
+participant "Email Service" as Email
+
+'--- Booking page ---
+User -> UI : navigates to booking page
+UI -> API : request categories/services
+API -> App : request categories/services
+App -> Query : query categories/services
+Query -> DB : fetch categories and services
+DB --> Query : return data
+Query --> App : return categories/services
+App --> API : return data
+API --> UI : render categories/services
+
+'--- Time slot selection ---
+User -> UI : selects services and preferred date
+UI -> API : request available time slots
+API -> App : fetch time slots
+App -> Query : query available time slots
+Query -> DB : fetch available slots for date
+DB --> Query : return time slots
+Query --> App : return slots
+App --> API : return slots
+API --> UI : show available time slots
+
+'--- Appointment creation ---
+User -> UI : selects time and clicks confirm
+UI -> API : submit appointment details
+API -> App : process appointment
+App -> Domain : validate and create appointment
+Domain -> DB : save appointment
+Domain -> Email : send confirmation email
+Email --> Domain : confirmation sent
+Domain --> App : appointment created
+App --> API : return confirmation
+API --> UI : show confirmation
+@enduml
