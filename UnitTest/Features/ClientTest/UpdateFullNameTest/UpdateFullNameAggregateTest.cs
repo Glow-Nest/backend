@@ -8,7 +8,7 @@ public class UpdateFullNameAggregateTest
 {
     
     [Fact]
-    public async void ShouldSucceed_WhenValidClientProvided()
+    public async Task ShouldSucceed_WhenValidClientProvided()
     {
         // Arrange
         var fullName = FullName.Create("Valid", "User").Data;

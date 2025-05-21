@@ -7,7 +7,7 @@ namespace UnitTest.Features.ClientTest.CreateClient;
 public class CreateClientHandlerTest
 {
     [Fact]
-    public async void ShouldSucceed_WhenValidCommandProvided()
+    public async Task ShouldSucceed_WhenValidCommandProvided()
     {
         // Arrange
         var clientRepository = new FakeClientRepository();

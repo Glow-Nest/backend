@@ -22,8 +22,8 @@ public class LoginClientAggregateTest
         var clientRepository = new FakeClientRepository();
         var emailUniqueChecker = new FakeEmailUniqueChecker(clientRepository);
         
-        var client=Client.Create(fullname, email, password, phoneNumber, emailUniqueChecker);
-        await clientRepository.AddAsync(client.Result.Data);
+        var client= await Client.Create(fullname, email, password, phoneNumber, emailUniqueChecker);
+        await clientRepository.AddAsync(client.Data);
         
         // Act
         var result = await clientRepository.GetAsync(email);
@@ -44,8 +44,8 @@ public class LoginClientAggregateTest
         var clientRepository = new FakeClientRepository();
         var emailUniqueChecker = new FakeEmailUniqueChecker(clientRepository);
         
-        var clientResult = Client.Create(fullname, email, password, phoneNumber, emailUniqueChecker);
-        await clientRepository.AddAsync(clientResult.Result.Data);
+        var clientResult = await Client.Create(fullname, email, password, phoneNumber, emailUniqueChecker);
+        await clientRepository.AddAsync(clientResult.Data);
         
         // Act
         var result = await clientRepository.GetAsync(email);
@@ -70,8 +70,8 @@ public class LoginClientAggregateTest
         var clientRepository = new FakeClientRepository();
         var emailUniqueChecker = new FakeEmailUniqueChecker(clientRepository);
 
-        var clientResult = Client.Create(fullname, email, password, phoneNumber, emailUniqueChecker);
-        await clientRepository.AddAsync(clientResult.Result.Data);
+        var clientResult = await Client.Create(fullname, email, password, phoneNumber, emailUniqueChecker);
+        await clientRepository.AddAsync(clientResult.Data);
 
         await clientRepository.GetAsync(email);
     
@@ -123,8 +123,8 @@ public class LoginClientAggregateTest
         var clientRepository = new FakeClientRepository();
         var emailUniqueChecker = new FakeEmailUniqueChecker(clientRepository);
 
-        var clientResult = Client.Create(fullname, email, correctPassword, phoneNumber, emailUniqueChecker);
-        await clientRepository.AddAsync(clientResult.Result.Data);
+        var clientResult = await Client.Create(fullname, email, correctPassword, phoneNumber, emailUniqueChecker);
+        await clientRepository.AddAsync(clientResult.Data);
 
         // Act
         var result = await clientRepository.GetAsync(email);
@@ -147,8 +147,8 @@ public class LoginClientAggregateTest
         var clientRepository = new FakeClientRepository();
         var emailUniqueChecker = new FakeEmailUniqueChecker(clientRepository);
 
-        var clientResult = Client.Create(fullname, email, password, phoneNumber, emailUniqueChecker);
-        await clientRepository.AddAsync(clientResult.Result.Data);
+        var clientResult = await Client.Create(fullname, email, password, phoneNumber, emailUniqueChecker);
+        await clientRepository.AddAsync(clientResult.Data);
 
         // Act
         var client = (await clientRepository.GetAsync(email)).Data;

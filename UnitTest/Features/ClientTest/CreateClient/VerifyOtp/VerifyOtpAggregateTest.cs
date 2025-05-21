@@ -15,13 +15,13 @@ public class VerifyOtpAggregateTest
     private readonly Mock<IUnitOfWork> _mockUnitOfWork = new();
 
     [Fact]
-    public void VerifyOtp_ShouldReturnSuccess_WhenOtpIsCorrectAndNotExpired()
+    public async Task VerifyOtp_ShouldReturnSuccess_WhenOtpIsCorrectAndNotExpired()
     {
         // Arrange
         var now = DateTime.UtcNow;
         _mockDateTimeProvider.Setup(d => d.GetNow()).Returns(now.AddMinutes(5));
 
-        var client = ClientBuilder.CreateValid().BuildAsync().Result.Data;
+        var client = (await ClientBuilder.CreateValid().BuildAsync()).Data;
         var otpSession = client.CreateOtp(Purpose.Registration, _mockDateTimeProvider.Object).Data;
 
         // Act
@@ -33,13 +33,13 @@ public class VerifyOtpAggregateTest
     }
 
     [Fact]
-    public void VerifyOtp_ShouldFail_WhenOtpIsIncorrect()
+    public async Task VerifyOtp_ShouldFail_WhenOtpIsIncorrect()
     {
         // Arrange
         var now = DateTime.UtcNow;
         _mockDateTimeProvider.Setup(d => d.GetNow()).Returns(now.AddMinutes(5));
 
-        var client = ClientBuilder.CreateValid().BuildAsync().Result.Data;
+        var client = (await ClientBuilder.CreateValid().BuildAsync()).Data;
 
         var newOtpCode = OtpCode.New().Data;
         
@@ -54,13 +54,13 @@ public class VerifyOtpAggregateTest
     }
 
     [Fact]
-    public void VerifyOtp_ShouldFail_WhenOtpIsExpired()
+    public async Task VerifyOtp_ShouldFail_WhenOtpIsExpired()
     {
         // Arrange
         var now = DateTime.UtcNow;
         _mockDateTimeProvider.Setup(d => d.GetNow()).Returns(now);
 
-        var client = ClientBuilder.CreateValid().BuildAsync().Result.Data;
+        var client = (await ClientBuilder.CreateValid().BuildAsync()).Data;
         var otpSession = client.CreateOtp(Purpose.Registration, _mockDateTimeProvider.Object).Data;
 
         _mockDateTimeProvider.Setup(d => d.GetNow()).Returns(now.AddMinutes(11));

@@ -18,7 +18,7 @@ public class CreateOtpHandlerTest
 
 
     [Fact]
-    public async void ShouldSucceed_WhenValidCommandProvided()
+    public async Task ShouldSucceed_WhenValidCommandProvided()
     {
         // Arrange
         var repository = new FakeClientRepository();
@@ -43,7 +43,7 @@ public class CreateOtpHandlerTest
     }
 
     [Fact]
-    public async void ShouldFail_WhenInvalidEmailProvided()
+    public async Task ShouldFail_WhenInvalidEmailProvided()
     {
         // Arrange
         var repository = new FakeClientRepository();

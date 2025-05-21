@@ -48,23 +48,6 @@ builder.Services.AddSwaggerGen(options =>
 });
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("Smtp"));
 
-// builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("Cloudinary"));
-
-// builder.Services.Configure<IISServerOptions>(options =>
-// {
-//     options.MaxRequestBodySize = 52428800; 
-// });
-//
-// builder.Services.Configure<KestrelServerOptions>(options =>
-// {
-//     options.Limits.MaxRequestBodySize = 52428800; 
-// });
-//
-// builder.Services.Configure<FormOptions>(options =>
-// {
-//     options.MultipartBodyLengthLimit = 52428800;
-// });
-
 builder.Services.RegisterApplications();
 builder.Services.RegisterDmPersistence();
 
@@ -137,3 +120,6 @@ app.UseCors(x => x
     .AllowCredentials());
 
 app.Run();
+
+
+public partial class Program { }

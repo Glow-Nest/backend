@@ -12,7 +12,7 @@ namespace UnitTest.Features.OrderTest;
 public class MarkAsPaidAggregateTest
 {
     [Fact]
-    public async void MarkAsPaid_WhenOrderStatusIsCreated_ShouldSetStatusToPaid()
+    public async Task MarkAsPaid_WhenOrderStatusIsCreated_ShouldSetStatusToPaid()
     {
         // Arrange
         var order = await CreateOrder();
@@ -26,7 +26,7 @@ public class MarkAsPaidAggregateTest
     }
 
     [Fact]
-    public async void MarkAsPaid_WhenOrderStatusIsNotCreated_ShouldFail()
+    public async Task MarkAsPaid_WhenOrderStatusIsNotCreated_ShouldFail()
     {
         // Arrange
         var order = await CreateOrder();

@@ -7,7 +7,7 @@ namespace UnitTest.Features.ClientTest.UpdatePhoneNumberTest;
 public class UpdatePhoneNumberAggregateTest
 {
     [Fact]
-    public async void ShouldSucceed_WhenValidClientProvided()
+    public async Task ShouldSucceed_WhenValidClientProvided()
     {
         // Arrange
         var fullName = FullName.Create("Valid", "User").Data;

@@ -24,7 +24,7 @@ public class AddBlockedTimeAggregateTest
     }
 
     [Fact]
-    public void Add_ShouldSucceed_WhenAllValidationsPass()
+    public async Task Add_ShouldSucceed_WhenAllValidationsPass()
     {
         // Arrange
         var scheduleDate = DateOnly.FromDateTime(DateTime.Now.AddDays(1));
@@ -35,7 +35,7 @@ public class AddBlockedTimeAggregateTest
         _dateTimeProviderMock.Setup(d => d.GetNow()).Returns(DateTime.Now.AddDays(-1));
         
         // Act
-        var result = schedule.AddBlockedTime(timeSlot.Data, reason, _dateTimeProviderMock.Object).Result;
+        var result = await schedule.AddBlockedTime(timeSlot.Data, reason, _dateTimeProviderMock.Object);
 
         // Assert
         Assert.True(result.IsSuccess);
@@ -43,7 +43,7 @@ public class AddBlockedTimeAggregateTest
     }
 
     [Fact]
-    public async void Add_ShouldFail_WhenTimeSlotOverlapsWithExistingBlockedTimeSlot()
+    public async Task Add_ShouldFail_WhenTimeSlotOverlapsWithExistingBlockedTimeSlot()
     {
         // Arrange
         var scheduleDate = DateOnly.FromDateTime(DateTime.Now.AddDays(1));
@@ -56,7 +56,7 @@ public class AddBlockedTimeAggregateTest
 
         // Act
         var blockedTimeSlotResult1 = await schedule.AddBlockedTime(timeSlot1.Data, reason, _dateTimeProviderMock.Object);
-        var result = schedule.AddBlockedTime(timeSlot2.Data, reason, _dateTimeProviderMock.Object).Result;
+        var result = await schedule.AddBlockedTime(timeSlot2.Data, reason, _dateTimeProviderMock.Object);
 
         // Assert
         Assert.False(result.IsSuccess);
@@ -64,7 +64,7 @@ public class AddBlockedTimeAggregateTest
     }
 
     [Fact]
-    public async void Add_ShouldFail_WhenTimeSlotOverlapsWithExistingAppointment()
+    public async Task Add_ShouldFail_WhenTimeSlotOverlapsWithExistingAppointment()
     {
         // Arrange
         SetupMocksForValidScenario();
@@ -82,7 +82,7 @@ public class AddBlockedTimeAggregateTest
         _dateTimeProviderMock.Setup(d => d.GetNow()).Returns(DateTime.Now.AddDays(-1));
 
         // Act
-        var blockedTimeSlotResult = schedule.AddBlockedTime(timeSlot, reason, _dateTimeProviderMock.Object).Result;
+        var blockedTimeSlotResult = await schedule.AddBlockedTime(timeSlot, reason, _dateTimeProviderMock.Object);
 
         // Assert
         Assert.False(blockedTimeSlotResult.IsSuccess);

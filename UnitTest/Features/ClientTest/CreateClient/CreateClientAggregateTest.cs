@@ -12,7 +12,7 @@ public class CreateClientAggregateTest
 {
 
     [Fact]
-    public async void ShouldSucceed_WhenValidClientProvided()
+    public async Task ShouldSucceed_WhenValidClientProvided()
     {
         // Arrange
         var fullName = FullName.Create("Valid", "User").Data;
@@ -36,7 +36,7 @@ public class CreateClientAggregateTest
     }
 
     [Fact]
-    public async void ShouldFail_WhenEmailIsNotUnique()
+    public async Task ShouldFail_WhenEmailIsNotUnique()
     {
         // Arrange
         var clientRepository = new FakeClientRepository();
