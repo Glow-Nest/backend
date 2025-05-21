@@ -1,0 +1,20 @@
+@startuml
+title Frontend Data Flow - UI to Backend and Back
+
+actor User
+component "Client Component\n(use client)" as UI
+component "Redux Store\n(RTK + Slices)" as Store
+component "RTK Query\n(Base Query Layer)" as RTK
+component "Next.js Server\n(Server Component)" as Server
+database "Backend API" as Backend
+
+User --> UI : Interacts (clicks, types)
+UI --> Store : Dispatch action or mutation
+Store --> RTK : Calls API endpoint
+RTK --> Backend : HTTP Request (GET/POST)
+Backend --> RTK : JSON Response
+RTK --> Store : Update cache
+Store --> UI : Provide data via hook
+UI --> User : Render updated UI
+
+@enduml

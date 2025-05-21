@@ -1,0 +1,14 @@
+@startuml
+actor Client
+participant "Schedule Aggregate" as Schedule
+participant "AppointmentCreatedEvent" as Event
+participant "AppointmentCreatedEventHandler" as Handler
+participant "EmailService" as EmailService
+
+Client -> Schedule : BookAppointment()
+Schedule -> Schedule : Add appointment
+Schedule -> Event : Raise AppointmentCreatedEvent
+Event -> Handler : Dispatched by dispatcher
+Handler -> EmailService : Send confirmation email to client
+
+@enduml

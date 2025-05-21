@@ -3,6 +3,7 @@ actor User
 participant "Frontend UI" as UI
 participant "Presentation Layer (Web API)" as API
 participant "Application Layer" as App
+participant "Command Handler (Application)" as Command
 participant "Query Handler (Infrastructure)" as Query
 participant "Domain Layer" as Domain
 participant "Persistence Layer" as DB
@@ -34,11 +35,14 @@ API --> UI : show available time slots
 User -> UI : selects time and clicks confirm
 UI -> API : submit appointment details
 API -> App : process appointment
-App -> Domain : validate and create appointment
-Domain -> DB : save appointment
-Domain -> Email : send confirmation email
-Email --> Domain : confirmation sent
-Domain --> App : appointment created
+App -> Command : handle create appointment command
+Command -> Domain : validate and create appointment
+Domain -> Command: returns created appointment
+Domain -> App : raise domain event (AppointmentCreated)
+Command -> DB : save appointment
+App -> Email : send confirmation email
+Email --> App : confirmation sent
+Command --> App : return success
 App --> API : return confirmation
 API --> UI : show confirmation
 @enduml

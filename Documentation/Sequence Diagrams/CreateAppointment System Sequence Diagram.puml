@@ -42,4 +42,8 @@ alt user is not logged in
   System -> System : appointment is created()
 end
 
+activate System
+System -> System : sends confirmation email()
+deactivate System
+
 @enduml

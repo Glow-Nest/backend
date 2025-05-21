@@ -1,0 +1,66 @@
+@startuml
+
+' Root layout structure
+package "App Root" {
+  [RootLayout]
+  [ReduxProvider]
+  [Toaster]
+}
+
+' Layouts
+package "Layouts" {
+  [StepLayout]
+  [Navbar]
+  [AppointmentSummary]
+}
+
+' Pages
+package "Pages" {
+  [StepPage]
+}
+
+' Step components
+package "Components" {
+  [StepWrapper]
+  [AppointmentContent]
+  [AppointmentScheduler]
+  [AppointmentConfirmation]
+}
+
+' State & side effects
+package "State" {
+  [Redux Store]
+  [RTK Query API Slice]
+}
+
+' Routing utilities
+package "Routing" {
+  [useParams]
+}
+
+' Layout flow
+RootLayout --> ReduxProvider
+RootLayout --> Toaster
+ReduxProvider --> StepPage : wraps
+
+StepPage --> StepLayout
+StepLayout --> Navbar
+StepLayout --> AppointmentSummary
+StepLayout --> StepWrapper : renders as children
+
+' Step routing
+StepWrapper --> AppointmentContent : if step = services
+StepWrapper --> AppointmentScheduler : if step = datetime
+StepWrapper --> AppointmentConfirmation : if step = confirmation
+
+' State interactions
+AppointmentContent --> [Redux Store] : update services
+AppointmentScheduler --> [RTK Query API Slice] : fetch time slots
+AppointmentScheduler --> [Redux Store] : update datetime
+AppointmentConfirmation --> [Redux Store] : read state
+AppointmentConfirmation --> [RTK Query API Slice] : create appointment
+
+' Routing hooks
+StepPage --> useParams : get step
+
+@enduml
