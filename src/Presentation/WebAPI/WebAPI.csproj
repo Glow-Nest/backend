@@ -25,4 +25,8 @@
       <ProjectReference Include="..\..\Infrastructure\Services\Services.csproj" />
     </ItemGroup>
 
+    <PropertyGroup>
+        <PreserveCompilationContext>true</PreserveCompilationContext>
+    </PropertyGroup>
+
 </Project>

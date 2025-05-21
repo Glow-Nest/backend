@@ -121,5 +121,4 @@ app.UseCors(x => x
 
 app.Run();
 
-
 public partial class Program { }
