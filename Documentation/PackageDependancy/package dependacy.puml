@@ -1,0 +1,51 @@
+@startuml
+title .NET Solution Project Dependencies
+
+skinparam packageStyle rectangle
+
+' Core Projects
+package "Core" {
+  [OperationResult]
+  [Domain]
+  [QueryContracts]
+  [Application]
+}
+
+' Infrastructure Projects
+package "Infrastructure" {
+  [DomainModelPersistence]
+  [Services]
+  [EfcQueries]
+}
+
+' Web Layer
+[WebAPI]
+
+' Core dependencies
+[Application] --> [Domain]
+[Application] --> [QueryContracts]
+[Domain] --> [OperationResult]
+[QueryContracts] --> [Domain]
+[QueryContracts] --> [OperationResult]
+
+' Infrastructure dependencies
+[DomainModelPersistence] --> [Domain]
+[DomainModelPersistence] --> [QueryContracts]
+
+[Services] --> [Application]
+[Services] --> [Domain]
+
+[EfcQueries] --> [DomainModelPersistence]
+[EfcQueries] --> [Services]
+[EfcQueries] --> [Domain]
+[EfcQueries] --> [QueryContracts]
+[EfcQueries] --> [OperationResult]
+
+' WebAPI dependencies
+[WebAPI] --> [Application]
+[WebAPI] --> [QueryContracts]
+[WebAPI] --> [DomainModelPersistence]
+[WebAPI] --> [EfcQueries]
+[WebAPI] --> [Services]
+
+@enduml
