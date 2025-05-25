@@ -12,6 +12,12 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      JwtSetting__SecretKey: ${{ secrets.JWT_SECRET_KEY }}
+      ConnectionStrings__DefaultConnection: ${{ secrets.DATABASE_CONNECTION_STRING }}
+      CloudSQL__CloudSqlConnection: ${{ secrets.CLOUD_SQL_CONNECTION }}
+      Stripe__SecretKey: ${{ secrets.STRIPE_SECRET_KEY }}
+      Stripe__WebhookSecret: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
 
     steps:
       - name: Checkout repository
