@@ -18,7 +18,8 @@
 # Generated files
 .idea/**/contentModel.xml
 
-/src/appsettings.Development.json
+/src/Presentation/WebAPI/appsettings.Development.json
+
 
 # Sensitive or high-churn files
 .idea/**/dataSources/
