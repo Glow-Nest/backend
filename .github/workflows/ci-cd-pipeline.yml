@@ -18,6 +18,7 @@ jobs:
       CloudSQL__CloudSqlConnection: ${{ secrets.CLOUD_SQL_CONNECTION }}
       Stripe__SecretKey: ${{ secrets.STRIPE_SECRET_KEY }}
       Stripe__WebhookSecret: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
+      Smtp__AppPassword: ${{ secrets.SMTP_APP_PASSWORD }}
 
     steps:
       - name: Checkout repository
